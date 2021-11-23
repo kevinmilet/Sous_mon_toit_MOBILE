@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
-import { default as React, default as React, useEffect, useState } from 'react';
+import { default as React, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import SignIn from './src/components/connexion/SignIn';
 import NavigationMain from './src/navigation/NavigationMain';
