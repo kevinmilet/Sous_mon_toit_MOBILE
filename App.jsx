@@ -9,34 +9,36 @@ import ApiRoutes from "./src/utils/const/ApiRoutes";
 export default function App() {
 
   const API_URL = 'http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/';
-  const [tokenIsValid, setTokenIsValid] = useState(true);
+  const [tokenIsValid, setTokenIsValid] = useState(false);
   axios.defaults.headers.common = { 'Authorization': `Bearer ${AsyncStorage.getItem('@auth:token')}` }
 
   // Test de la validité du token
   useEffect(() => {
     console.log(AsyncStorage.getItem('@auth:token'))
-
-    axios.interceptors.response.use(function (response) {
-      return response
-    }, function (error) {
-      if (error.response) {
-        if (error.response.status === 401) {
-          AsyncStorage.removeItem('@auth:token')
-          setTokenIsValid(false)
+    if (AsyncStorage.getItem('@auth:token') !== null ) {
+      axios.interceptors.response.use(function (response) {
+        setTokenIsValid(true);
+        return response
+      }, function (error) {
+        if (error.response) {
+          if (error.response.status === 401) {
+            AsyncStorage.removeItem('@auth:token')
+          }
         }
-      }
-      return Promise.reject(error);
-    })
-    axios.get(API_URL + ApiRoutes.customer + "/s/2")
-  }, [API_URL]);
+        return Promise.reject(error);
+      })
+      axios.get(API_URL + ApiRoutes.customer + "/s/2")
+    }
+
+  }, [API_URL, tokenIsValid]);
 
   return (
     tokenIsValid === true ?
-    <SafeAreaView style={{flex: 1}}>
-      <NavigationMain />
-    </SafeAreaView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <NavigationMain />
+      </SafeAreaView>
       :
-      <SignIn/>
+      <SignIn />
   );
 }
 
