@@ -1,25 +1,27 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View,ActivityIndicator} from 'react-native';
-import CustomerList from '../components/Customer/CustomerList';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import CustomerDetail from '../components/Customer/CustomerDetail';
-// import { Button, StyleSheet, TextInput, View, FlatList, Text, ActivityIndicator } from 'react-native';
-// import loader from '../../../assets/icons/loader.svg';
+import CustomerList from '../components/Customer/CustomerList';
+
 const Stack =  createNativeStackNavigator();
 const Customer = () => {
     return (
-       <Stack.Navigator>
-           <Stack.Screen name="customerList" options={{
+        <Stack.Navigator>
+            <Stack.Screen name="customerList" options={{
                     headerShown: false,
                 }}>
-               {()=><CustomerList/>}
-           </Stack.Screen>
-           <Stack.Screen name="customerDetail">
-               {()=><CustomerDetail/>}
-           </Stack.Screen>
-       </Stack.Navigator>
+            {()=><CustomerList/>}
+        </Stack.Screen>
+            <Stack.Screen name="customerDetail" options={{
+                    headerShown: false,
+                }}>
+                {()=><CustomerDetail/>}
+            </Stack.Screen>
+        </Stack.Navigator>
     );
 };
+
 const styles =  StyleSheet.create({
     mainContainer: {
         flex: 1,
@@ -39,6 +41,5 @@ const styles =  StyleSheet.create({
         justifyContent: 'center'
     }
 })
-
 
 export default Customer;

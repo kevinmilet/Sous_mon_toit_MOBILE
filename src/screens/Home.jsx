@@ -1,22 +1,15 @@
-// Components/FilmItem.js
-
-import React from 'react'
-import { StyleSheet, View, Text, Image } from 'react-native'
-// import { getImageFromApi } from '../API/TMDBApi'
+import React from 'react';
+import { View } from 'react-native';
+import Calendar from '../components/Calendar/Calendar';
+import Topbar from '../components/Topbar/Topbar';
 
 const Home = () => {
-   
-    return (
-      
-           <View style={{flex: 1 , justifyContent: "center" , alignItems:"center"}}>
-                <Text>Home</Text>
-           </View>
-            
+    return(
+        <View >
+            <Topbar/>
+            <Calendar/>
+        </View>
     )
-          
-      
-  }
-  
-  
-  
-  export default Home
+};
+
+export default Home;

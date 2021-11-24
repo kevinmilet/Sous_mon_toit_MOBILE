@@ -1,12 +1,14 @@
-// Methode de test pour récupérer l'avatar -- NE PAS GARDER EN L'ETAT!!!
+import { API_URL } from '@env';
+import axios from 'axios';
 
-import axios from "axios"
-
-export async function getStaffPicture(id) {
-    const url = 'http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/staff/' + id;
-
-    return await axios.get(url)
-        
+// Methode de connexion
+export async function login(values) {
+    const url = `${API_URL}/login/staff`;
+    return await axios.post(url, values);
 }
 
-export const AVATAR_BASE_URL = 'http://api-sousmontoit.am.manusien-ecolelamanu.fr/storage/app/public/pictures/avatars/';
+// Methode de test pour récupérer l'avatar -- NE PAS GARDER EN L'ETAT!!!
+export async function getStaffPicture(id) {
+    const url = `${API_URL}/staff/${id}`;
+    return await axios.get(url);
+}
