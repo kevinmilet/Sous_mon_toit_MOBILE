@@ -1,21 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { StyleSheet, View, TextInput, Button, FlatList } from 'react-native';
 import EstateCard from './EstateCard';
-
-const API_TOKEN = '64800ba865274be62e64c072867ec661';
-
-const getEstateFromApi = (text) => {
-
-};
+import axios from 'axios';
+import ApiRoutes from "../../utils/const/ApiRoutes";
 
 const EstateList = () => {
 
-    const [estates, setEstate] = useState([]);
+    const [estates, setEstates] = useState([]);
     const loadEstates = () => {
         getEstateFromApi(searchedText).then(data => {
             setEstate(data.results);
         });
     };
+
+    const API_URL = 'http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/';
+    useEffect(() => {
+        
+        axios.get(API_URL + ApiRoutes.estates).then(res => {
+            setEstates(res.data)
+        }).catch(error => {
+            console.log(error.message)
+        })
+    
+    }, [API_URL])
 
     return (
 

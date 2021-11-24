@@ -1,20 +1,25 @@
-// Components/FilmItem.js
-
+import { SafeAreaView, StyleSheet, Text, View, ActivityIndicator, Image } from 'react-native';
+import EstateList from '../components/Estate/EstateList';
+import EstateDetail from '../components/Estate/EstateDetail';
 import React from 'react'
-import { StyleSheet, View, Text, Image } from 'react-native'
-// import { getImageFromApi } from '../API/TMDBApi'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 const Estate = () => {
-   
+
     return (
-        <View style={{flex: 1 , justifyContent: "center" , alignItems:"center"}}>
-            <Text>Liste de biens</Text>
-        </View>
+        <Stack.Navigator>
+            <Stack.Screen name="estateList" options={{
+                headerShown: false,
+            }}>
+                {() => <EstateList />}
+            </Stack.Screen>
+            <Stack.Screen name="estateDetail">
+                {() => <EstateDetail />}
+            </Stack.Screen>
+        </Stack.Navigator>
     )
-          
-      
-  }
-  
-  
-  
-  export default Estate
+}
+
+export default Estate
