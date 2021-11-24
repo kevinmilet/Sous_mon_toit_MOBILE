@@ -74,33 +74,27 @@ const SignIn = () => {
         }),
         onSubmit: async (values) => {
             await new Promise(r => {
-                login(values)
+                signIn(values)
             })
             alert(`Login: ${values.login}, Password: ${values.password}`)
         }
     });
 
-    useEffect(() => {
-        login(values).then(
-            response => {
-    // const API_URL = 'http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/';
-    // const login = async(values) => {
-    //     await axios.post(API_URL + ApiRoutes.login, values)
-    //         .then(res => {
-                try {
-                    AsyncStorage.setItem(
-                        '@auth:token',
-                        response.data.token
-                    );
-                } catch (error) {
-                    console.log("Error saving data")
-                    console.log(error);
-                }
-                // window.location.href = '/';
-            }).catch(error => {
-                console.log(error.message);
-            })
-    }, [])
+    const signIn = (values) => login(values).then(
+        response => {
+            try {
+                AsyncStorage.setItem(
+                    '@auth:token',
+                    response.data.token
+                );
+            } catch (error) {
+                console.log("Error saving data")
+                console.log(error);
+            }
+            // window.location.href = '/';
+        }).catch(error => {
+            console.log("catch !",error.message);
+        })
 
     return (
         <View
