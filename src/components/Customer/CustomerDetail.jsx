@@ -14,27 +14,12 @@ const CustomerDetail = () => {
     const [CustomerSearch, setCustomerSearch] =  useState({});
     const [customerTypeData, setCustomerTypeData] = useState({});
     const [loading, setLoading] = useState(true);
-    const localStorage = [];
-    localStorage["token"] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGktc291c21vbnRvaXQuYW0ubWFudXNpZW4tZWNvbGVsYW1hbnUuZnJcL3B1YmxpY1wvbG9naW5cL3N0YWZmIiwiaWF0IjoxNjM3NzQ4MTM2LCJleHAiOjE2Mzc3NTE3MzYsIm5iZiI6MTYzNzc0ODEzNiwianRpIjoiVlpveG11Nk1MdUdkMVZyQyIsInN1YiI6MiwicHJ2IjoiNjNjNmQwNjFmOGJkNGUzNTBmMjk4MDRmNThlNDMzNTRhNjZiNTg3NyJ9.kMpBgW7kBUKVKL1du_JU9N2OhoHyvgsjMPoxDjc13V0";
-    axios.defaults.headers.common = {
-        
-       
-        Authorization:  `Bearer ${localStorage["token"]}`,
-    };
-
+  
+   
+   
     useEffect(() => {
 
         // Test de la validité du token
-        axios.interceptors.response.use(function (response) {
-            return response
-        }, function (error) {
-            if (error.response) {
-                if (error.response.status === 401) {
-                    localStorage.clear()
-                    return window.location = '/connexion' // redirect to login page
-                }
-            }
-        })
 
         axios.get(
             "http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/customer/s/2" 
