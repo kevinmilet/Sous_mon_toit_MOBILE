@@ -15,21 +15,21 @@ const CustomerList = () => {
     const [customerTypeData, setCustomerTypeData] = useState({});
     const [loading, setLoading] = useState(true);
   
-    
+    console.log(customerData)
 
     useEffect(() => {
 
         // Test de la validité du token
-        axios.interceptors.response.use(function (response) {
-            return response
-        }, function (error) {
-            if (error.response) {
-                if (error.response.status === 401) {
-                    localStorage.clear()
-                    return window.location = '/connexion' // redirect to login page
-                }
-            }
-        })
+        // axios.interceptors.response.use(function (response) {
+        //     return response
+        // }, function (error) {
+        //     if (error.response) {
+        //         if (error.response.status === 401) {
+        //             localStorage.clear()
+        //             return window.location = '/connexion' // redirect to login page
+        //         }
+        //     }
+        // })
 
         axios.get(
             "http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/customer/s/" 
