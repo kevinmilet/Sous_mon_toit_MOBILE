@@ -4,22 +4,21 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import ApiRoutes from "../../utils/const/ApiRoutes";
 import EstateCard from './EstateCard';
+import { getAllEstates } from '../../API/ApiEstates';
         
 const EstateList = () => {
 
     const [estates, setEstates] = useState([]);
-    const loadEstates = () => {
-        getEstateFromApi(searchedText).then(data => {
-            setEstate(data.results);
-        });
-    };
 
     useEffect(() => {
-        axios.get(API_URL + ApiRoutes.estates).then(res => {
-            setEstates(res.data)
-        }).catch(error => {
-            console.log(error.message)
-        })
+
+        getAllEstates().then(
+            response => {
+                setEstates(response.data)
+            }).catch(error => {
+                console.log(error.message)
+            }
+        )
     
     }, [API_URL])
 
