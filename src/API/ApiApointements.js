@@ -1,6 +1,5 @@
-import axios from 'axios';
-import ApiRoutes from '../utils/const/ApiRoutes';
 import { API_URL } from '@env';
+import axios from 'axios';
 
 // Récuperer tous les rdvs de l'agent
 export async function getAllStaffAptmt(id) {
@@ -23,7 +22,6 @@ export async function createAptmt(values) {
 // Editer un rdv
 export async function updateAptmt(id, values) {
     const url = `${API_URL}/schedule/update/${id}`;
-
     return await axios.put(url, values);
 }
 
