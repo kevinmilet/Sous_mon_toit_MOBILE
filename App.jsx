@@ -1,15 +1,13 @@
+import { API_URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import { default as React, useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
 import SignIn from './src/components/connexion/SignIn';
 import NavigationMain from './src/navigation/NavigationMain';
-import ApiRoutes from "./src/utils/const/ApiRoutes";
-import { StatusBar } from 'react-native';
 
 export default function App() {
 
-  const API_URL = ApiRoutes.api_url;
   const [tokenIsValid, setTokenIsValid] = useState(false);
   //Fonction de récupération du token dans le storage
   const readData = async () => {

@@ -1,9 +1,10 @@
-import React, { useState , useEffect } from 'react';
-import { StyleSheet, View, TextInput, Button, FlatList } from 'react-native';
-import EstateCard from './EstateCard';
+import { API_URL } from '@env';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import ApiRoutes from "../../utils/const/ApiRoutes";
-
+import EstateCard from './EstateCard';
+        
 const EstateList = () => {
 
     const [estates, setEstates] = useState([]);
@@ -13,9 +14,7 @@ const EstateList = () => {
         });
     };
 
-    const API_URL = 'http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/';
     useEffect(() => {
-        
         axios.get(API_URL + ApiRoutes.estates).then(res => {
             setEstates(res.data)
         }).catch(error => {
