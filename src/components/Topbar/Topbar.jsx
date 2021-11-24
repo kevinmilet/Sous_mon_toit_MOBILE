@@ -2,7 +2,8 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { AVATAR_BASE_URL, getStaffPicture } from '../../API/ApiStaff';
+import { getStaffPicture } from '../../API/ApiStaff';
+import { AVATAR_BASE_URL } from '@env';
 
 const Topbar = () => {
 

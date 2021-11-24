@@ -20,7 +20,9 @@ const API_URL = {
     update_aptmt: 'schedule/update',
     delete_aptmt: 'schedule/delete',
     aptmt_types: 'schedule/appointmentsTypes',
-    show_aptmt: 'schedule'
+    show_aptmt: 'schedule',
+    today_s_aptmts: 'schedule/today_staff',
+    today_c_aptmts: 'schedule/today_customer'
 }
 
 export default API_URL;
