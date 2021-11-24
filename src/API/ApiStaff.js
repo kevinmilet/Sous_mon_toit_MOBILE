@@ -1,11 +1,20 @@
+import axios from 'axios';
+import ApiRoutes from '../utils/const/ApiRoutes';
+
+const API_URL = ApiRoutes.api_url;
+
+// Methode de connexion
+export async function login(values) {
+    const url = API_URL + ApiRoutes.login;
+
+    return await axios.post(url, values);
+}
+
 // Methode de test pour récupérer l'avatar -- NE PAS GARDER EN L'ETAT!!!
-
-import axios from "axios"
-
 export async function getStaffPicture(id) {
-    const url = 'http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/staff/' + id;
+    const url = `${API_URL + ApiRoutes.staff}/${id}`;
 
-    return await axios.get(url)
+    return await axios.get(url);
         
 }
 

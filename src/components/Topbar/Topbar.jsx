@@ -12,7 +12,7 @@ const Topbar = () => {
     const [staffData, setStaffData] = useState({});
 
     useEffect(() => {
-        getStaffPicture('3').then(
+        getStaffPicture('2').then(
             response => {
                 setStaffData(response.data)
             }).catch(error => {
