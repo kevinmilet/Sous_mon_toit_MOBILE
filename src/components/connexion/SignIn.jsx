@@ -1,12 +1,11 @@
-import React, { useRef, forwardRef } from 'react';
-import { TextInput as RNTextInput, StyleSheet, TouchableOpacity, Text, View, Image } from 'react-native';
-import colors from '../../utils/styles/colors';
-import axios from 'axios';
-import ApiRoutes from "../../utils/const/ApiRoutes";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import { Entypo as Icon } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFormik } from "formik";
+import React, { forwardRef, useEffect, useRef } from 'react';
+import { Image, StyleSheet, Text, TextInput as RNTextInput, TouchableOpacity, View } from 'react-native';
+import * as Yup from "yup";
+import { login } from '../../API/ApiStaff';
+import colors from '../../utils/styles/colors';
 
 const Button = ({ label, onPress }) => {
     return (
@@ -96,14 +95,13 @@ const SignIn = () => {
         }
     });
 
-    const API_URL = 'http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/';
-    const login = (values) => {
-        axios.post(API_URL + ApiRoutes.login, values)
-            .then(res => {
+    useEffect(() => {
+        login(values).then(
+            response => {
                 try {
                     AsyncStorage.setItem(
                         '@auth:token',
-                        res.data.token
+                        response.data.token
                     );
                 } catch (error) {
                     console.log("Error saving data")
@@ -113,7 +111,7 @@ const SignIn = () => {
             }).catch(error => {
                 console.log(error.message);
             })
-    };
+    }, [])
 
     return (
         <View

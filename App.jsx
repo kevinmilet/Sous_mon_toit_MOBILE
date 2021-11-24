@@ -8,7 +8,7 @@ import ApiRoutes from "./src/utils/const/ApiRoutes";
 
 export default function App() {
 
-  const API_URL = 'http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/';
+  const API_URL = ApiRoutes.api_url;
   const [tokenIsValid, setTokenIsValid] = useState(false);
   axios.defaults.headers.common = { 'Authorization': `Bearer ${AsyncStorage.getItem('@auth:token')}` }
 
