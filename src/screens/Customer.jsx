@@ -3,18 +3,25 @@ import { SafeAreaView, StyleSheet, Text, View,ActivityIndicator} from 'react-nat
 import CustomerList from '../components/Customer/CustomerList';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CustomerDetail from '../components/Customer/CustomerDetail';
+
 // import { Button, StyleSheet, TextInput, View, FlatList, Text, ActivityIndicator } from 'react-native';
 // import loader from '../../../assets/icons/loader.svg';
 const Stack =  createNativeStackNavigator();
 const Customer = () => {
     return (
+       
+        
+       
        <Stack.Navigator>
+          
            <Stack.Screen name="customerList" options={{
                     headerShown: false,
                 }}>
                {()=><CustomerList/>}
            </Stack.Screen>
-           <Stack.Screen name="customerDetail">
+           <Stack.Screen name="customerDetail" options={{
+                    headerShown: false,
+                }}>
                {()=><CustomerDetail/>}
            </Stack.Screen>
        </Stack.Navigator>

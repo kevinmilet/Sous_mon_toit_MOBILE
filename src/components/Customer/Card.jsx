@@ -14,6 +14,7 @@ const Card = ({customer}) => {
             <Text >Nom : {customer.lastname}</Text>
             <Text >Prénom : {customer.firstname}</Text>
             <Text>Mail : {customer.mail}</Text>
+           
           </View>
         </View>
       </TouchableOpacity>
@@ -23,9 +24,9 @@ const Card = ({customer}) => {
   
   const styles = StyleSheet.create({
     main_container: {
-      height: 100,
-      flexDirection: 'row',
-      margin: 5,
+      flex: 1,
+      margin: 10,
+      padding: 10,
       backgroundColor: '#4EA1D5',
       borderRadius: 20
     },
