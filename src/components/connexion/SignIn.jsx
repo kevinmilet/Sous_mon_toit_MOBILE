@@ -60,21 +60,6 @@ const TextInput = forwardRef(({ icon, error, touched, ...otherProps }, ref) => {
 
 const SignIn = () => {
 
-    // Fonction de test si le token est dans le storage AsyncStorage
-    const readData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('@auth:token')
-            console.log(value);
-            if (value !== null) {
-                console.log('TOKEN = ' + value);
-                alert('TOKEN = ' + value);
-            }else{
-                alert('pas de token')
-            }
-        } catch (e) {
-            console.log('Failed to fetch the data from storage')
-        }
-    }
     const password = useRef(null);
     const { handleChange, handleSubmit, handleBlur, values, errors, touched } = useFormik({
         initialValues: {
@@ -98,6 +83,10 @@ const SignIn = () => {
     useEffect(() => {
         login(values).then(
             response => {
+    // const API_URL = 'http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/';
+    // const login = async(values) => {
+    //     await axios.post(API_URL + ApiRoutes.login, values)
+    //         .then(res => {
                 try {
                     AsyncStorage.setItem(
                         '@auth:token',
@@ -180,7 +169,6 @@ const SignIn = () => {
                     />
                 </View>
                 <Button label='Connexion' onPress={handleSubmit} />
-                <Button label='data' onPress={readData} />
             </View>
         </View>
     );
