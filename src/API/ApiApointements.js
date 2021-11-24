@@ -37,3 +37,17 @@ export async function deleteAptmt(id) {
 
     return await axios.post(url);
 }
+
+// Récuperer tout les rdv du jour pour l'agent
+export async function getTodayStaffAptmts(id) {
+    const url = `${API_URL + ApiRoutes.today_s_aptmts}/${id}`;
+
+    return await axios.get(url);
+}
+
+// Récuperer tout les rdv du jour pour le client
+export async function getTodayCustomerAptmts(id) {
+    const url = `${API_URL + ApiRoutes.today_c_aptmts}/${id}`;
+
+    return await axios.get(url);
+}
