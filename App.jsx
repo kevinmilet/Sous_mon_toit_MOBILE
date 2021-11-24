@@ -47,15 +47,15 @@ export default function App() {
   }, [API_URL, tokenIsValid]);
 
   return (
-    // tokenIsValid === true ?
+    tokenIsValid === true ?
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar
         animated={true}
         backgroundColor="#61dafb" />
         <NavigationMain />
       </SafeAreaView>
-      // :
-      // <SignIn />
+      :
+      <SignIn />
   );
 }
 
