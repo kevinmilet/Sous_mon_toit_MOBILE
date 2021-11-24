@@ -1,12 +1,9 @@
-// Components/FilmItem.js
-
-import React from 'react'
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-// import { getImageFromApi } from '../API/TMDBApi'
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const Card = ({customer}) => {
-   const navigation = useNavigation();
+  const navigation = useNavigation();
     return (
       <TouchableOpacity style={styles.main_container} onPress={() => navigation.navigate('customerDetail')} > 
         <View style={styles.content_container}>  
@@ -14,7 +11,7 @@ const Card = ({customer}) => {
             <Text >Nom : {customer.lastname}</Text>
             <Text >Prénom : {customer.firstname}</Text>
             <Text>Mail : {customer.mail}</Text>
-           
+          
           </View>
         </View>
       </TouchableOpacity>

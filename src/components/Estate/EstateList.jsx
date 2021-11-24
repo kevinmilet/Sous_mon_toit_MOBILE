@@ -1,10 +1,8 @@
 import { API_URL } from '@env';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import ApiRoutes from "../../utils/const/ApiRoutes";
-import EstateCard from './EstateCard';
 import { getAllEstates } from '../../API/ApiEstates';
+import EstateCard from './EstateCard';
         
 const EstateList = () => {
 

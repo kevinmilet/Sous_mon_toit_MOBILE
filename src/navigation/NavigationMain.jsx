@@ -1,13 +1,12 @@
-import React from "react";
-import { NavigationContainer } from '@react-navigation/native';
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from '../screens/Home';
-import Customer from "../screens/Customer";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { NavigationContainer } from '@react-navigation/native';
+import React from "react";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { AntDesign, FontAwesome5} from '@expo/vector-icons'
-import Estate from "../screens/Estate";
 import Contract from "../screens/Contract";
+import Customer from "../screens/Customer";
+import Estate from "../screens/Estate";
+import Home from '../screens/Home';
 
 
 const Tab = createBottomTabNavigator();
@@ -18,7 +17,7 @@ const NavigationMain = () => {
         <NavigationContainer>
             <Tab.Navigator>
                 <Tab.Screen name="home" options={{
-                   headerShown: false,
+                    headerShown: false,
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size }) => (
                         <AntDesign name="home" color="black" size={24} />
@@ -33,7 +32,7 @@ const NavigationMain = () => {
                     tabBarLabel: 'Clients',
                     tabBarIcon: ({ color, size }) => (
                         <AntDesign name="profile" size={24} color="black" />
-                     ),
+                    ),
                 }}>
 
                 {()=><Customer/>}
