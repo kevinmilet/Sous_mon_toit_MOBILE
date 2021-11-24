@@ -7,19 +7,15 @@ import Loader from "../../Tools/Loader/Loader";
 // import {Context} from "../../utils/context/Context";
 import { Button, StyleSheet, TextInput, View, FlatList, Text, ActivityIndicator } from 'react-native'
 import Card from '../../components/Customer/Card';
+import Topbar from './../Topbar/Topbar';
 
 
 const CustomerList = () => {
     const [customerData, setCustomerData] = useState({});
     const [customerTypeData, setCustomerTypeData] = useState({});
     const [loading, setLoading] = useState(true);
-    const localStorage = [];
-    localStorage["token"] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGktc291c21vbnRvaXQuYW0ubWFudXNpZW4tZWNvbGVsYW1hbnUuZnJcL3B1YmxpY1wvbG9naW5cL3N0YWZmIiwiaWF0IjoxNjM3Njc1NjY5LCJleHAiOjE2Mzc2NzkyNjksIm5iZiI6MTYzNzY3NTY2OSwianRpIjoibVFZcWZWRWprMjN0U3lZNCIsInN1YiI6MiwicHJ2IjoiNjNjNmQwNjFmOGJkNGUzNTBmMjk4MDRmNThlNDMzNTRhNjZiNTg3NyJ9.FeA1JZGgrpmIwCLhty387OQvz6BBQ_MPSXez0Z6-Lvg";
-    axios.defaults.headers.common = {
-        
-       
-        Authorization:  `Bearer ${localStorage["token"]}`,
-    };
+  
+    
 
     useEffect(() => {
 
@@ -48,19 +44,18 @@ const CustomerList = () => {
                 setLoading(false);
             });
 
-        axios
-            .get(
-                "http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/describe_customer_type/joinCustomer/" + localStorage["userId"]
-            )
-            .then((res) => {
-                setCustomerTypeData(res.data);
-            })
-            .catch((error) => {
-                console.log(error.message);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        // axios.get(
+        //         "http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/describe_customer_type/joinCustomer/" + localStorage["userId"]
+        //     )
+        //     .then((res) => {
+        //         setCustomerTypeData(res.data);
+        //     })
+        //     .catch((error) => {
+        //         console.log(error.message);
+        //     })
+        //     .finally(() => {
+        //         setLoading(false);
+        //     });
 
     }, []);
 
@@ -68,8 +63,9 @@ const CustomerList = () => {
         return <Loader/>;
     }
     return (
+        
         <View style={styles.mainContainer}>
-    
+     <Topbar/>
         <FlatList
             data={customerData}
             keyExtractor={(item) => item.id.toString()}

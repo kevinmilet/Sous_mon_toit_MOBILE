@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native';
 import SignIn from './src/components/connexion/SignIn';
 import NavigationMain from './src/navigation/NavigationMain';
 import ApiRoutes from "./src/utils/const/ApiRoutes";
+import { StatusBar } from 'react-native';
 
 export default function App() {
 
@@ -46,12 +47,15 @@ export default function App() {
   }, [API_URL, tokenIsValid]);
 
   return (
-    tokenIsValid === true ?
+    // tokenIsValid === true ?
       <SafeAreaView style={{ flex: 1 }}>
+        <StatusBar
+        animated={true}
+        backgroundColor="#61dafb" />
         <NavigationMain />
       </SafeAreaView>
-      :
-      <SignIn />
+      // :
+      // <SignIn />
   );
 }
 
