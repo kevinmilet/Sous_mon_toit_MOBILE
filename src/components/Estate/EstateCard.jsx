@@ -26,12 +26,10 @@ const EstateCard = (props) => {
             <View style={styles.content_container}>
                 <View >
                     <Text>{estate.title}</Text>
-                    <Text>{COVER_ESTATE_BASE_URL + pictureCover.name}</Text>
                     <Image source={{ uri: COVER_ESTATE_BASE_URL + pictureCover.name }} style={{height:100, width:100}}/>
                 </View>
             </View>
         </TouchableOpacity>
-
     )
 }
 
