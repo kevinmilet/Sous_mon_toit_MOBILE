@@ -9,7 +9,8 @@ export async function getAllCustomers() {
 
 // Récuperer un client
 export async function getOneCustomer(id) {
-    const url = `${API_URL}/customer/s/${id}`;
+    // const url = `${API_URL}/customer/s/${id}`;
+    const url = `${API_URL}/customer/s/2`;
     return await axios.get(url);
 }
 
@@ -21,6 +22,13 @@ export async function getCustomersTypes() {
 
 // Récuperer les biens recherchés par le client
 export async function getCustomerSearch(id) {
-    const url = `${API_URL}/customer_search/${id}`;
+    // const url = `${API_URL}/customer_search/${id}`;
+    const url = `${API_URL}/customer_search/s/${id}`;
+    return await axios.get(url);
+}
+
+export async function getCustomerDescribe(id ) {
+    // const url = `${API_URL}/customer_search/${id}`;
+    const url = `${API_URL}/describe_customer_type/joinCustomer/${id}`;
     return await axios.get(url);
 }

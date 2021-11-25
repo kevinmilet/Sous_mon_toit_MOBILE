@@ -13,13 +13,13 @@ const Topbar = () => {
     const [staffData, setStaffData] = useState({});
 
     useEffect(() => {
-        getCurrentUser().then(
-            response => {
-                console.log(response.data);
-            }).catch(error => {
-                console.log(error)
-            }
-        )
+        // getCurrentUser().then(
+        //     response => {
+        //         console.log(response.data);
+        //     }).catch(error => {
+        //         console.log(error)
+        //     }
+        // )
 
         getStaffPicture('3').then(
             response => {
