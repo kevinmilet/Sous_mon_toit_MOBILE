@@ -43,7 +43,7 @@ const CustomerList = () => {
 const styles =  StyleSheet.create({
     mainContainer: {
         flex: 1,
-        marginTop: 50
+        
     },
     textinput: {
         marginLeft: 5, 

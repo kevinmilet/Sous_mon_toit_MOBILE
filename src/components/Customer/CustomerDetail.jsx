@@ -5,7 +5,8 @@ import { getCustomerSearch, getOneCustomer } from "../../API/ApiCustomers";
 
 const CustomerDetail = () => {
     const [customerData, setCustomerData] = useState({});
-    const [CustomerSearch, setCustomerSearch] =  useState({});
+    const [customerSearch, setCustomerSearch] =  useState({});
+    const [customerType, setCustomerType] =  useState({});
     const [customerTypeData, setCustomerTypeData] = useState({});
     const [loading, setLoading] = useState(true);
   
@@ -31,10 +32,18 @@ const CustomerDetail = () => {
             .finally(() => {
                 setLoading(false);
             });
-    }, []);
 
+    }, []);
     return (
-        <View style={styles.main_container}  > 
+      
+
+      
+      <View  style={styles.main_container}>
+        <Topbar/>
+        
+       
+       <View  style={styles.main_container}> 
+       <Text style={styles.titleTextPrincipal}>Détails client</Text>
             <View style={styles.content_container}>  
                 <View >
                 <View  style={styles.titleContainer}>
@@ -46,7 +55,7 @@ const CustomerDetail = () => {
                 </Text>
                 <Text style={styles.baseText}>
                         Prénom : 
-                    <Text style={styles.innerText}>{customerData.firstname}</Text>
+                    <Text style={styles.innerText}> {customerData.firstname}</Text>
                 </Text>
                 <Text style={styles.baseText}>
                         Mail :
@@ -54,21 +63,47 @@ const CustomerDetail = () => {
                 </Text>
                 <Text style={styles.baseText}>
                     Date de naissance :
-                    <Text style={styles.innerText}>{customerData.birthdate}</Text>
+                    <Text style={styles.innerText}> {customerData.birthdate}</Text>
                 </Text>
                 <Text style={styles.baseText}>
                     Adresse: 
-                    <Text style={styles.innerText}>{customerData.address}</Text>
+                    <Text style={styles.innerText}> {customerData.address}</Text>
                 </Text>
                 <Text style={styles.baseText}>
                     Numéro client :
                     <Text style={styles.innerText}> {customerData.n_customer}</Text>
+                </Text><Text style={styles.baseText}>
+                    Type client :
+                    <Text style={styles.innerText}> {customerType.customer_type}</Text>
                 </Text>
+
+
                     <View  style={styles.titleContainer}>
                     <Text style={styles.titleText}>Recherche du client</Text>
                     </View>
+                <Text style={styles.baseText}>
+                        Achat/Location : 
+                <Text style={styles.innerText}> {customerSearch.buy_or_rent}</Text>
+                </Text>
+                <Text style={styles.baseText}>
+                    Surface min :
+                    <Text style={styles.innerText}> {customerSearch.surface_min} m²</Text>
+                </Text>
+                <Text style={styles.baseText}>
+                    Budget maxi :  
+                    <Text style={styles.innerText}> {customerSearch.budget_max}</Text>
+                </Text>
+                <Text style={styles.baseText}>
+                    Secteur de recherche (longitude/latitude):
+                    <Text style={styles.innerText}> {customerSearch.search_longitude}/{customerSearch.search_latitude}</Text>
+                </Text>
+                <Text style={styles.baseText}>
+                    Rayon de recherche :  
+                    <Text style={styles.innerText}> {customerSearch.search_radius} Km</Text>
+                </Text>
                 </View>
             </View>
+      </View>
       </View>
     );
 };
