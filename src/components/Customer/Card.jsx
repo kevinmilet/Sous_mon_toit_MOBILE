@@ -8,9 +8,17 @@ const Card = ({customer}) => {
       <TouchableOpacity style={styles.main_container} onPress={() => navigation.navigate('customerDetail')} > 
         <View style={styles.content_container}>  
           <View >
-            <Text >Nom : {customer.lastname}</Text>
-            <Text >Prénom : {customer.firstname}</Text>
-            <Text>Mail : {customer.mail}</Text>
+          <Text style={styles.baseText}>
+              Nom :
+              <Text style={styles.innerText}> {customer.lastname}</Text>
+            </Text>
+            <Text style={styles.baseText}>
+              Prénom :
+              <Text style={styles.innerText}> {customer.firstname}</Text>
+            </Text>
+            <Text style={styles.baseText}>
+              Mail :<Text style={styles.innerText}> {customer.mail}</Text>
+            </Text>
           
           </View>
         </View>
@@ -27,6 +35,15 @@ const Card = ({customer}) => {
       backgroundColor: '#4EA1D5',
       borderRadius: 20
     },
+    baseText: {
+    fontWeight: "bold",
+    color: "#EAEAEA"
+  },
+  innerText: {
+    fontStyle: "italic",
+    fontWeight: "normal",
+    color: "black"
+  },
     image: {
       width: 120,
       height: 180,
