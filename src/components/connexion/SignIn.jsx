@@ -87,6 +87,10 @@ const SignIn = () => {
                     '@auth:token',
                     response.data.token
                 );
+                AsyncStorage.setItem(
+                    '@auth:userId',
+                    (response.data.user.id).toString()
+                );
             } catch (error) {
                 console.log("Error saving data")
                 console.log(error);

@@ -1,49 +1,57 @@
+import { AVATAR_BASE_URL } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import 'moment/locale/fr';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { getCurrentUser, getStaffPicture } from '../../API/ApiStaff';
-import { AVATAR_BASE_URL } from '@env';
+import { getCurrentUser } from '../../API/ApiStaff';
 
 const Topbar = () => {
 
     let day = moment().format('dddd');
     let date = moment().format('DD MMMM YYYY');
 
-    const [staffData, setStaffData] = useState({});
+    const [currentUser, setCurrentUser] = useState({
+        firstname: '',
+        lastname: '',
+        avatar: ''
+    });
+    const [currentUserId, setCurrentUserId] = useState('');
 
     useEffect(() => {
-        getCurrentUser().then(
-            response => {
-                console.log(response.data);
-            }).catch(error => {
-                console.log(error)
-            }
-        )
 
-        getStaffPicture('3').then(
+        AsyncStorage.getItem('@auth:userId', (error, result) => {
+            try {
+                setCurrentUserId(result);
+            } catch {
+                console.log(error)
+            } 
+        });
+
+        setCurrentUserId(currentUserId);
+
+        getCurrentUser(currentUserId).then(
             response => {
-                setStaffData(response.data)
+                setCurrentUser(response.data);
             }).catch(error => {
                 console.log(error)
-            }
-        )
-    }, [])
-    
-    return(
-    <View style={styles.topbar_container}>
-        <View style={styles.content_container}>
-            <View style={styles.profile_container}>
-                <Image source={{uri: AVATAR_BASE_URL + staffData.avatar}}
-                    style={styles.profile_img}/>
-                <Text style={styles.name}>{staffData.firstname + ' ' + staffData.lastname}</Text>
-            </View>
-            <View style={styles.date_container}>
-                <Text style={styles.date}>{day}</Text>
-                <Text style={styles.date}>{date}</Text>
+            })
+    }, [currentUserId])
+
+    return (
+        <View style={styles.topbar_container}>
+            <View style={styles.content_container}>
+                <View style={styles.profile_container}>
+                    <Image source={{uri: AVATAR_BASE_URL + currentUser.avatar}}
+                        style={styles.profile_img}/>
+                    <Text style={styles.name}>{currentUser.firstname + ' ' + currentUser.lastname}</Text>
+                </View>
+                <View style={styles.date_container}>
+                    <Text style={styles.date}>{day}</Text>
+                    <Text style={styles.date}>{date}</Text>
+                </View>
             </View>
         </View>
-    </View>
     )
 };
 
