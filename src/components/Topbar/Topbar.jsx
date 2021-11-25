@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     profile_img: {
         width: 65,
         height: 65,
-        borderRadius: 20,
+        borderRadius: 50,
         margin: 12,
         backgroundColor: 'gray'
     },

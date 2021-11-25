@@ -5,7 +5,7 @@ const CalendarItem = (appointments) => {
 
     const apptmt = appointments.appointments;
 
-    const date = apptmt.date;
+    const date = apptmt.scheduled_at;
     const dateArray = date.substr(0, 10).split('-');
     const hourArray = date.substr(11, 19).split(':');
     const formatDate = dateArray[2] + '/' + dateArray[1] + '/' +dateArray[0];
@@ -15,11 +15,11 @@ const CalendarItem = (appointments) => {
         <View style={styles.content_container}>
             <View style={styles.header_container}>
                 <Text style={styles.date_text}>{formatDate} à {formatHour}</Text>
-                <Text style={styles.type_text}>{apptmt.type}</Text>
+                <Text style={styles.type_text}>{apptmt.appointment_type}</Text>
             </View>
             <View style={styles.description_container}>
-                <Text style={styles.description_text}>{apptmt.customer}</Text>
-                <Text style={styles.description_text}>{apptmt.estate_address}</Text>
+                <Text style={styles.description_text}>{apptmt.customerFirstname} {apptmt.customerLastname}</Text>
+                <Text style={styles.description_text}>{apptmt.address} {apptmt.zipcode} {apptmt.city}</Text>
             </View>
         </View>
     )

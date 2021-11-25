@@ -1,70 +1,60 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Text, StyleSheet } from 'react-native';
 import CalendarItem from './CalendarItem';
 import { getTodayStaffAptmts } from '../../API/ApiApointements';
-
-const DATA = [
-    {
-        id: '1',
-        date: '2021-11-23 10:30:00',
-        staff_id: '1',
-        estate_address: '2 rue de la poupée qui tousse 80000 Amiens',
-        customer: 'Jean Aymare',
-        type: 'Visite',
-        note: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-    },
-    {
-        id: '2',
-        date: '2021-11-23 11:30:00',
-        staff_id: '1',
-        estate_address: '2 rue de la poupée qui tousse 80000 Amiens',
-        customer: 'Jean Aymare',
-        type: 'Première visite',
-        note: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-    },
-    {
-        id: '3',
-        date: '2021-11-23 14:00:00',
-        staff_id: '1',
-        estate_address: '2 rue de la poupée qui tousse 80000 Amiens',
-        customer: 'Jean Aymare',
-        type: 'Visite',
-        note: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-    },
-];
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Calendar = () => {
 
-    const [appointements, setAppointements] = useState([])
+    const [appointments, setAppointments] = useState([]);
 
     useEffect(() => {
-
-        getTodayStaffAptmts('2').then(
-            response => {
-                if (response.status == 200) {
-                    setAppointements(response.data);
-                    console.log(appointements)
-                } else {
-                    console.log('Pas de rendez-vous aujourd\'hui ');
-                }
-            }).catch(error => {
-                console.log(error)
-            })
-    }, [])
+        if (appointments.length == 0) {
+            AsyncStorage.getItem('@auth:userId', (error, result) => {
+                try {
+                    getTodayStaffAptmts(result).then(
+                        response => {
+                            if (response.status == 200) {
+                                setAppointments(response.data);
+                            } else {
+                                console.log('Pas de rendez-vous aujourd\'hui');
+                            }
+                        }).catch(error => {
+                            console.log(error)
+                        })
+                } catch {
+                    console.log(error)
+                } 
+            });
+        }
+    }, [appointments])
 
     const renderItem = ({ item }) => (
-        <CalendarItem title={item.date} />
+        <CalendarItem title={item.sheduled_at} />
     );
 
     return(
+        appointments.length != 0 ?
         <View>
             <FlatList
-                data={DATA}
+                data={appointments}
                 renderItem={({item}) => <CalendarItem appointments={item}/>}
                 keyExtractor={item => item.id}
             />
         </View>
+        : 
+        <View>
+            <Text style={styles.text}>Pas de rendez-vous</Text>
+        </View>
     )
 };
+
+const styles = StyleSheet.create({
+    text: {
+        justifyContent: 'center',
+        marginTop: 20,
+        textAlign: 'center'
+    }
+})
 
 export default Calendar;
