@@ -16,7 +16,7 @@ export default function App() {
         if (value !== null) {
             return value;
         }else{
-            alert('pas de token')
+            console.log('pas de token')
         }
     } catch (e) {
         console.log('Failed to fetch the data from storage')
@@ -34,7 +34,8 @@ export default function App() {
           if (error.response) {
             if (error.response.status === 401) {
               AsyncStorage.removeItem('@auth:token')
-              alert('j\ai supprimé le token')
+              console.log('j\ai supprimé le token')
+              console.log(error.response);
             }
           }
           return Promise.reject(error);

@@ -15,7 +15,7 @@ const Estate = () => {
                 {() => <EstateList />}
             </Stack.Screen>
             <Stack.Screen name="estateDetail">
-                {() => <EstateDetail />}
+                {(props) => <EstateDetail {...props} />}
             </Stack.Screen>
         </Stack.Navigator>
     )
