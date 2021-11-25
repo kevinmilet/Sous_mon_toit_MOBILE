@@ -6,7 +6,7 @@ import { SafeAreaView, StyleSheet, Text, View,ActivityIndicator} from 'react-nat
 const Loader = () => {
     return (
         <View style={styles.loading_container}>
-             <ActivityIndicator size='large' color='red'/>
+            <ActivityIndicator size='large' color='red'/>
         </View>
     );
 };

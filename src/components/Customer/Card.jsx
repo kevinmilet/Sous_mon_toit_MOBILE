@@ -1,20 +1,30 @@
-// Components/FilmItem.js
-
-import React from 'react'
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-// import { getImageFromApi } from '../API/TMDBApi'
-
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  getCustomerDescribe,
+  getCustomerSearch,
+  getOneCustomer,
+} from "../../API/ApiCustomers";
 const Card = ({customer}) => {
-   const navigation = useNavigation();
+  
+  const navigation = useNavigation();
     return (
-      <TouchableOpacity style={styles.main_container} onPress={() => navigation.navigate('customerDetail')} > 
+      <TouchableOpacity style={styles.main_container} onPress={() => navigation.navigate('customerDetail', {id : customer.id})} > 
         <View style={styles.content_container}>  
           <View >
-            <Text >Nom : {customer.lastname}</Text>
-            <Text >Prénom : {customer.firstname}</Text>
-            <Text>Mail : {customer.mail}</Text>
-           
+          <Text style={styles.baseText}>
+              Nom :
+              <Text style={styles.innerText}> {customer.lastname}</Text>
+            </Text>
+            <Text style={styles.baseText}>
+              Prénom :
+              <Text style={styles.innerText}> {customer.firstname}</Text>
+            </Text>
+            <Text style={styles.baseText}>
+              Mail :<Text style={styles.innerText}> {customer.mail}</Text>
+            </Text>
+          
           </View>
         </View>
       </TouchableOpacity>
@@ -30,6 +40,15 @@ const Card = ({customer}) => {
       backgroundColor: '#4EA1D5',
       borderRadius: 20
     },
+    baseText: {
+    fontWeight: "bold",
+    color: "#EAEAEA"
+  },
+  innerText: {
+    fontStyle: "italic",
+    fontWeight: "normal",
+    color: "black"
+  },
     image: {
       width: 120,
       height: 180,

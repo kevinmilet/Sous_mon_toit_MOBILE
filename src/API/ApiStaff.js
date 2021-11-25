@@ -7,8 +7,8 @@ export async function login(values) {
     return await axios.post(url, values);
 }
 
-// Methode de test pour récupérer l'avatar -- NE PAS GARDER EN L'ETAT!!!
-export async function getStaffPicture(id) {
+// Récuperer l'user courant (connecté)
+export async function getCurrentUser(id) {
     const url = `${API_URL}/staff/${id}`;
     return await axios.get(url);
 }

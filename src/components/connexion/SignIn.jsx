@@ -1,7 +1,7 @@
 import { Entypo as Icon } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFormik } from "formik";
-import React, { forwardRef, useEffect, useRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
 import { Image, StyleSheet, Text, TextInput as RNTextInput, TouchableOpacity, View } from 'react-native';
 import * as Yup from "yup";
 import { login } from '../../API/ApiStaff';
@@ -86,6 +86,10 @@ const SignIn = () => {
                 AsyncStorage.setItem(
                     '@auth:token',
                     response.data.token
+                );
+                AsyncStorage.setItem(
+                    '@auth:userId',
+                    (response.data.user.id).toString()
                 );
             } catch (error) {
                 console.log("Error saving data")

@@ -1,8 +1,7 @@
-import { SafeAreaView, StyleSheet, Text, View, ActivityIndicator, Image } from 'react-native';
-import EstateList from '../components/Estate/EstateList';
-import EstateDetail from '../components/Estate/EstateDetail';
-import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import EstateDetail from '../components/Estate/EstateDetail';
+import EstateList from '../components/Estate/EstateList';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +15,7 @@ const Estate = () => {
                 {() => <EstateList />}
             </Stack.Screen>
             <Stack.Screen name="estateDetail">
-                {() => <EstateDetail />}
+                {(props) => <EstateDetail {...props} />}
             </Stack.Screen>
         </Stack.Navigator>
     )

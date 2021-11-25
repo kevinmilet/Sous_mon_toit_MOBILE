@@ -13,12 +13,10 @@ export default function App() {
   const readData = async () => {
     try {
         const value = await AsyncStorage.getItem('@auth:token')
-        console.log(value);
         if (value !== null) {
-            console.log('TOKEN = ' + value);
             return value;
         }else{
-            alert('pas de token')
+            console.log('pas de token')
         }
     } catch (e) {
         console.log('Failed to fetch the data from storage')
@@ -36,7 +34,8 @@ export default function App() {
           if (error.response) {
             if (error.response.status === 401) {
               AsyncStorage.removeItem('@auth:token')
-              alert('j\ai supprimé le token')
+              console.log('j\ai supprimé le token')
+              console.log(error.response);
             }
           }
           return Promise.reject(error);

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from 'react-native';
+import { getAllCustomers } from "../../API/ApiCustomers";
 import Card from '../../components/Customer/Card';
 import Loader from "../../Tools/Loader/Loader";
 import Topbar from './../Topbar/Topbar';
@@ -11,14 +12,8 @@ const CustomerList = () => {
     const [customerTypeData, setCustomerTypeData] = useState({});
     const [loading, setLoading] = useState(true);
 
-    
-
     useEffect(() => {
-
-        axios.get(
-            "http://api-sousmontoit.am.manusien-ecolelamanu.fr/public/customer/s/" 
-        )
-            .then((res) => {
+        getAllCustomers().then((res) => {
                 setCustomerData(res.data);
             })
             .catch((error) => {
@@ -27,7 +22,6 @@ const CustomerList = () => {
             .finally(() => {
                 setLoading(false);
             });
-
     }, []);
 
     if (loading) {
@@ -49,7 +43,7 @@ const CustomerList = () => {
 const styles =  StyleSheet.create({
     mainContainer: {
         flex: 1,
-        marginTop: 50
+         backgroundColor: "#454552"
     },
     textinput: {
         marginLeft: 5, 
