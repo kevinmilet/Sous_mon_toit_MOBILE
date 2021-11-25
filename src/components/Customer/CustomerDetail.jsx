@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView} from "react-native";
 import {
   getCustomerDescribe,
   getCustomerSearch
 } from "../../API/ApiCustomers";
 import Topbar from "../Topbar/Topbar";
+import {
+  getAllCustomerAptmts
+} from "../../API/ApiApointements";
 
-const CustomerDetail = () => {
+const CustomerDetail = ({route}) => {
+  const {id} =  route.params;
+
   const [customerData, setCustomerData] = useState({});
   const [customerSearch, setCustomerSearch] = useState({});
   const [customerTypes, setCustomerTypes] = useState({});
   const [customerTypeData, setCustomerTypeData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [customerAptmts, setCustomerAptmts ] = useState({});
 
   useEffect(() => {
-    getCustomerSearch("2")
+    getCustomerSearch(id)
       .then((res) => {
         setCustomerSearch(res.data);
         console.log(res.data, "search");
@@ -26,10 +32,11 @@ const CustomerDetail = () => {
         setLoading(false);
       });
 
-    getCustomerDescribe("3")
+    getCustomerDescribe(id)
       .then((res) => {
+    
         setCustomerData(res.data[[0]][[0]]);
-        console.log(res.data[[0]][[0]], "describe5");
+        console.log(res.data, "describe5");
       })
       .catch((error) => {
         console.log(error.message);
@@ -37,12 +44,24 @@ const CustomerDetail = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+      getAllCustomerAptmts(id).then((res) => {
+    
+        setCustomerAptmts(res.data[0]);
+        console.log(res.data, "describe5");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+     
+  }, [id]);
   return (
     <View style={styles.main_container}>
       <Topbar />
 
-      <View style={styles.main_container}>
+      <ScrollView style={styles.main_container2}>
         <View style={styles.containerTitleMain}>
           <Text style={styles.styleTitleMain}>Détails client</Text>
         </View>
@@ -119,9 +138,16 @@ const CustomerDetail = () => {
                 {customerSearch.search_radius} Km
               </Text>
             </Text>
+            <Text style={styles.baseText}>
+              Rendez-vous :
+              <Text style={styles.innerText}>
+                {" "}
+                {customerAptmts.scheduled_at} 
+              </Text>
+            </Text>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -129,8 +155,7 @@ const CustomerDetail = () => {
 const styles = StyleSheet.create({
   main_container: {
     flex: 1,
-    backgroundColor: "#4EA1D5",
-    borderRadius: 20,
+     backgroundColor: "#454552",
   },
 
   styleTitleMain:{
@@ -140,11 +165,12 @@ const styles = StyleSheet.create({
   },
 
   main_container2: {
-    flex: 1,
+    // marginHorizontal: 20,
+    // marginVertical: 10,
     margin: 10,
-    padding: 10,
+    padding: 20,
     backgroundColor: "#4EA1D5",
-    borderRadius: 20,
+    borderRadius: 10,
   },
   baseText: {
     fontWeight: "bold",
@@ -172,7 +198,9 @@ const styles = StyleSheet.create({
   },
   content_container: {
     flex: 1,
-    margin: 5,
+    // margin: 5,
+
+    marginBottom: 30
   },
   header_container: {
     flex: 3,

@@ -16,7 +16,8 @@ const Customer = () => {
             <Stack.Screen name="customerDetail" options={{
                     headerShown: false,
                 }}>
-                {()=><CustomerDetail/>}
+                    {(props) => <CustomerDetail {...props} />}
+                
             </Stack.Screen>
         </Stack.Navigator>
     );

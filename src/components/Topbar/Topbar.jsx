@@ -52,7 +52,7 @@ const Topbar = () => {
 
 const styles = StyleSheet.create({
     topbar_container: {
-        backgroundColor: '#454552',
+        backgroundColor: '#E85A70',
         minHeight: 180,
         flexDirection: 'row'
     },

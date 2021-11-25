@@ -42,3 +42,9 @@ export async function getTodayCustomerAptmts(id) {
     const url = `${API_URL}/schedule/today_customer/${id}`;
     return await axios.get(url);
 }
+
+// Récupére tout les rendez vous d'un client 
+export async function getAllCustomerAptmts(id) {
+    const url = `${API_URL}/schedule/customer/${id}`;
+    return await axios.get(url);
+}

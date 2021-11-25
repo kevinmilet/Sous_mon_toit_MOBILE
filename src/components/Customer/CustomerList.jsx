@@ -43,7 +43,7 @@ const CustomerList = () => {
 const styles =  StyleSheet.create({
     mainContainer: {
         flex: 1,
-         backgroundColor: "#E85A70"
+         backgroundColor: "#454552"
     },
     textinput: {
         marginLeft: 5, 
