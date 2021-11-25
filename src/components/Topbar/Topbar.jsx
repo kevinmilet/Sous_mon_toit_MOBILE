@@ -11,34 +11,27 @@ const Topbar = () => {
     let day = moment().format('dddd');
     let date = moment().format('DD MMMM YYYY');
 
-    const [currentUser, setCurrentUser] = useState({
-        firstname: '',
-        lastname: '',
-        avatar: ''
-    });
-    const [currentUserId, setCurrentUserId] = useState('');
+    const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
-
-        AsyncStorage.getItem('@auth:userId', (error, result) => {
-            try {
-                setCurrentUserId(result);
-            } catch {
-                console.log(error)
-            } 
-        });
-
-        setCurrentUserId(currentUserId);
-
-        getCurrentUser(currentUserId).then(
-            response => {
-                setCurrentUser(response.data);
-            }).catch(error => {
-                console.log(error)
-            })
-    }, [currentUserId])
+        if (!currentUser) {
+            AsyncStorage.getItem('@auth:userId', (error, result) => {
+                try {
+                    getCurrentUser(result).then(
+                        response => {
+                            setCurrentUser(response.data);
+                        }).catch(error => {
+                            console.log(error)
+                        })
+                } catch {
+                    console.log(error)
+                } 
+            });
+        }
+    }, [currentUser])
 
     return (
+        currentUser ? 
         <View style={styles.topbar_container}>
             <View style={styles.content_container}>
                 <View style={styles.profile_container}>
@@ -52,6 +45,8 @@ const Topbar = () => {
                 </View>
             </View>
         </View>
+        :
+        null
     )
 };
 
