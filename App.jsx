@@ -13,9 +13,7 @@ export default function App() {
   const readData = async () => {
     try {
         const value = await AsyncStorage.getItem('@auth:token')
-        console.log(value);
         if (value !== null) {
-            console.log('TOKEN = ' + value);
             return value;
         }else{
             alert('pas de token')

@@ -2,7 +2,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { getStaffPicture } from '../../API/ApiStaff';
+import { getCurrentUser, getStaffPicture } from '../../API/ApiStaff';
 import { AVATAR_BASE_URL } from '@env';
 
 const Topbar = () => {
@@ -13,7 +13,15 @@ const Topbar = () => {
     const [staffData, setStaffData] = useState({});
 
     useEffect(() => {
-        getStaffPicture('2').then(
+        getCurrentUser().then(
+            response => {
+                console.log(response.data);
+            }).catch(error => {
+                console.log(error)
+            }
+        )
+
+        getStaffPicture('3').then(
             response => {
                 setStaffData(response.data)
             }).catch(error => {

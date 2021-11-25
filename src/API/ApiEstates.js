@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Récupérer tout les biens
 export async function getAllEstates() {
-    const url = `${API_URL}/estates/`;
+    const url = `${API_URL}/estates`;
     return await axios.get(url);
 }
 
@@ -15,13 +15,13 @@ export async function getOneEstate(id) {
 
 // Récuperer les types biens pour la recherche
 export async function getEstatesTypes() {
-    const url = `${API_URL}/estates_types/`;
+    const url = `${API_URL}/estates_types`;
     return await axios.get(url);
 }
 
 // Recherche
 export async function search(values) {
-    const url = `${API_URL}/search/`;
+    const url = `${API_URL}/search`;
     return await axios.post(url, values)
 }
 

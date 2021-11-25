@@ -12,3 +12,9 @@ export async function getStaffPicture(id) {
     const url = `${API_URL}/staff/${id}`;
     return await axios.get(url);
 }
+
+// Récuperer l'user courant (connecté)
+export async function getCurrentUser() {
+    const url = `${API_URL}/api/s/me`;
+    return await axios.post(url);
+}

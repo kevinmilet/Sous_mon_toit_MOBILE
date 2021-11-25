@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Liste de tous les clients
 export async function getAllCustomers() {
-    const url = `${API_URL}/customer/s/`;
+    const url = `${API_URL}/customer/s`;
     return await axios.get(url);
 }
 
@@ -15,7 +15,7 @@ export async function getOneCustomer(id) {
 
 // Récupérer les types de clients (acheteur, vendeur....)
 export async function getCustomersTypes() {
-    const url = `${API_URL}/customer_type/`;
+    const url = `${API_URL}/customer_type`;
     return await axios.get(url);
 }
 
