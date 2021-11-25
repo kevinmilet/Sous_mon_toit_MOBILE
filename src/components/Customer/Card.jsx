@@ -1,11 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
+import {
+  getCustomerDescribe,
+  getCustomerSearch,
+  getOneCustomer,
+} from "../../API/ApiCustomers";
 const Card = ({customer}) => {
+  
   const navigation = useNavigation();
     return (
-      <TouchableOpacity style={styles.main_container} onPress={() => navigation.navigate('customerDetail')} > 
+      <TouchableOpacity style={styles.main_container} onPress={() => navigation.navigate('customerDetail', {id : customer.id})} > 
         <View style={styles.content_container}>  
           <View >
           <Text style={styles.baseText}>
