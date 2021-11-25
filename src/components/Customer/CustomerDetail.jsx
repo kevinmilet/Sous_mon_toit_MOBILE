@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import {
   getCustomerDescribe,
-  getCustomerSearch,
-  getOneCustomer,
+  getCustomerSearch
 } from "../../API/ApiCustomers";
 import Topbar from "../Topbar/Topbar";
-import axios from "axios";
 
 const CustomerDetail = () => {
   const [customerData, setCustomerData] = useState({});

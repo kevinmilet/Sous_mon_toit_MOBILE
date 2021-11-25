@@ -1,5 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const CalendarItem = (appointments) => {
 
@@ -10,18 +11,22 @@ const CalendarItem = (appointments) => {
     const hourArray = date.substr(11, 19).split(':');
     const formatDate = dateArray[2] + '/' + dateArray[1] + '/' +dateArray[0];
     const formatHour = hourArray[0] + 'h' + hourArray[1];
+
+    const navigation = useNavigation();
     
     return(
-        <View style={styles.content_container}>
-            <View style={styles.header_container}>
-                <Text style={styles.date_text}>{formatDate} à {formatHour}</Text>
-                <Text style={styles.type_text}>{apptmt.appointment_type}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('appointmentDetails')}>
+            <View style={styles.content_container}>
+                <View style={styles.header_container}>
+                    <Text style={styles.date_text}>{formatDate} à {formatHour}</Text>
+                    <Text style={styles.type_text}>{apptmt.appointment_type}</Text>
+                </View>
+                <View style={styles.description_container}>
+                    <Text style={styles.description_text}>{apptmt.customerFirstname} {apptmt.customerLastname}</Text>
+                    <Text style={styles.description_text}>{apptmt.address} {apptmt.zipcode} {apptmt.city}</Text>
+                </View>
             </View>
-            <View style={styles.description_container}>
-                <Text style={styles.description_text}>{apptmt.customerFirstname} {apptmt.customerLastname}</Text>
-                <Text style={styles.description_text}>{apptmt.address} {apptmt.zipcode} {apptmt.city}</Text>
-            </View>
-        </View>
+        </TouchableOpacity>
     )
 };
 
