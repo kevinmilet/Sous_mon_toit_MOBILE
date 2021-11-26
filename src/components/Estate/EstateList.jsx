@@ -1,9 +1,8 @@
-import { API_URL } from '@env';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { getAllEstates } from '../../API/ApiEstates';
 import EstateCard from './EstateCard';
-        
+
 const EstateList = () => {
 
     const [estates, setEstates] = useState([]);
@@ -17,8 +16,7 @@ const EstateList = () => {
                 console.log(error.message)
             }
         )
-    
-    }, [API_URL])
+    }, [])
 
     return (
 

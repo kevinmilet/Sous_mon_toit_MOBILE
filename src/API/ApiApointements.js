@@ -1,50 +1,50 @@
-import { API_URL } from '@env';
-import axios from 'axios';
+import { instanceAxios } from "./Interceptor"
 
 // Récuperer tous les rdvs de l'agent
-export async function getAllStaffAptmt(id) {
-    const url = `${API_URL}/schedule/staff/${id}`;
-    return await axios.get(url);
+export const getAllStaffAptmt = (id) =>{
+    return instanceAxios.get(`/schedule/staff/${id}`)
+    .then(response => response)
 }
 
 // Récuperer les rdvs d'un client
-export async function getAllCustomerAptmt(id) {
-    const url = `${API_URL}/schedule/customer/${id}`;
-    return await axios.get(url);
+export const getAllCustomerAptmt = (id) =>{
+    return instanceAxios.get(`/schedule/customer/${id}`)
+    .then(response => response)
 }
 
 // Ajouter un rdv
-export async function createAptmt(values) {
-    const url = `${API_URL}/schedule/createAppt`;
-    return await axios.post(url, values);
+export const createAptmt = (values) =>{
+    return instanceAxios.post(`/schedule/createAppt`,values)
+    .then(response => response)
 }
 
 // Editer un rdv
-export async function updateAptmt(id, values) {
-    const url = `${API_URL}/schedule/update/${id}`;
-    return await axios.put(url, values);
+export const updateAptmt = (values) =>{
+    return instanceAxios.put(`/schedule/update/${id}`,values)
+    .then(response => response)
 }
 
 // Supprimer un rdv
-export async function deleteAptmt(id) {
-    const url = `${API_URL}/schedule/delete/${id}`;
-    return await axios.post(url);
+export const deleteAptmt = (id) =>{
+    return instanceAxios.post(`/schedule/update/${id}`)
+    .then(response => response)
 }
 
+
 // Récuperer tout les rdv du jour pour l'agent
-export async function getTodayStaffAptmts(id) {
-    const url = `${API_URL}/schedule/today_staff/${id}`;
-    return await axios.get(url);
+export const getTodayStaffAptmts = (id) =>{
+    return instanceAxios.get(`/schedule/today_staff/${id}`)
+    .then(response => response)
 }
 
 // Récuperer tout les rdv du jour pour le client
-export async function getTodayCustomerAptmts(id) {
-    const url = `${API_URL}/schedule/today_customer/${id}`;
-    return await axios.get(url);
+export const getTodayCustomerAptmts = (id) =>{
+    return instanceAxios.get(`/schedule/today_customer/${id}`)
+    .then(response => response)
 }
 
 // Récupére tout les rendez vous d'un client 
-export async function getAllCustomerAptmts(id) {
-    const url = `${API_URL}/schedule/customer/${id}`;
-    return await axios.get(url);
+export const getAllCustomerAptmts = (id) =>{
+    return instanceAxios.get(`/schedule/customer/${id}`)
+    .then(response => response)
 }

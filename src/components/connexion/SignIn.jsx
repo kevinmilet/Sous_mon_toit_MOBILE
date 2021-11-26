@@ -1,7 +1,7 @@
 import { Entypo as Icon } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFormik } from "formik";
-import React, { forwardRef, useRef } from 'react';
+import React, { forwardRef, useRef , useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TextInput as RNTextInput, TouchableOpacity, View } from 'react-native';
 import * as Yup from "yup";
 import { login } from '../../API/ApiStaff';
@@ -58,9 +58,10 @@ const TextInput = forwardRef(({ icon, error, touched, ...otherProps }, ref) => {
     );
 });
 
-const SignIn = () => {
+const SignIn = (props) => {
 
     const password = useRef(null);
+    const{setTokenIsValid} = props
     const { handleChange, handleSubmit, handleBlur, values, errors, touched } = useFormik({
         initialValues: {
             login: '',
@@ -76,29 +77,23 @@ const SignIn = () => {
             await new Promise(r => {
                 signIn(values)
             })
-            alert(`Login: ${values.login}, Password: ${values.password}`)
+            // alert(`Login: ${values.login}, Password: ${values.password}`)
         }
     });
 
     const signIn = (values) => login(values).then(
         response => {
-            try {
+            if(response.token){
                 AsyncStorage.setItem(
-                    '@auth:token',
-                    response.data.token
+                    '@auth_userId',
+                    (response.user.id).toString()
                 );
-                AsyncStorage.setItem(
-                    '@auth:userId',
-                    (response.data.user.id).toString()
-                );
-            } catch (error) {
-                console.log("Error saving data")
-                console.log(error);
+                setTokenIsValid(true);
             }
-            // window.location.href = '/';
-        }).catch(error => {
-            console.log("catch !",error.message);
-        })
+        }
+    ).catch(error => {
+        console.log("catch !",error.message);
+    })
 
     return (
         <View
