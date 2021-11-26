@@ -13,9 +13,9 @@ export const getAllCustomerAptmt = (id) =>{
 }
 
 // Voir un rendez-vous
-export async function showAptmt(id) {
-    const url = `${API_URL}/schedule/${id}`;
-    return await axios.get(url);
+export const showAptmt = (id)  => {
+    return instanceAxios.get(`/schedule/${id}`)
+        .then(response =>response)
 }
 
 // Ajouter un rdv
