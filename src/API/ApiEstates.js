@@ -1,38 +1,37 @@
-import { API_URL } from '@env';
-import axios from 'axios';
+import { instanceAxios } from "./Interceptor"
 
 // Récupérer tout les biens
-export async function getAllEstates() {
-    const url = `${API_URL}/estates`;
-    return await axios.get(url);
+export const getAllEstates = () =>{
+    return instanceAxios.get(`/estates`)
+    .then(response => response)
 }
 
 // Récupérer un bien
-export async function getOneEstate(id) {
-    const url = `${API_URL}/estates/${id}`;
-    return await axios.get(url);
+export const getOneEstate = (id) =>{
+    return instanceAxios.get(`/estates/${id}`)
+    .then(response => response)
 }
 
 // Récuperer les types biens pour la recherche
-export async function getEstatesTypes() {
-    const url = `${API_URL}/estates_types`;
-    return await axios.get(url);
+export const getEstatesTypes = () =>{
+    return instanceAxios.get(`/estates_types`)
+    .then(response => response)
 }
 
 // Recherche
-export async function search(values) {
-    const url = `${API_URL}/search`;
-    return await axios.post(url, values)
+export const search = (values) =>{
+    return instanceAxios.post(`/search`)
+    .then(response => response)
 }
 
 // Images d'un bien
-export async function getEstatePictures(id) {
-    const url = `${API_URL}/estates_pictures/${id}`
-    return await axios.get(url);
+export const getEstatePictures = (id) =>{
+    return instanceAxios.get(`/estates_pictures/${id}`)
+    .then(response => response)
 }
 
 // Cover d'un bien
-export async function getEstateCover(id) {
-    const url = `${API_URL}/estates_pictures/cover/${id}`;
-    return await axios.get(url);
+export const getEstateCover = (id) =>{
+    return instanceAxios.get(`/estates_pictures/cover/${id}`)
+    .then(response => response)
 }

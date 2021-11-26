@@ -1,6 +1,4 @@
-import { API_URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from "axios";
 import { default as React, useEffect, useState } from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
 import SignIn from './src/components/connexion/SignIn';
@@ -10,39 +8,32 @@ import colors from './src/utils/styles/colors';
 export default function App() {
 
   const [tokenIsValid, setTokenIsValid] = useState(false);
+  // AsyncStorage.removeItem("@auth_token");
+  // AsyncStorage.removeItem("@auth_userId");
   //Fonction de récupération du token dans le storage
   const readData = async () => {
     try {
-        const value = await AsyncStorage.getItem('@auth:token')
+        const value = await AsyncStorage.getItem('@auth_token')
         if (value !== null) {
-            return value;
+            console.log('j\'ai un token !', value)
+            return true;
         }else{
             console.log('pas de token')
+            return false;
         }
     } catch (e) {
         console.log('Failed to fetch the data from storage')
     }
   }  
   useEffect(() => {
-      readData().then(res=>{
-        // Enregistrement du token dans le header
-        axios.defaults.headers.common['Authorization'] = `Bearer ${res}`
-        // Test de la validité du token
-        axios.interceptors.response.use(function (response) {
-          setTokenIsValid(true);
-          return response
-        }, function (error) {
-          if (error.response) {
-            if (error.response.status === 401) {
-              AsyncStorage.removeItem('@auth:token')
-              console.log('j\ai supprimé le token')
-              console.log(error.response);
-            }
-          }
-          return Promise.reject(error);
-        })
-      });
-  }, [API_URL, tokenIsValid]);
+
+    readData().then(res=>{
+      if(res){
+        setTokenIsValid(true);
+      }
+    })
+
+  }, [tokenIsValid]);
 
   return (
     tokenIsValid === true ?
@@ -53,7 +44,7 @@ export default function App() {
         <NavigationMain />
       </SafeAreaView>
       :
-      <SignIn />
+      <SignIn setTokenIsValid={setTokenIsValid}/>
   );
 }
 

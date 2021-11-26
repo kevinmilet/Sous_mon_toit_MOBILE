@@ -1,4 +1,3 @@
-import { API_URL } from '@env';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { getAllEstates } from '../../API/ApiEstates';
@@ -18,8 +17,7 @@ const EstateList = () => {
                 console.log(error.message)
             }
         )
-    
-    }, [API_URL])
+    }, [])
 
     return (
 
