@@ -22,13 +22,17 @@ const EstateList = () => {
 
     return (
 
+        <>
+        <View>
+            <Topbar />
+        </View>
         <View style={styles.main_container}>
             <FlatList
                 data={estates}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <EstateCard estate={item} />}
-            />
+                renderItem={({ item }) => <EstateCard estate={item} />} />
         </View>
+        </>
     );
 }
 
