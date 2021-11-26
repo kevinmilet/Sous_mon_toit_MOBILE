@@ -3,6 +3,7 @@ import { View, FlatList, Text, StyleSheet } from 'react-native';
 import CalendarItem from './CalendarItem';
 import { getTodayStaffAptmts } from '../../API/ApiApointements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Topbar from '../Topbar/Topbar';
 
 const Calendar = () => {
 
@@ -35,7 +36,9 @@ const Calendar = () => {
 
     return(
         appointments.length != 0 ?
+
         <View>
+            <Topbar/>
             <FlatList
                 data={appointments}
                 renderItem={({item}) => <CalendarItem appointments={item}/>}
@@ -44,6 +47,7 @@ const Calendar = () => {
         </View>
         : 
         <View>
+            <Topbar/>
             <Text style={styles.text}>Pas de rendez-vous</Text>
         </View>
     )
