@@ -1,12 +1,12 @@
-import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import React from "react";
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Contract from "../screens/Contract";
 import Customer from "../screens/Customer";
 import Estate from "../screens/Estate";
 import Home from '../screens/Home';
+import colors from '../utils/styles/colors';
 
 
 const Tab = createBottomTabNavigator();
@@ -20,7 +20,7 @@ const NavigationMain = () => {
                     headerShown: false,
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size }) => (
-                        <AntDesign name="home" color="black" size={24} />
+                        <FontAwesome5 name="home" color={colors.secondary} size={24} />
                     ),
                 }} >
                 
@@ -31,7 +31,7 @@ const NavigationMain = () => {
                     headerShown: false,
                     tabBarLabel: 'Clients',
                     tabBarIcon: ({ color, size }) => (
-                        <AntDesign name="profile" size={24} color="black" />
+                        <FontAwesome5 name="user" size={24} color={colors.secondary} />
                     ),
                 }}>
 
@@ -42,7 +42,7 @@ const NavigationMain = () => {
                     headerShown: false,
                     tabBarLabel: 'Biens',
                     tabBarIcon: ({ color, size }) => (
-                        <MaterialCommunityIcons name="home-modern" size={24} color="black" />
+                        <FontAwesome5 name="building" size={24} color={colors.secondary} />
                     ),
                 }} >
                 
@@ -53,7 +53,7 @@ const NavigationMain = () => {
                     headerShown: false,
                     tabBarLabel: 'Contrats',
                     tabBarIcon: ({ color, size }) => (
-                        <FontAwesome5 name="file-contract" size={24} color="black" />
+                        <FontAwesome5 name="file-contract" size={24} color={colors.secondary} />
                     ),
                 }} >
                 

@@ -11,12 +11,12 @@ const Button = ({ label, onPress }) => {
     return (
         <TouchableOpacity
             style={{
-                borderRadius: 8,
+                borderRadius: 25,
                 height: 50,
                 width: 245,
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: '#e94832'
+                backgroundColor: colors.primaryBtn
             }}
             activeOpacity={0.7}
             onPress={onPress}
@@ -30,14 +30,14 @@ const Button = ({ label, onPress }) => {
     );
 }
 const TextInput = forwardRef(({ icon, error, touched, ...otherProps }, ref) => {
-    const validationColor = !touched ? '#223e4b' : error ? '#FF5A5F' : '#223e4b';
+    const validationColor = !touched ? colors.secondaryBtn : error ? colors.primaryBtn : colors.secondaryBtn;
     return (
         <View
             style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 height: 48,
-                borderRadius: 8,
+                borderRadius: 25,
                 borderColor: validationColor,
                 borderWidth: StyleSheet.hairlineWidth,
                 padding: 8
@@ -101,29 +101,25 @@ const SignIn = () => {
         })
 
     return (
-        <View
-            style={{
-                flex: 1,
-                backgroundColor: '#000000',
-            }}
-        >
+        <View  style={{flex: 1}}>
             {/* Logo */}
             <View
                 style={{
                     flex: 2,
-                    backgroundColor: '#999999',
+                    backgroundColor: colors.primary,
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    borderRadius: 10
                 }}
             >
-                <Image source={require('../../../assets/android-icon-192x192.png')} />
+                <Image style={{borderRadius: 10}} source={require('../../../assets/android-icon-192x192.png')} />
             </View>
 
             {/* Formulaire */}
             <View
                 style={{
                     flex: 2,
-                    backgroundColor: '#fff',
+                    backgroundColor: colors.backgroundPrimary,
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}

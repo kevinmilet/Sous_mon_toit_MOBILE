@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/fr';
+import colors from '../../utils/styles/colors';
 
 const CalendarItem = (appointments) => {
 
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 10,
         padding: 10,
-        backgroundColor: '#4EA1D5',
+        backgroundColor: colors.secondaryBtn,
         borderRadius: 20
         },
     header_container: {
@@ -44,17 +45,17 @@ const styles = StyleSheet.create({
     date_text: {
         textAlign: 'left',
         fontSize: 16,
-        color: '#FFF',
+        color: colors.backgroundPrimary,
         fontWeight: 'bold'
     },
     type_text: {
         textAlign: 'right',
         fontSize: 16,
-        color: '#FFF',
+        color: colors.backgroundPrimary,
         fontWeight: 'bold'
     },
     description_text: {
-        color: '#454552',
+        color: colors.primary,
         fontSize: 14,
         marginVertical: 3
     }

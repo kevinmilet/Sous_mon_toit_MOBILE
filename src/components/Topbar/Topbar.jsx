@@ -5,6 +5,7 @@ import 'moment/locale/fr';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { getCurrentUser } from '../../API/ApiStaff';
+import colors from '../../utils/styles/colors'
 
 const Topbar = () => {
 
@@ -52,7 +53,7 @@ const Topbar = () => {
 
 const styles = StyleSheet.create({
     topbar_container: {
-        backgroundColor: '#E85A70',
+        backgroundColor: colors.secondary,
         minHeight: 180,
         flexDirection: 'row'
     },
@@ -69,14 +70,14 @@ const styles = StyleSheet.create({
         
     },
     profile_img: {
-        width: 65,
-        height: 65,
+        width: 80,
+        height: 80,
         borderRadius: 50,
         margin: 12,
-        backgroundColor: 'gray'
+        backgroundColor: colors.backgroundSecondary
     },
     date: {
-        color: '#FFF',
+        color: colors.backgroundPrimary,
         textTransform: 'capitalize',
         fontSize: 24,
         fontWeight: 'bold',
