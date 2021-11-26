@@ -13,6 +13,12 @@ export async function getAllCustomerAptmt(id) {
     return await axios.get(url);
 }
 
+// Voir un rendez-vous
+export async function showAptmt(id) {
+    const url = `${API_URL}/schedule/${id}`;
+    return await axios.get(url);
+}
+
 // Ajouter un rdv
 export async function createAptmt(values) {
     const url = `${API_URL}/schedule/createAppt`;

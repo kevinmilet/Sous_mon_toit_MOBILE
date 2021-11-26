@@ -21,17 +21,17 @@ const Topbar = () => {
                         response => {
                             setCurrentUser(response.data);
                         }).catch(error => {
-                            console.log(error)
+                            console.log(error.message)
                         })
                 } catch {
-                    console.log(error)
+                    console.log(error.message)
                 } 
             });
         }
     }, [currentUser])
 
     return (
-        currentUser ? 
+        currentUser ? (
         <View style={styles.topbar_container}>
             <View style={styles.content_container}>
                 <View style={styles.profile_container}>
@@ -44,7 +44,7 @@ const Topbar = () => {
                     <Text style={styles.date}>{date}</Text>
                 </View>
             </View>
-        </View>
+        </View>)
         :
         null
     )

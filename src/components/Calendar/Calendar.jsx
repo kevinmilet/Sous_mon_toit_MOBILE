@@ -18,17 +18,17 @@ const Calendar = () => {
                             if (response.status == 200) {
                                 setAppointments(response.data);
                             } else {
-                                console.log('Pas de rendez-vous aujourd\'hui');
+                                console.log('Pas de rendez-vous aujourd\'hui ');
                             }
                         }).catch(error => {
-                            console.log(error)
+                            console.log(error.message)
                         })
                 } catch {
-                    console.log(error)
-                } 
+                    console.log(error.message)
+                }
             });
         }
-    }, [appointments])
+    }, [])
 
     const renderItem = ({ item }) => (
         <CalendarItem title={item.sheduled_at} />
@@ -45,7 +45,7 @@ const Calendar = () => {
                 keyExtractor={item => item.id}
             />
         </View>
-        : 
+        :
         <View>
             <Topbar/>
             <Text style={styles.text}>Pas de rendez-vous</Text>
