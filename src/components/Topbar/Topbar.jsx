@@ -16,7 +16,7 @@ const Topbar = () => {
 
     useEffect(() => {
         if (!currentUser) {
-            AsyncStorage.getItem('@auth:userId', (error, result) => {
+            AsyncStorage.getItem('@auth_userId', (error, result) => {
                 try {
                     getCurrentUser(result).then(
                         response => {

@@ -84,11 +84,11 @@ const SignIn = () => {
         response => {
             try {
                 AsyncStorage.setItem(
-                    '@auth:token',
+                    '@auth_token',
                     response.data.token
                 );
                 AsyncStorage.setItem(
-                    '@auth:userId',
+                    '@auth_userId',
                     (response.data.user.id).toString()
                 );
             } catch (error) {
