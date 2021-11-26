@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { getAllEstates } from '../../API/ApiEstates';
 import EstateCard from './EstateCard';
+import Topbar from '../Topbar/Topbar'
         
 const EstateList = () => {
 

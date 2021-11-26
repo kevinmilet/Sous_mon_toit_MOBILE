@@ -55,7 +55,9 @@ const styles = StyleSheet.create({
     topbar_container: {
         backgroundColor: colors.secondary,
         minHeight: 180,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        borderBottomStartRadius: 10,
+        borderBottomEndRadius: 10
     },
     content_container: {
         flex: 1,
