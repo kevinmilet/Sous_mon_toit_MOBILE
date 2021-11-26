@@ -8,7 +8,9 @@ import Topbar from "../Topbar/Topbar";
 import {
   getAllCustomerAptmts
 } from "../../API/ApiApointements";
-
+import { format } from "date-fns";
+import Moment from 'moment';
+import 'moment/locale/fr';
 const CustomerDetail = ({route}) => {
   const {id} =  route.params;
 
@@ -47,20 +49,29 @@ const CustomerDetail = ({route}) => {
       getAllCustomerAptmts(id).then((res) => {
     
         setCustomerAptmts(res.data[0]);
-        console.log(res.data, "describe5");
+       
+        console.log(res.data,customerAptmts.scheduled_at, "appt5");
       })
       .catch((error) => {
         console.log(error.message);
       })
       .finally(() => {
+        // let formatHour = null;
         setLoading(false);
       });
      
   }, [id]);
+  // if(customerAptmts.scheduled_at !== null){
+    Moment.locale();
+    var dt = customerAptmts.scheduled_at;
+    const formatDate =  Moment(customerAptmts.scheduled_at).format('LLLL');
+  
+  
+  
   return (
     <View style={styles.main_container}>
       <Topbar />
-
+  
       <ScrollView style={styles.main_container2}>
         <View style={styles.containerTitleMain}>
           <Text style={styles.styleTitleMain}>Détails client</Text>
@@ -142,8 +153,21 @@ const CustomerDetail = ({route}) => {
               Rendez-vous :
               <Text style={styles.innerText}>
                 {" "}
-                {customerAptmts.scheduled_at} 
+                {customerAptmts ? customerAptmts.scheduled_at : null } 
               </Text>
+            </Text>
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>Rendez-vous</Text>
+            </View>
+            <Text style={styles.baseText}>
+              Rendez-vous :
+           
+              <Text style={styles.innerText}>
+                {" "}
+                {/* {formatHour} */}
+              {formatDate ?   formatDate : null } 
+              </Text>
+              
             </Text>
           </View>
         </View>
