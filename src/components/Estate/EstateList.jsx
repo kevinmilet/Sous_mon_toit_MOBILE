@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { getAllEstates } from '../../API/ApiEstates';
 import EstateCard from './EstateCard';
-
+import Topbar from '../Topbar/Topbar'
+        
 const EstateList = () => {
 
     const [estates, setEstates] = useState([]);
@@ -20,13 +21,17 @@ const EstateList = () => {
 
     return (
 
+        <>
+        <View>
+            <Topbar />
+        </View>
         <View style={styles.main_container}>
             <FlatList
                 data={estates}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <EstateCard estate={item} />}
-            />
+                renderItem={({ item }) => <EstateCard estate={item} />} />
         </View>
+        </>
     );
 }
 

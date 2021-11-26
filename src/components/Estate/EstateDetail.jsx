@@ -3,6 +3,7 @@ import { Text, View, Image, StyleSheet, FlatList, ScrollView } from 'react-nativ
 import { getOneEstate, getEstateCover, getEstatePictures } from '../../API/ApiEstates';
 import { COVER_ESTATE_BASE_URL } from '@env';
 import { FontAwesome5 } from '@expo/vector-icons';
+import colors from '../../utils/styles/colors'
 
 const EstateDetail = ({ route }) => {
 
@@ -57,10 +58,10 @@ const EstateDetail = ({ route }) => {
             <View style={{alignItems: 'center'}}>
                 <Image 
                     source={{ uri: COVER_ESTATE_BASE_URL + pictureCover.name }} 
-                    style={{ height: 150, width: '80%', resizeMode:'cover', borderRadius:30 }} 
+                    style={{ height: 150, width: '80%', resizeMode:'cover', borderRadius:20 }} 
                 />
             </View>
-            <Text style={{textAlign:"right"}}>Prix: {oneEstateData.price}€</Text>
+            <Text style={{textAlign:"right", color: colors.primaryBtn}}>Prix: {oneEstateData.price}€</Text>
             <FlatList
                 data={picturesList}
                 horizontal={true}
@@ -100,18 +101,18 @@ const EstateDetail = ({ route }) => {
                 <Text>Parking : <Text>{oneEstateData.nb_parking}</Text></Text>
 
                 <Text style={{ fontSize: 30 }}>Les plus</Text>
-                {oneEstateData.communal_heating ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Chauffage collectif</Text> : null}
-                {oneEstateData.furnished ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Meublé</Text> : null}
-                {oneEstateData.private_parking ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Parking privé</Text> : null}
-                {oneEstateData.handicap_access ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Accès handicapé</Text> : null}
-                {oneEstateData.cellar ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Cave</Text> : null}
-                {oneEstateData.terrace ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Terrace</Text> : null}
-                {oneEstateData.swimming_pool ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Piscine</Text> : null}
-                {oneEstateData.fireplace ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Cheminée</Text> : null}
-                {oneEstateData.all_in_sewer ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Tout à l'égout</Text> : null}
-                {oneEstateData.septik_tank ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Fosse septique</Text> : null}
-                {oneEstateData.attic ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Grenier</Text> : null}
-                {oneEstateData.elevator ? <Text><FontAwesome5 name="check-circle" size={24} color="black" /> Ascensseur</Text> : null}
+                {oneEstateData.communal_heating ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Chauffage collectif</Text> : null}
+                {oneEstateData.furnished ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Meublé</Text> : null}
+                {oneEstateData.private_parking ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Parking privé</Text> : null}
+                {oneEstateData.handicap_access ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Accès handicapé</Text> : null}
+                {oneEstateData.cellar ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Cave</Text> : null}
+                {oneEstateData.terrace ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Terrace</Text> : null}
+                {oneEstateData.swimming_pool ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Piscine</Text> : null}
+                {oneEstateData.fireplace ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Cheminée</Text> : null}
+                {oneEstateData.all_in_sewer ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Tout à l'égout</Text> : null}
+                {oneEstateData.septik_tank ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Fosse septique</Text> : null}
+                {oneEstateData.attic ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Grenier</Text> : null}
+                {oneEstateData.elevator ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Ascensseur</Text> : null}
 
                 <Text style={{ fontSize: 30 }}>Contactez l'agence</Text>
                 <Text>Ce bien vous a tapé dans l'oeil ? Vous n'en dormez plus la nuit ?
@@ -130,6 +131,5 @@ const styles = StyleSheet.create({
         paddingHorizontal:15,
     },
 })
-
 
 export default EstateDetail;

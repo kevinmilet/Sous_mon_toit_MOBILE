@@ -12,6 +12,12 @@ export const getAllCustomerAptmt = (id) =>{
     .then(response => response)
 }
 
+// Voir un rendez-vous
+export async function showAptmt(id) {
+    const url = `${API_URL}/schedule/${id}`;
+    return await axios.get(url);
+}
+
 // Ajouter un rdv
 export const createAptmt = (values) =>{
     return instanceAxios.post(`/schedule/createAppt`,values)

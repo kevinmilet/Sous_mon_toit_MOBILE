@@ -1,15 +1,14 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from 'react-native';
 import { getAllCustomers } from "../../API/ApiCustomers";
 import Card from '../../components/Customer/Card';
 import Loader from "../../Tools/Loader/Loader";
 import Topbar from './../Topbar/Topbar';
+import colors from '../../utils/styles/colors'
 
 
 const CustomerList = () => {
     const [customerData, setCustomerData] = useState({});
-    const [customerTypeData, setCustomerTypeData] = useState({});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -43,15 +42,7 @@ const CustomerList = () => {
 const styles =  StyleSheet.create({
     mainContainer: {
         flex: 1,
-         backgroundColor: "#454552"
-    },
-    textinput: {
-        marginLeft: 5, 
-        marginRight: 5, 
-        height: 50, 
-        borderColor: '#000000', 
-        borderWidth: 1, 
-        paddingLeft: 5
+        backgroundColor: colors.primary
     },
     loading_container: {
         flex: 1,

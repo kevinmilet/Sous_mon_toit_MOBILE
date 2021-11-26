@@ -3,6 +3,7 @@ import { default as React, useEffect, useState } from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
 import SignIn from './src/components/connexion/SignIn';
 import NavigationMain from './src/navigation/NavigationMain';
+import colors from './src/utils/styles/colors';
 
 export default function App() {
 
@@ -39,7 +40,7 @@ export default function App() {
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar
         animated={true}
-        backgroundColor="#61dafb" />
+        backgroundColor={colors.primary} />
         <NavigationMain />
       </SafeAreaView>
       :

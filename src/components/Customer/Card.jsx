@@ -1,11 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import {
-  getCustomerDescribe,
-  getCustomerSearch,
-  getOneCustomer,
-} from "../../API/ApiCustomers";
+import colors from '../../utils/styles/colors';
+
+
 const Card = ({customer}) => {
   
   const navigation = useNavigation();
@@ -37,57 +35,21 @@ const Card = ({customer}) => {
       flex: 1,
       margin: 10,
       padding: 10,
-      backgroundColor: '#4EA1D5',
+      backgroundColor: colors.secondaryBtn,
       borderRadius: 20
     },
     baseText: {
-    fontWeight: "bold",
-    color: "#EAEAEA"
-  },
-  innerText: {
-    fontStyle: "italic",
-    fontWeight: "normal",
-    color: "black"
-  },
-    image: {
-      width: 120,
-      height: 180,
-      margin: 5,
-      backgroundColor: 'gray'
+      fontWeight: "bold",
+      color: colors.backgroundSecondary
+    },
+    innerText: {
+      fontStyle: "italic",
+      fontWeight: "normal",
+      color: colors.primary
     },
     content_container: {
       flex: 1,
       margin: 5
-    },
-    header_container: {
-      flex: 3,
-      flexDirection: 'row'
-    },
-    title_text: {
-      fontWeight: 'bold',
-      fontSize: 20,
-      flex: 1,
-      flexWrap: 'wrap',
-      paddingRight: 5
-    },
-    vote_text: {
-      fontWeight: 'bold',
-      fontSize: 26,
-      color: '#666666'
-    },
-    description_container: {
-      flex: 7
-    },
-    description_text: {
-      fontStyle: 'italic',
-      color: '#666666'
-    },
-    date_container: {
-      flex: 1
-    },
-    date_text: {
-      textAlign: 'right',
-      fontSize: 14
     }
   })
   
