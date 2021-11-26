@@ -76,11 +76,6 @@ const Calendar = () => {
                     renderItem={({ item }) => <CalendarItem appointments={item} />}
                     keyExtractor={item => item.id} />
             </View>
-            :
-            <View>
-                <Topbar/>
-                <Text style={styles.text}>Pas de rendez-vous</Text>
-            </View>
             <View style={styles.button_container}>
                 <TouchableOpacity>
                     <FontAwesome5 name="calendar-plus" color={colors.primaryBtn} size={36} />
