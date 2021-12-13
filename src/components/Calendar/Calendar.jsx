@@ -82,15 +82,28 @@ const Calendar = () => {
                 </TouchableOpacity>
             </View>
         </>
-        : null
+        : 
+        <>
+            <View>
+                <Topbar />
+                <Text style={styles.text}>Pas de rendez-vous</Text>
+            </View>
+            <View style={styles.button_container}>
+                <TouchableOpacity>
+                    <FontAwesome5 name="calendar-plus" color={colors.primaryBtn} size={36} />
+                </TouchableOpacity>
+            </View>
+        </>
     )
 };
 
 const styles = StyleSheet.create({
     text: {
         justifyContent: 'center',
-        marginTop: 20,
-        textAlign: 'center'
+        marginVertical: 30,
+        textAlign: 'center',
+        fontSize: 22,
+        fontWeight: 'bold'
     },
     button_container: {
         margin: 10,
