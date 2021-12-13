@@ -85,7 +85,7 @@ const CustomerDetail = ({ route }) => {
     <View style={styles.main_container}>
       <Topbar />
 
-      <SafeAreaView style={styles.main_container}>            
+      <ScrollView style={styles.main_container}>            
         <Text style={styles.baseText}>
                 Prénom :
                 <Text style={styles.innerText}> {customerData.firstname}</Text>
@@ -173,6 +173,8 @@ const CustomerDetail = ({ route }) => {
             :
             (
               <FlatList
+              horizontal={true}
+
               data={customerAptmts}
               keyExtractor={(item, index) => index}
               renderItem={({ item }) => <CustomerAptmt customer={item} />}
@@ -185,7 +187,7 @@ const CustomerDetail = ({ route }) => {
               
             
           
-      </SafeAreaView>
+      </ScrollView>
     </View>
   );
 };
@@ -193,7 +195,7 @@ const CustomerDetail = ({ route }) => {
 const styles = StyleSheet.create({
   main_container: {
     flex: 1,
-    backgroundColor: "#454552",
+    backgroundColor: "#4EA1D5",
   },
 
   styleTitleMain: {
@@ -204,7 +206,7 @@ const styles = StyleSheet.create({
   main_container2: {
     margin: 10,
     padding: 20,
-    backgroundColor: colors.secondaryBtn,
+    backgroundColor:'#4EA1D5',
     borderRadius: 10,
   },
   baseText: {
