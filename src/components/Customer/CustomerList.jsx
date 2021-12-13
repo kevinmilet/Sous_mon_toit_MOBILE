@@ -4,7 +4,7 @@ import { getAllCustomers } from "../../API/ApiCustomers";
 import Card from '../../components/Customer/Card';
 import Loader from "../../Tools/Loader/Loader";
 import Topbar from './../Topbar/Topbar';
-import colors from '../../utils/styles/colors'
+import colors from '../../utils/styles/colors';
 
 
 const CustomerList = () => {
