@@ -14,7 +14,9 @@ const Estate = () => {
             }}>
                 {() => <EstateList />}
             </Stack.Screen>
-            <Stack.Screen name="estateDetail">
+            <Stack.Screen name="estateDetail"options={{
+                headerShown: false,
+            }}>
                 {(props) => <EstateDetail {...props} />}
             </Stack.Screen>
         </Stack.Navigator>
