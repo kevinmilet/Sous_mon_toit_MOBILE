@@ -1,7 +1,7 @@
 import { Entypo as Icon } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFormik } from "formik";
-import React, { forwardRef, useRef } from 'react';
+import React, { forwardRef, useRef , useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TextInput as RNTextInput, TouchableOpacity, View } from 'react-native';
 import * as Yup from "yup";
 import { login } from '../../API/ApiStaff';
@@ -11,12 +11,12 @@ const Button = ({ label, onPress }) => {
     return (
         <TouchableOpacity
             style={{
-                borderRadius: 8,
+                borderRadius: 25,
                 height: 50,
                 width: 245,
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: '#e94832'
+                backgroundColor: colors.primaryBtn
             }}
             activeOpacity={0.7}
             onPress={onPress}
@@ -30,14 +30,14 @@ const Button = ({ label, onPress }) => {
     );
 }
 const TextInput = forwardRef(({ icon, error, touched, ...otherProps }, ref) => {
-    const validationColor = !touched ? '#223e4b' : error ? '#FF5A5F' : '#223e4b';
+    const validationColor = !touched ? colors.secondaryBtn : error ? colors.primaryBtn : colors.secondaryBtn;
     return (
         <View
             style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 height: 48,
-                borderRadius: 8,
+                borderRadius: 25,
                 borderColor: validationColor,
                 borderWidth: StyleSheet.hairlineWidth,
                 padding: 8
@@ -58,9 +58,10 @@ const TextInput = forwardRef(({ icon, error, touched, ...otherProps }, ref) => {
     );
 });
 
-const SignIn = () => {
+const SignIn = (props) => {
 
     const password = useRef(null);
+    const{setTokenIsValid} = props
     const { handleChange, handleSubmit, handleBlur, values, errors, touched } = useFormik({
         initialValues: {
             login: '',
@@ -76,54 +77,44 @@ const SignIn = () => {
             await new Promise(r => {
                 signIn(values)
             })
-            alert(`Login: ${values.login}, Password: ${values.password}`)
+            // alert(`Login: ${values.login}, Password: ${values.password}`)
         }
     });
 
     const signIn = (values) => login(values).then(
         response => {
-            try {
+            if(response.token){
                 AsyncStorage.setItem(
-                    '@auth:token',
-                    response.data.token
+                    '@auth_userId',
+                    (response.user.id).toString()
                 );
-                AsyncStorage.setItem(
-                    '@auth:userId',
-                    (response.data.user.id).toString()
-                );
-            } catch (error) {
-                console.log("Error saving data")
-                console.log(error);
+                setTokenIsValid(true);
             }
-            // window.location.href = '/';
-        }).catch(error => {
-            console.log("catch !",error.message);
-        })
+        }
+    ).catch(error => {
+        console.log("catch !",error.message);
+    })
 
     return (
-        <View
-            style={{
-                flex: 1,
-                backgroundColor: '#000000',
-            }}
-        >
+        <View  style={{flex: 1}}>
             {/* Logo */}
             <View
                 style={{
                     flex: 2,
-                    backgroundColor: '#999999',
+                    backgroundColor: colors.primary,
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    borderRadius: 10
                 }}
             >
-                <Image source={require('../../../assets/android-icon-192x192.png')} />
+                <Image style={{borderRadius: 10}} source={require('../../../assets/android-icon-192x192.png')} />
             </View>
 
             {/* Formulaire */}
             <View
                 style={{
                     flex: 2,
-                    backgroundColor: '#fff',
+                    backgroundColor: colors.backgroundPrimary,
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}

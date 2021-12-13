@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react";
-import { StyleSheet, Text, View, ScrollView , FlatList, SectionList} from "react-native";
+import { StyleSheet, Text, View, ScrollView , FlatList, SectionList, SafeAreaView} from "react-native";
 import { getCustomerDescribe, getCustomerSearch } from "../../API/ApiCustomers";
 import Topbar from "../Topbar/Topbar";
 import { getAllCustomerAptmts } from "../../API/ApiApointements";
@@ -8,6 +8,7 @@ import "moment/locale/fr";
 import Loader from "../../Tools/Loader/Loader";
 import { useIsFocused } from "@react-navigation/native";
 import CustomerAptmt from "../Customer/CustomerAptmt";
+import colors from '../../utils/styles/colors';
 
 const CustomerDetail = ({ route }) => {
   const { id } = route.params;
@@ -18,7 +19,7 @@ const CustomerDetail = ({ route }) => {
   const [customerTypes, setCustomerTypes] = useState(null);
   const [customerTypeData, setCustomerTypeData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [customerAptmts, setCustomerAptmts] = useState({});
+  const [customerAptmts, setCustomerAptmts] = useState([]);
 
   useEffect(() => {
     getCustomerSearch(id)
@@ -35,7 +36,7 @@ const CustomerDetail = ({ route }) => {
 
     getCustomerDescribe(id)
       .then((res) => {
-        setCustomerData(res.data[[0]][[0]]);
+        setCustomerData(res.data[0][0]);
         console.log(res.data, "describe5");
       })
       .catch((error) => {
@@ -45,7 +46,7 @@ const CustomerDetail = ({ route }) => {
         setLoading(false);
       });
       
-    getAllCustomerAptmts(id)
+     getAllCustomerAptmts(id)
       .then((res) => {
       
         let allApptmt = [];
@@ -55,8 +56,7 @@ const CustomerDetail = ({ route }) => {
   
             Moment.locale();
             var dt = item.scheduled_at;
-            const formatDate = {
-              date : Moment(dt).format("LLLL")}
+            const formatDate = Moment(dt).format("LLLL")
           
             allApptmt = [...allApptmt, formatDate];
           
@@ -85,7 +85,7 @@ const CustomerDetail = ({ route }) => {
     <View style={styles.main_container}>
       <Topbar />
 
-      <ScrollView style={styles.main_container}>            
+      <SafeAreaView style={styles.main_container}>            
         <Text style={styles.baseText}>
                 Prénom :
                 <Text style={styles.innerText}> {customerData.firstname}</Text>
@@ -149,13 +149,6 @@ const CustomerDetail = ({ route }) => {
                   {customerSearch.search_radius} Km
                 </Text>
               </Text>
-              <Text style={styles.baseText}>
-                Rendez-vous :
-                <Text style={styles.innerText}>
-                  {" "}
-                  {customerAptmts ? customerAptmts.scheduled_at : null}
-                </Text>
-              </Text>
               <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Rendez-vous</Text>
               </View>
@@ -174,17 +167,25 @@ const CustomerDetail = ({ route }) => {
                 renderItem={({ item }) => <CustomerAptmt customer={item} />}
               /> */}
               {/* </Text>  */}
-              <SectionList
-              sections={customerAptmts ?? []}
+              {customerAptmts.length == 0 ?(
+                <Loader />
+              )
+            :
+            (
+              <FlatList
+              data={customerAptmts}
               keyExtractor={(item, index) => index}
               renderItem={({ item }) => <CustomerAptmt customer={item} />}
               renderSectionHeader={({ section: { title } }) => (
                 <Text > rdv</Text>
                 )}
                 />
+            )
+            }
+              
             
           
-      </ScrollView>
+      </SafeAreaView>
     </View>
   );
 };
@@ -200,13 +201,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#E85A70",
   },
-
   main_container2: {
-    // marginHorizontal: 20,
-    // marginVertical: 10,
     margin: 10,
     padding: 20,
-    backgroundColor: "#4EA1D5",
+    backgroundColor: colors.secondaryBtn,
     borderRadius: 10,
   },
   baseText: {
@@ -227,52 +225,16 @@ const styles = StyleSheet.create({
   titleText: {
     fontWeight: "bold",
   },
-  image: {
-    width: 120,
-    height: 180,
-    margin: 5,
-    backgroundColor: "gray",
-  },
   content_container: {
     flex: 1,
     // margin: 5,
 
     marginBottom: 30,
   },
-  header_container: {
-    flex: 3,
-    flexDirection: "row",
-  },
-  title_text: {
-    fontWeight: "bold",
-    fontSize: 20,
-    flex: 1,
-    flexWrap: "wrap",
-    paddingRight: 5,
-  },
-  vote_text: {
-    fontWeight: "bold",
-    fontSize: 26,
-    color: "#666666",
-  },
-  description_container: {
-    flex: 7,
-  },
-  description_text: {
-    fontStyle: "italic",
-    color: "#666666",
-  },
-  date_container: {
-    flex: 1,
-  },
   containerTitleMain: {
     justifyContent: "center",
     alignItems: "center",
-  },
-  date_text: {
-    textAlign: "right",
-    fontSize: 14,
-  },
+  }
 });
 
 export default CustomerDetail;

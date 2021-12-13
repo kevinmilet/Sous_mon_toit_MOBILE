@@ -7,18 +7,17 @@ const Stack = createNativeStackNavigator();
 
 const Home = () => {
     return(
-        // <View >
-        //     <Topbar/>
-        //     <Calendar/>
-        // </View>
         <Stack.Navigator>
             <Stack.Screen name="calendar" options={{
                 headerShown: false,
             }}>
                 {() => <Calendar />}
             </Stack.Screen>
-            <Stack.Screen name="appointmentDetails">
-                {(props) => <AppointmentDetails {...props} />}
+            <Stack.Screen name="appointmentDetails" options={{
+                    headerShown: false,
+                }}>
+                    {(appointments) => <AppointmentDetails {...appointments} />}
+                
             </Stack.Screen>
         </Stack.Navigator>
     )

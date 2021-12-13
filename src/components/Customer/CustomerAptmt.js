@@ -3,6 +3,7 @@ import {Text } from 'react-native';
 
 const CustomeAptmt= (props) =>{
 console.log(props)
+const {customer} = props
 
   return (
 
