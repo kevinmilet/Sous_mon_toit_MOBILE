@@ -3,14 +3,32 @@ import { Text, View, Image, StyleSheet, FlatList, ScrollView } from 'react-nativ
 import { getOneEstate, getEstateCover, getEstatePictures } from '../../API/ApiEstates';
 import { COVER_ESTATE_BASE_URL } from '@env';
 import { FontAwesome5 } from '@expo/vector-icons';
-import colors from '../../utils/styles/colors'
+import Topbar from "../Topbar/Topbar";
+import colors from '../../utils/styles/colors';
+// import { Modal } from 'react-native';
+// import ImageViewer from 'react-native-image-zoom-viewer';
+
+// const images = [{
+//     // Simplest usage.
+//     url: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
+
+//     // width: number
+//     // height: number
+//     // Optional, if you know the image size, you can set the optimization performance
+
+//     // You can pass props to <Image />.
+//     props: {
+//         // headers: ...
+//     }
+// }]
+
 
 const EstateDetail = ({ route }) => {
 
     const { estateId } = route.params;
     const [oneEstateData, setOneEstateData] = useState({})
     const [pictureCover, setPictureCover] = useState({})
-    const [picturesList, setPicturesList] = useState({})
+    const [picturesList, setPicturesList] = useState([{}])
     // const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -53,68 +71,83 @@ const EstateDetail = ({ route }) => {
         // !loading &&
 
         <View style={styles.container}>
-            
-            <Text style={{textAlign:"center"}}>Référence du biens : {oneEstateData.reference}</Text>
-            <View style={{alignItems: 'center'}}>
-                <Image 
-                    source={{ uri: COVER_ESTATE_BASE_URL + pictureCover.name }} 
-                    style={{ height: 150, width: '80%', resizeMode:'cover', borderRadius:20 }} 
-                />
-            </View>
-            <Text style={{textAlign:"right", color: colors.primaryBtn}}>Prix: {oneEstateData.price}€</Text>
-            <FlatList
-                data={picturesList}
-                horizontal={true}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => {
-                    <Image source={{ uri: COVER_ESTATE_BASE_URL + item.name }} style={{ height: 100, width: 100 }} />
-                }}
-            />
-            <ScrollView>
-                <Text style={{ fontSize: 30 }}>{oneEstateData.title}</Text>
-                <Text>{oneEstateData.description}</Text>
+            <Topbar />
+            <ScrollView style={styles.containerDetail}>
 
-                <Text style={{ fontSize: 30 }}>Caractèristiques</Text>
-                <Text style={{ fontSize: 20 }}>Général</Text>
-                <Text>Année de construction : <Text styles={{ fontWeight: 'bold' }}>{oneEstateData.year_of_construction}</Text></Text>
-                <Text>Surface habitable au sol : <Text>{oneEstateData.living_surface}m²</Text></Text>
-                <Text>Surface habitable ( selon Loi Carrez ) : <Text>{oneEstateData.carrez_law}m²</Text></Text>
-                <Text>Superficie du terrain : <Text>{oneEstateData.land_surface}m²</Text></Text>
+                <Text style={{ textAlign: "center", color: "white" }}>Référence du biens : {oneEstateData.reference}</Text>
+                <View style={{ alignItems: 'center' }}>
+                    <Image
+                        source={{ uri: COVER_ESTATE_BASE_URL + pictureCover.name }}
+                        style={{ height: 150, width: '80%', resizeMode: 'cover', borderRadius: 15 }}
+                    />
+                </View>
+                <View style={{ height: 100, width: "100%", alignItems: 'center' }}>
+                    <FlatList
+                        data={picturesList}
+                        horizontal={true}
+                        keyExtractor={(item,index) => index}
+                        renderItem={({ item }) => {
+                            return(
+                                <View style={{}}>
+                                    <Image 
+                                        source={{ uri: COVER_ESTATE_BASE_URL + item.alt }}
+                                        style={{ height: 100, width: 100, resizeMode:'cover' }}
+                                    />
+                                </View>
+                            )
+                        }}
+                    />
+                    {/* <Modal visible={false} transparent={true}>
+                        <ImageViewer imageUrls={images}/>
+                    </Modal> */}
+                </View>
 
-                <Text style={{ fontSize: 20 }}>Aspects financiers</Text>
-                <Text>Prix : <Text>{oneEstateData.price}€</Text></Text>
-                <Text>Taxe foncière : <Text>{oneEstateData.property_charge}€</Text></Text>
-                <Text>Charges locatives : <Text>{oneEstateData.rental_charge ? oneEstateData.rental_charge + "€" : "non renseigné"}</Text></Text>
-                <Text>Charges de co-propriété : <Text>{oneEstateData.coownership_charge ? oneEstateData.coownership_charge + "€" : "non renseigné"}</Text></Text>
+                <Text style={{ fontSize: 20, textAlign: "right", color: "black", marginRight: 10 }}>Prix: {oneEstateData.price}€</Text>
 
-                <Text style={{ fontSize: 20 }}>Interieur</Text>
-                <Text>Nombre de pièces : <Text>{oneEstateData.nb_rooms} pièces</Text></Text>
-                <Text>Nombre de salle de bain : <Text>{oneEstateData.nb_bathrooms} pièces</Text></Text>
-                <Text>Nombre de sanitaire : <Text>{oneEstateData.nb_sanitary} pièces</Text></Text>
-                <Text>Nombre de cuisine : <Text>{oneEstateData.nb_kitchen} pièces</Text></Text>
-                <Text>Type de cuisine : <Text>{oneEstateData.type_kitchen}</Text></Text>
-                <Text>Type de chauffage : <Text>{oneEstateData.heaters}</Text></Text>
+                <Text style={{ fontSize: 30, color: colors.primaryBtn }}>{oneEstateData.title}</Text>
+                <Text style={{ backgroundColor: "white", padding: 10, borderRadius: 10 }}>{oneEstateData.description}</Text>
 
-                <Text style={{ fontSize: 20 }}>Extérieur</Text>
-                <Text>Balcon : <Text>{oneEstateData.nb_balcony}</Text></Text>
-                <Text>Garage : <Text>{oneEstateData.nb_garage}</Text></Text>
-                <Text>Parking : <Text>{oneEstateData.nb_parking}</Text></Text>
+                <Text style={{ fontSize: 30, marginTop: 15, color: colors.primaryBtn }}>Caractèristiques</Text>
+                <Text style={{ fontSize: 20, marginTop: 15, textDecorationLine: "underline" }}>Général</Text>
+                <Text style={{ color: "white" }}>Année de construction : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.year_of_construction}</Text></Text>
+                <Text style={{ color: "white" }}>Surface habitable au sol : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.living_surface}m²</Text></Text>
+                <Text style={{ color: "white" }}>Surface habitable ( selon Loi Carrez ) : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.carrez_law}m²</Text></Text>
+                <Text style={{ color: "white" }}>Superficie du terrain : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.land_surface}m²</Text></Text>
 
-                <Text style={{ fontSize: 30 }}>Les plus</Text>
-                {oneEstateData.communal_heating ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Chauffage collectif</Text> : null}
-                {oneEstateData.furnished ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Meublé</Text> : null}
-                {oneEstateData.private_parking ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Parking privé</Text> : null}
-                {oneEstateData.handicap_access ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Accès handicapé</Text> : null}
-                {oneEstateData.cellar ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Cave</Text> : null}
-                {oneEstateData.terrace ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Terrace</Text> : null}
-                {oneEstateData.swimming_pool ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Piscine</Text> : null}
-                {oneEstateData.fireplace ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Cheminée</Text> : null}
-                {oneEstateData.all_in_sewer ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Tout à l'égout</Text> : null}
-                {oneEstateData.septik_tank ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Fosse septique</Text> : null}
-                {oneEstateData.attic ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Grenier</Text> : null}
-                {oneEstateData.elevator ? <Text><FontAwesome5 name="check-circle" size={24} color={colors.primary} /> Ascensseur</Text> : null}
+                <Text style={{ fontSize: 20, marginTop: 15, textDecorationLine: "underline" }}>Aspects financiers</Text>
+                <Text style={{ color: "white" }}>Prix : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.price}€</Text></Text>
+                <Text style={{ color: "white" }}>Taxe foncière : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.property_charge}€</Text></Text>
+                <Text style={{ color: "white" }}>Charges locatives : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.rental_charge ? oneEstateData.rental_charge + "€" : "non renseigné"}</Text></Text>
+                <Text style={{ color: "white" }}>Charges de co-propriété : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.coownership_charge ? oneEstateData.coownership_charge + "€" : "non renseigné"}</Text></Text>
 
-                <Text style={{ fontSize: 30 }}>Contactez l'agence</Text>
+                <Text style={{ fontSize: 20, marginTop: 15, textDecorationLine: "underline" }}>Interieur</Text>
+                <Text style={{ color: "white" }}>Nombre de pièces : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.nb_rooms} pièces</Text></Text>
+                <Text style={{ color: "white" }}>Nombre de salle de bain : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.nb_bathrooms} pièces</Text></Text>
+                <Text style={{ color: "white" }}>Nombre de sanitaire : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.nb_sanitary} pièces</Text></Text>
+                <Text style={{ color: "white" }}>Nombre de cuisine : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.nb_kitchen} pièces</Text></Text>
+                <Text style={{ color: "white" }}>Type de cuisine : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.type_kitchen}</Text></Text>
+                <Text style={{ color: "white" }}>Type de chauffage : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.heaters}</Text></Text>
+
+                <Text style={{ fontSize: 20, marginTop: 15, textDecorationLine: "underline" }}>Extérieur</Text>
+                <Text style={{ color: "white" }}>Balcon : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.nb_balcony}</Text></Text>
+                <Text style={{ color: "white" }}>Garage : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.nb_garage}</Text></Text>
+                <Text style={{ color: "white" }}>Parking : <Text style={{ fontWeight: 'bold', color: "black" }}>{oneEstateData.nb_parking}</Text></Text>
+
+                <Text style={{ fontSize: 30, marginTop: 15, color: colors.primaryBtn }}>Les plus</Text>
+                {oneEstateData.communal_heating ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Chauffage collectif</Text> : null}
+                {oneEstateData.furnished ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Meublé</Text> : null}
+                {oneEstateData.private_parking ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Parking privé</Text> : null}
+                {oneEstateData.handicap_access ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Accès handicapé</Text> : null}
+                {oneEstateData.cellar ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Cave</Text> : null}
+                {oneEstateData.terrace ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Terrace</Text> : null}
+                {oneEstateData.swimming_pool ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Piscine</Text> : null}
+                {oneEstateData.fireplace ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Cheminée</Text> : null}
+                {oneEstateData.all_in_sewer ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Tout à l'égout</Text> : null}
+                {oneEstateData.septik_tank ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Fosse septique</Text> : null}
+                {oneEstateData.attic ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Grenier</Text> : null}
+                {oneEstateData.elevator ? <Text style={{ fontWeight: 'bold', color: "black" }}><FontAwesome5 name="check-circle" size={24} color="white" /> Ascensseur</Text> : null}
+
+                <Text style={{ fontSize: 30, marginTop: 15, color: colors.primaryBtn }}>Contactez l'agence</Text>
                 <Text>Ce bien vous a tapé dans l'oeil ? Vous n'en dormez plus la nuit ?
                     N'hesitez plus et contactez votre agence dès maintenant !</Text>
                 <Text>Appeler directement au <Text>03 21 15 87 99</Text></Text>
@@ -128,7 +161,17 @@ const EstateDetail = ({ route }) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal:15,
+        flex: 1,
+        backgroundColor: colors.primary,
+    },
+    containerDetail: {
+
+        margin: 10,
+        paddingHorizontal: 20,
+        paddingTop: 15,
+        paddingBottom: 10,
+        backgroundColor: colors.secondaryBtn,
+        borderRadius: 10,
     },
 })
 
