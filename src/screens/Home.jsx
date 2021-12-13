@@ -2,6 +2,7 @@ import React from 'react';
 import AppointmentDetails from '../components/Calendar/AppointmentDetails';
 import Calendar from '../components/Calendar/Calendar';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AddAppointment from "../components/Calendar/AddAppointment";
 
 const Stack = createNativeStackNavigator();
 
@@ -11,13 +12,17 @@ const Home = () => {
             <Stack.Screen name="calendar" options={{
                 headerShown: false,
             }}>
-                {() => <Calendar />}
+            {() => <Calendar />}
             </Stack.Screen>
             <Stack.Screen name="appointmentDetails" options={{
                     headerShown: false,
                 }}>
-                    {(appointments) => <AppointmentDetails {...appointments} />}
-                
+                {(appointments) => <AppointmentDetails {...appointments} />}
+            </Stack.Screen>
+            <Stack.Screen name="addAppointment" options={{
+                headerShown: false,
+                }}>
+                {() => <AddAppointment/>}
             </Stack.Screen>
         </Stack.Navigator>
     )
