@@ -9,8 +9,7 @@ import {
     ScrollView,
     FlatList,
     Modal,
-    Pressable,
-    TouchableOpacityComponent
+    Pressable
 } from "react-native";
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -21,13 +20,10 @@ import colors from "../../utils/styles/colors";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {getAptmtsTypes} from "../../API/ApiApointements";
 import { Searchbar } from 'react-native-paper';
-import {getAllCustomers, searchCustomers} from "../../API/ApiCustomers";
-import {Touchable} from "react-native-web";
+import {searchCustomers} from "../../API/ApiCustomers";
 import {searchEstates} from "../../API/ApiEstates";
 
 const AddAppointment = () => {
-
-    const DATA = ["Tata", "Titi", "Toto", "Tutu"]
 
     const [date, setDate] = useState(moment());
     const [time, setTime] = useState(moment());
@@ -40,7 +36,7 @@ const AddAppointment = () => {
     const [customerData, setCustomerData] = useState([]);
     const [customer, setCustomer] = useState('');
 
-    const [estates, setEstates] = useState('');
+    const [estate, setEstate] = useState('');
     const [estateInput, setEstateInput] = useState('');
     const [estateData, setEstateData] = useState([]);
 
@@ -49,7 +45,8 @@ const AddAppointment = () => {
         appointment_type: '',
         id: null
     });
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalCVisible, setModalCVisible] = useState(false);
+    const [modalEVisible, setModalEVisible] = useState(false);
 
     const showDatePicker = () => {
         setIsDatePickerShow(true);
@@ -79,7 +76,7 @@ const AddAppointment = () => {
                 setCustomerData(response.data);
             }
         ).finally(() => {
-            setModalVisible(true)
+            setModalCVisible(true)
             }
         ).catch(error => {
             console.log(error.message);
@@ -92,7 +89,7 @@ const AddAppointment = () => {
                 setEstateData(response.data);
             }
         ).finally(() => {
-            setModalVisible(true)
+            setModalEVisible(true)
             }
         ).catch(error => {
             console.log(error.message);
@@ -101,14 +98,14 @@ const AddAppointment = () => {
 
     const selectCustomer = (customerIT) => {
         setCustomer(customerIT);
-        setModalVisible(false)
+        setModalCVisible(false)
         setCustomerData(null);
         setCustomerInput(null);
     }
 
     const selectEstates = (estateIT) => {
-        setEstates(estateIT);
-        setModalVisible(false)
+        setEstate(estateIT);
+        setModalEVisible(false)
         setEstateData(null);
         setEstateInput(null);
     }
@@ -201,11 +198,11 @@ const AddAppointment = () => {
 
                     <Modal animationType="slide"
                             transparent={true}
-                            visible={modalVisible}
+                            visible={modalCVisible}
                             onRequestClose={() => {
                                setCustomerData(null);
                                setSearchTimer(null);
-                               setModalVisible(false);
+                               setModalCVisible(false);
                             }}
                             >
                         <View style={styles.centeredModal}>
@@ -224,7 +221,7 @@ const AddAppointment = () => {
                             </View>
                             <Pressable
                                 style={[styles.modalButton, styles.buttonClose]}
-                                onPress={() => setModalVisible(false)}
+                                onPress={() => setModalCVisible(false)}
                             >
                                 <Text style={styles.btnText}>Fermer</Text>
                             </Pressable>
@@ -257,11 +254,11 @@ const AddAppointment = () => {
 
                     <Modal animationType="slide"
                            transparent={true}
-                           visible={modalVisible}
+                           visible={modalEVisible}
                            onRequestClose={() => {
                                setEstateData(null);
                                setSearchTimer(null);
-                               setModalVisible(false);
+                               setModalEVisible(false);
                            }}
                     >
                         <View style={styles.centeredModal}>
@@ -270,7 +267,7 @@ const AddAppointment = () => {
                                     data={estateData}
                                     renderItem={({ item }) => (
                                         <View>
-                                            <TouchableOpacity onPress={() => selectCustomer(item)}>
+                                            <TouchableOpacity onPress={() => selectEstates(item)}>
                                                 <Text style={styles.modalText}>{item.city } / {item.title}</Text>
                                             </TouchableOpacity>
                                         </View>
@@ -280,7 +277,7 @@ const AddAppointment = () => {
                             </View>
                             <Pressable
                                 style={[styles.modalButton, styles.buttonClose]}
-                                onPress={() => setModalVisible(false)}
+                                onPress={() => setModalEVisible(false)}
                             >
                                 <Text style={styles.btnText}>Fermer</Text>
                             </Pressable>
@@ -288,7 +285,7 @@ const AddAppointment = () => {
                     </Modal>
 
                     <View>
-                        <TextInput editable={false}>{estates.title}</TextInput>
+                        <TextInput editable={false}>{estate.title}</TextInput>
                     </View>
 
                 </View>
