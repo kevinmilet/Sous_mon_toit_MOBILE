@@ -1,12 +1,29 @@
-import React, {useState} from 'react';
-import {Platform, StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView} from "react-native";
+import React, {useEffect, useState} from 'react';
+import {
+    Platform,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+    ScrollView,
+    FlatList,
+    Modal,
+    Pressable,
+    TouchableOpacityComponent
+} from "react-native";
 import moment from 'moment';
 import 'moment/locale/fr';
 import Topbar from "../Topbar/Topbar";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
 import colors from "../../utils/styles/colors";
-import {FontAwesome5} from "@expo/vector-icons";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import {getAptmtsTypes} from "../../API/ApiApointements";
+import { Searchbar } from 'react-native-paper';
+import {getAllCustomers, searchCustomers} from "../../API/ApiCustomers";
+import {Touchable} from "react-native-web";
+import {searchEstates} from "../../API/ApiEstates";
 
 const AddAppointment = () => {
 
@@ -15,8 +32,24 @@ const AddAppointment = () => {
     const [date, setDate] = useState(moment());
     const [time, setTime] = useState(moment());
     const [note, setNote] = useState();
+
     const [isDatePickerShow, setIsDatePickerShow] = useState(false);
     const [isTimePickerShow, setIsTimePickerShow] = useState(false);
+
+    const [customerInput, setCustomerInput] = useState('');
+    const [customerData, setCustomerData] = useState([]);
+    const [customer, setCustomer] = useState('');
+
+    const [estates, setEstates] = useState('');
+    const [estateInput, setEstateInput] = useState('');
+    const [estateData, setEstateData] = useState([]);
+
+    const [searchTimer, setSearchTimer] = useState(null);
+    const [aptmtsTypes, setAptmtsTypes] = useState({
+        appointment_type: '',
+        id: null
+    });
+    const [modalVisible, setModalVisible] = useState(false);
 
     const showDatePicker = () => {
         setIsDatePickerShow(true);
@@ -39,6 +72,56 @@ const AddAppointment = () => {
             setIsTimePickerShow(false);
         }
     }
+
+    const getCustomersResults = (text) => {
+        searchCustomers(text).then(
+            response => {
+                setCustomerData(response.data);
+            }
+        ).finally(() => {
+            setModalVisible(true)
+            }
+        ).catch(error => {
+            console.log(error.message);
+        })
+    }
+
+    const getEstatesResults = (text) => {
+        searchEstates(text).then(
+            response => {
+                setEstateData(response.data);
+            }
+        ).finally(() => {
+            setModalVisible(true)
+            }
+        ).catch(error => {
+            console.log(error.message);
+        })
+    }
+
+    const selectCustomer = (customerIT) => {
+        setCustomer(customerIT);
+        setModalVisible(false)
+        setCustomerData(null);
+        setCustomerInput(null);
+    }
+
+    const selectEstates = (estateIT) => {
+        setEstates(estateIT);
+        setModalVisible(false)
+        setEstateData(null);
+        setEstateInput(null);
+    }
+
+    useEffect(() => {
+        getAptmtsTypes().then(
+            response => {
+                setAptmtsTypes(response.data);
+            }
+        ).catch (error => {
+            console.log(error.message)
+        });
+    }, []);
 
     return (
         <>
@@ -99,74 +182,140 @@ const AddAppointment = () => {
                 </View>
 
                 <View>
+                    <Searchbar style={styles.dropdownInput}
+                                placeholder="Chercher un client"
+                               onChangeText={(text) => {
+                                   if (searchTimer) {
+                                       clearTimeout(searchTimer);
+                                   }
+                                   setCustomerInput(text);
+                                   setSearchTimer(
+                                       setTimeout(() => {
+                                           if (text.length >= 3) {
+                                               getCustomersResults(text);
+                                           }
+                                       }, 200),
+                                   );
+                               }}
+                               value={customerInput} />
+
+                    <Modal animationType="slide"
+                            transparent={true}
+                            visible={modalVisible}
+                            onRequestClose={() => {
+                               setCustomerData(null);
+                               setSearchTimer(null);
+                               setModalVisible(false);
+                            }}
+                            >
+                        <View style={styles.centeredModal}>
+                            <View style={styles.modalView}>
+                                <FlatList
+                                          data={customerData}
+                                          renderItem={({ item }) => (
+                                              <View>
+                                                  <TouchableOpacity onPress={() => selectCustomer(item)}>
+                                                        <Text style={styles.modalText}>{item.firstname} {item.lastname}</Text>
+                                                  </TouchableOpacity>
+                                              </View>
+                                          )}
+                                          keyExtractor={(item) => "" + item.id}
+                                />
+                            </View>
+                            <Pressable
+                                style={[styles.modalButton, styles.buttonClose]}
+                                onPress={() => setModalVisible(false)}
+                            >
+                                <Text style={styles.btnText}>Fermer</Text>
+                            </Pressable>
+                        </View>
+                    </Modal>
+
+                    <View>
+                        <TextInput editable={false}>{customer.firstname} {customer.lastname}</TextInput>
+                    </View>
+
+                </View>
+
+                <View>
+                    <Searchbar style={styles.dropdownInput}
+                               placeholder="Chercher un bien"
+                               onChangeText={(text) => {
+                                   if (searchTimer) {
+                                       clearTimeout(searchTimer);
+                                   }
+                                   setEstateInput(text);
+                                   setSearchTimer(
+                                       setTimeout(() => {
+                                           if (text.length >= 3) {
+                                               getEstatesResults(text);
+                                           }
+                                       }, 200),
+                                   );
+                               }}
+                               value={estateInput} />
+
+                    <Modal animationType="slide"
+                           transparent={true}
+                           visible={modalVisible}
+                           onRequestClose={() => {
+                               setEstateData(null);
+                               setSearchTimer(null);
+                               setModalVisible(false);
+                           }}
+                    >
+                        <View style={styles.centeredModal}>
+                            <View style={styles.modalView}>
+                                <FlatList
+                                    data={estateData}
+                                    renderItem={({ item }) => (
+                                        <View>
+                                            <TouchableOpacity onPress={() => selectCustomer(item)}>
+                                                <Text style={styles.modalText}>{item.city } / {item.title}</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
+                                    keyExtractor={(item) => "" + item.id}
+                                />
+                            </View>
+                            <Pressable
+                                style={[styles.modalButton, styles.buttonClose]}
+                                onPress={() => setModalVisible(false)}
+                            >
+                                <Text style={styles.btnText}>Fermer</Text>
+                            </Pressable>
+                        </View>
+                    </Modal>
+
+                    <View>
+                        <TextInput editable={false}>{estates.title}</TextInput>
+                    </View>
+
+                </View>
+
+                <View>
                     <SelectDropdown
-                        data={DATA}
-                        defaultButtonText={"Client"}
+                        data={aptmtsTypes}
+                        defaultButtonText={"Type"}
                         onSelect={(selectedItem, index) => {
                             console.log(selectedItem, index)
                         }}
                         buttonTextAfterSelection={(selectedItem, index) => {
                             // text represented after item is selected
                             // if data array is an array of objects then return selectedItem.property to render after item is selected
-                            return selectedItem
+                            return selectedItem.appointment_type
                         }}
                         rowTextForSelection={(item, index) => {
                             // text represented for each item in dropdown
                             // if data array is an array of objects then return item.property to represent item in dropdown
-                            return item
+                            return item.appointment_type
                         }}
                         buttonStyle={styles.dropdownInput}
                         dropdownIconPosition={'right'}
                         dropdownStyle={styles.dropdown}
                         buttonTextStyle={styles.selectBtnText}
                         renderDropdownIcon={() => {
-                            return <FontAwesome5 name="chevron-down" size={18} color={colors.secondaryBtn} />;
-                        }}
-                    />
-                </View>
-
-                <View>
-                    <SelectDropdown
-                        data={DATA}
-                        defaultButtonText={"Bien"}
-                        onSelect={(selectedItem, index) => {
-                            console.log(selectedItem, index)
-                        }}
-                        buttonTextAfterSelection={(selectedItem, index) => {
-                            return selectedItem
-                        }}
-                        rowTextForSelection={(item, index) => {
-                            return item
-                        }}
-                        buttonStyle={styles.dropdownInput}
-                        dropdownIconPosition={'right'}
-                        dropdownStyle={styles.dropdown}
-                        buttonTextStyle={styles.selectBtnText}
-                        renderDropdownIcon={() => {
-                            return <FontAwesome5 name="chevron-down" size={18} color={colors.secondaryBtn} />;
-                        }}
-                    />
-                </View>
-
-                <View>
-                    <SelectDropdown
-                        data={DATA}
-                        defaultButtonText={"Type"}
-                        onSelect={(selectedItem, index) => {
-                            console.log(selectedItem, index)
-                        }}
-                        buttonTextAfterSelection={(selectedItem, index) => {
-                            return selectedItem
-                        }}
-                        rowTextForSelection={(item, index) => {
-                            return item
-                        }}
-                        buttonStyle={styles.dropdownInput}
-                        dropdownIconPosition={'right'}
-                        dropdownStyle={styles.dropdown}
-                        buttonTextStyle={styles.selectBtnText}
-                        renderDropdownIcon={() => {
-                            return <FontAwesome5 name="chevron-down" size={18} color={colors.secondaryBtn} />;
+                            return <MaterialCommunityIcons name="chevron-down" size={18} color={colors.secondaryBtn} />;
                         }}
                     />
                 </View>
@@ -223,6 +372,14 @@ const styles = StyleSheet.create({
         height: 55,
         fontSize: 18,
         backgroundColor: colors.backgroundPrimary,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
     },
     timeInput: {
         paddingVertical: 15,
@@ -237,6 +394,14 @@ const styles = StyleSheet.create({
         height: 55,
         fontSize: 18,
         backgroundColor: colors.backgroundPrimary,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
     },
     textareaInput: {
         paddingVertical: 15,
@@ -248,6 +413,14 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         fontSize: 18,
         backgroundColor: colors.backgroundPrimary,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
     },
     // Seulement pour iOS
     datePicker: {
@@ -271,6 +444,14 @@ const styles = StyleSheet.create({
         height: 55,
         fontSize: 18,
         backgroundColor: colors.backgroundPrimary,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
     },
     selectBtnText: {
         color: colors.primary,
@@ -287,10 +468,55 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         height: 55,
         width: 245,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
     },
     btnText: {
         color: colors.backgroundPrimary,
         textAlign: 'center',
+        fontSize: 18,
+    },
+    centeredModal: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        width: '80%',
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 10,
+        padding: 35,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    modalButton: {
+        elevation: 2,
+        padding: 10,
+        borderRadius: 25,
+        backgroundColor: colors.secondaryBtn,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginVertical: 10,
+        height: 50,
+        width: 150,
+    },
+    modalText: {
+        marginBottom: 20,
+        textAlign: "left",
         fontSize: 18,
     }
 })

@@ -1,4 +1,5 @@
 import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons, EvilIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import React from "react";
@@ -20,7 +21,7 @@ const NavigationMain = () => {
                     headerShown: false,
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size }) => (
-                        <FontAwesome5 name="home" color={colors.secondary} size={24} />
+                        <MaterialCommunityIcons name="home" color={colors.secondary} size={24} />
                     ),
                 }} >
                 
@@ -31,7 +32,7 @@ const NavigationMain = () => {
                     headerShown: false,
                     tabBarLabel: 'Clients',
                     tabBarIcon: ({ color, size }) => (
-                        <FontAwesome5 name="user" size={24} color={colors.secondary} />
+                        <EvilIcons name="user" size={30} color={colors.secondary} />
                     ),
                 }}>
 
@@ -42,7 +43,7 @@ const NavigationMain = () => {
                     headerShown: false,
                     tabBarLabel: 'Biens',
                     tabBarIcon: ({ color, size }) => (
-                        <FontAwesome5 name="building" size={24} color={colors.secondary} />
+                        <MaterialCommunityIcons name="office-building" size={24} color={colors.secondary} />
                     ),
                 }} >
                 
@@ -53,7 +54,7 @@ const NavigationMain = () => {
                     headerShown: false,
                     tabBarLabel: 'Contrats',
                     tabBarIcon: ({ color, size }) => (
-                        <FontAwesome5 name="file-contract" size={24} color={colors.secondary} />
+                        <MaterialCommunityIcons name="file-document-outline" size={24} color={colors.secondary} />
                     ),
                 }} >
                 

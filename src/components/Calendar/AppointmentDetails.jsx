@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import {Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import Topbar from '../Topbar/Topbar';
-import {showAptmt} from '../../API/ApiApointements';
+import {deleteAptmt, showAptmt} from '../../API/ApiApointements';
 import moment from 'moment';
 import 'moment/locale/fr';
 import colors from '../../utils/styles/colors'
+import labels from "../../utils/labels";
 
 const AppointmentDetails = ({ route }) => {
 
@@ -39,6 +40,33 @@ const AppointmentDetails = ({ route }) => {
             });
     }, [aptmtId])
 
+    // const showDelAlert = () => {
+    //     Alert.alert(
+    //         labels.confirmation,
+    //         labels.delConf,
+    //         [
+    //             {
+    //                 text: "Non",
+    //                 onPress: () => console.log("Suppresion annulée"),
+    //                 style: "cancel"
+    //             },
+    //             {
+    //                 text: "Oui",
+    //                 onPress: () => deleteAptmt(aptmtId),
+    //             }
+    //         ]
+    //     );
+    // }
+
+    // deleteAptmt(aptmtId)
+    //     .then(
+    //         response => {
+    //             console.log(response.data + ' ' + response.statusCode)
+    //         }
+    //     ).catch (error => {
+    //     console.log(error.message)
+    // });
+
     return(
             <>
                 <View>
@@ -71,10 +99,11 @@ const AppointmentDetails = ({ route }) => {
                         </View>
                         <View style={styles.button_container}>
                             <TouchableOpacity>
-                                <FontAwesome5 name="edit" color={colors.secondaryBtn} size={24} />
+                                <MaterialCommunityIcons name="calendar-edit" color={colors.secondaryBtn} size={24} />
                             </TouchableOpacity>
-                            <TouchableOpacity>
-                                <FontAwesome5 name="trash-alt" color={colors.secondaryBtn} size={24} />
+                            <TouchableOpacity onPress={() => showDelAlert()}>
+                            {/*<touchableopacity onpress={() => showdelalert()}>*/}
+                                <MaterialCommunityIcons name="trash-can-outline" color={colors.secondaryBtn} size={24} />
                             </TouchableOpacity>
                         </View>
                     </View>
