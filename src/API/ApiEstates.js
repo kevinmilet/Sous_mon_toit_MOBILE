@@ -35,3 +35,9 @@ export const getEstateCover = (id) =>{
     return instanceAxios.get(`/estates_pictures/cover/${id}`)
     .then(response => response)
 }
+
+// Recherche de biens
+export const searchEstates = (value) => {
+    return instanceAxios.get(`/estates/search/${value}`)
+        .then(response => response);
+}

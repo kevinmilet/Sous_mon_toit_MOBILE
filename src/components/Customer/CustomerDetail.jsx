@@ -9,13 +9,15 @@ import Loader from "../../Tools/Loader/Loader";
 import { useIsFocused } from "@react-navigation/native";
 import CustomerAptmt from "../Customer/CustomerAptmt";
 import colors from '../../utils/styles/colors';
+import NotSearch from './NotSearch';
+import CustomerSearch from "./CustomerSearch";
 
 const CustomerDetail = ({ route }) => {
   const { id } = route.params;
   const isFocused = useIsFocused();
 
   const [customerData, setCustomerData] = useState({});
-  const [customerSearch, setCustomerSearch] = useState({});
+  const [customerSearch, setCustomerSearch] = useState(null);
   const [customerTypes, setCustomerTypes] = useState(null);
   const [customerTypeData, setCustomerTypeData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -24,8 +26,11 @@ const CustomerDetail = ({ route }) => {
   useEffect(() => {
     getCustomerSearch(id)
       .then((res) => {
-        setCustomerSearch(res.data);
-        console.log(res.data, "search");
+        if(Object.entries(res.data).length != 0){
+          setCustomerSearch(res.data);
+        }
+
+        console.log(res.data.length, "search");
       })
       .catch((error) => {
         console.log(error.message);
@@ -78,6 +83,7 @@ const CustomerDetail = ({ route }) => {
      
   }, [id, isFocused]);
   console.log( customerAptmts, 'ff');
+  console.log(customerSearch, 'eeeeee');
   if (loading) {
     return <Loader />;
   }
@@ -85,7 +91,7 @@ const CustomerDetail = ({ route }) => {
     <View style={styles.main_container}>
       <Topbar />
 
-      <ScrollView style={styles.main_container}>            
+      <ScrollView style={styles.main_container2}>            
         <Text style={styles.baseText}>
                 Prénom :
                 <Text style={styles.innerText}> {customerData.firstname}</Text>
@@ -115,7 +121,10 @@ const CustomerDetail = ({ route }) => {
 
               <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Recherche du client</Text>
-              </View>
+              </View> 
+              {customerSearch != null ? (
+               
+                <View>
               <Text style={styles.baseText}>
                 Achat/Location :
                 <Text style={styles.innerText}>
@@ -149,6 +158,10 @@ const CustomerDetail = ({ route }) => {
                   {customerSearch.search_radius} Km
                 </Text>
               </Text>
+              </View>
+              )
+              : <NotSearch/>
+              } 
               <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Rendez-vous</Text>
               </View>
@@ -168,7 +181,7 @@ const CustomerDetail = ({ route }) => {
               /> */}
               {/* </Text>  */}
               {customerAptmts.length == 0 ?(
-                <Loader />
+                <Text> Pas de RDV pour ce client</Text>
               )
             :
             (
@@ -195,7 +208,7 @@ const CustomerDetail = ({ route }) => {
 const styles = StyleSheet.create({
   main_container: {
     flex: 1,
-    backgroundColor: "#4EA1D5",
+    // backgroundColor: "#4EA1D5",
   },
 
   styleTitleMain: {
@@ -204,10 +217,10 @@ const styles = StyleSheet.create({
     color: "#E85A70",
   },
   main_container2: {
-    margin: 10,
-    padding: 20,
+    margin: 5,
+    padding: 10,
     backgroundColor:'#4EA1D5',
-    borderRadius: 10,
+    borderRadius: 10
   },
   baseText: {
     fontWeight: "bold",

@@ -28,3 +28,9 @@ export const getCustomerDescribe = (id) =>{
     return instanceAxios.get(`/describe_customer_type/joinCustomer/${id}`)
     .then(response => response)
 }
+
+// Chercher des clients
+export const searchCustomers = (value) => {
+    return instanceAxios.get(`/customer/s/search/${value}`)
+        .then(response => response);
+}

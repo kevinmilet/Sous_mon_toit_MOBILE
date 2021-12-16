@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { View, FlatList, Text, StyleSheet,TouchableOpacity } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CalendarItem from './CalendarItem';
-import { getTodayStaffAptmts } from '../../API/ApiApointements';
+import {getTodayStaffAptmts} from '../../API/ApiApointements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Topbar from '../Topbar/Topbar';
-import { FontAwesome5 } from '@expo/vector-icons';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 import colors from '../../utils/styles/colors'
 import {useNavigation} from "@react-navigation/native";
 
@@ -50,7 +50,7 @@ const Calendar = () => {
             </View>
             <View style={styles.button_container}>
                 <TouchableOpacity onPress={() => navigation.navigate('addAppointment', null)}>
-                    <FontAwesome5 name="calendar-plus" color={colors.primaryBtn} size={36} />
+                    <MaterialCommunityIcons name="calendar-plus" color={colors.primaryBtn} size={36} />
                 </TouchableOpacity>
             </View>
         </>
@@ -62,7 +62,7 @@ const Calendar = () => {
             </View>
             <View style={styles.button_container}>
                 <TouchableOpacity onPress={() => navigation.navigate('addAppointment', null)}>
-                    <FontAwesome5 name="calendar-plus" color={colors.primaryBtn} size={36}/>
+                    <MaterialCommunityIcons name="calendar-plus" color={colors.primaryBtn} size={36}/>
                 </TouchableOpacity>
             </View>
         </>

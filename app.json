@@ -4,11 +4,11 @@
     "slug": "sous_mon_toit-MOBILE",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/splash.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#EAEAEA"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

@@ -32,10 +32,9 @@ export const updateAptmt = (values) =>{
 
 // Supprimer un rdv
 export const deleteAptmt = (id) =>{
-    return instanceAxios.post(`/schedule/update/${id}`)
+    return instanceAxios.delete(`/schedule/delete/${id}`)
     .then(response => response)
 }
-
 
 // Récuperer tout les rdv du jour pour l'agent
 export const getTodayStaffAptmts = (id) =>{
@@ -49,8 +48,8 @@ export const getTodayCustomerAptmts = (id) =>{
     .then(response => response)
 }
 
-// Récupére tout les rendez vous d'un client 
-export const getAllCustomerAptmts = (id) =>{
-    return instanceAxios.get(`/schedule/customer/${id}`)
-    .then(response => response)
+// Récupérer les types de rdv
+export const  getAptmtsTypes = () => {
+    return instanceAxios.get('/schedule/appointmentsTypes')
+        .then(response => response)
 }
