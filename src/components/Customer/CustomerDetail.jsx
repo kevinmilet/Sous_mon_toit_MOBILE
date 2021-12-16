@@ -2,7 +2,7 @@ import React, { useEffect, useState} from "react";
 import { StyleSheet, Text, View, ScrollView , FlatList, SectionList, SafeAreaView} from "react-native";
 import { getCustomerDescribe, getCustomerSearch } from "../../API/ApiCustomers";
 import Topbar from "../Topbar/Topbar";
-import { getAllCustomerAptmts } from "../../API/ApiApointements";
+import { getAllCustomerAptmt } from "../../API/ApiApointements";
 import Moment from "moment";
 import "moment/locale/fr";
 import Loader from "../../Tools/Loader/Loader";
@@ -51,8 +51,8 @@ const CustomerDetail = ({ route }) => {
         setLoading(false);
       });
       
-     getAllCustomerAptmts(id)
-      .then((res) => {
+      getAllCustomerAptmt(id)
+     .then((res) => {
       
         let allApptmt = [];
         res.data.map( item=>{
@@ -90,7 +90,7 @@ const CustomerDetail = ({ route }) => {
   return (
     <View style={styles.main_container}>
       <Topbar />
-
+ 
       <ScrollView style={styles.main_container2}>            
         <Text style={styles.baseText}>
                 Prénom :
