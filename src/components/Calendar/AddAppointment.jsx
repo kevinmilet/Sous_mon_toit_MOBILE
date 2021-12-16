@@ -180,7 +180,7 @@ const AddAppointment = () => {
 
                 <View>
                     <Searchbar style={styles.dropdownInput}
-                                placeholder="Chercher un client"
+                               placeholder="Chercher un client"
                                onChangeText={(text) => {
                                    if (searchTimer) {
                                        clearTimeout(searchTimer);
@@ -285,7 +285,7 @@ const AddAppointment = () => {
                     </Modal>
 
                     <View>
-                        <TextInput editable={false}>{estate.title}</TextInput>
+                        <TextInput editable={false}>{estate.reference} - {estate.title} - {estate.city}</TextInput>
                     </View>
 
                 </View>
