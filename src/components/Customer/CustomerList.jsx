@@ -5,15 +5,23 @@ import Card from '../../components/Customer/Card';
 import Loader from "../../Tools/Loader/Loader";
 import Topbar from './../Topbar/Topbar';
 import colors from '../../utils/styles/colors';
+import { Searchbar } from 'react-native-paper';
+import {searchCustomers} from "../../API/ApiCustomers";
 
 
 const CustomerList = () => {
-    const [customerData, setCustomerData] = useState({});
+    const [customerData1, setCustomerData1] = useState({});
     const [loading, setLoading] = useState(true);
+    const [estateInput, setEstateInput] = useState('');
+    const [searchTimer, setSearchTimer] = useState(null);
+    const [customerInput, setCustomerInput] = useState('');
+    const [modalCVisible, setModalCVisible] = useState(false);
+    const [modalEVisible, setModalEVisible] = useState(false);
+    const [customerData2, setCustomerData2] = useState([]);
 
     useEffect(() => {
         getAllCustomers().then((res) => {
-                setCustomerData(res.data);
+                setCustomerData1(res.data);
             })
             .catch((error) => {
                 console.log(error.message);
@@ -21,6 +29,25 @@ const CustomerList = () => {
             .finally(() => {
                 setLoading(false);
             });
+             const onTimeChange = (e, selectedTime) => {
+                setTime(moment(selectedTime));
+                if (Platform.OS === 'android') {
+                    setIsTimePickerShow(false);
+                }
+            };
+        
+             getCustomersResults = (text) => {
+                searchCustomers(text).then(
+                    response => {
+                        setCustomerData2(response.data);
+                    }
+                ).finally(() => {
+                    setModalCVisible(true)
+                    }
+                ).catch(error => {
+                    console.log(error.message);
+                })
+            }
     }, []);
 
     if (loading) {
@@ -30,8 +57,24 @@ const CustomerList = () => {
         
         <View style={styles.mainContainer}>
             <Topbar/>
+            <Searchbar style={styles.dropdownInput}
+                                placeholder="Chercher un client"
+                               onChangeText={(text) => {
+                                   if (searchTimer) {
+                                       clearTimeout(searchTimer);
+                                   }
+                                   setCustomerInput(text);
+                                   setSearchTimer(
+                                       setTimeout(() => {
+                                           if (text.length >= 3) {
+                                               getCustomersResults(text);
+                                           }
+                                       }, 200),
+                                   );
+                               }}
+                               value={customerInput} />
         <FlatList
-            data={customerData}
+            data={customerData1}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({item}) => <Card customer={item}/>}
         
