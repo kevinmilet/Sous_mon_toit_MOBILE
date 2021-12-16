@@ -40,6 +40,7 @@ instanceAxios.interceptors.response.use(
                 AsyncStorage.removeItem("@auth_token");
                 AsyncStorage.removeItem("@auth_userId");
                 console.log('j\ai supprimé le token')
+                return err
             }
         }
 
@@ -49,6 +50,8 @@ instanceAxios.interceptors.response.use(
             AsyncStorage.removeItem("@auth_userId");
             console.log('j\ai supprimé le token')
         }
+
+        return err
     }
 );
 

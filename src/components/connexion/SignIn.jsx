@@ -1,10 +1,11 @@
 import { Entypo as Icon } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFormik } from "formik";
-import React, { forwardRef, useRef , useEffect, useState } from 'react';
+import React, { forwardRef, useRef , useEffect, useState, useContext } from 'react';
 import { Image, StyleSheet, Text, TextInput as RNTextInput, TouchableOpacity, View } from 'react-native';
 import * as Yup from "yup";
 import { login } from '../../API/ApiStaff';
+import LogContext from '../../API/Context/LogContext';
 import colors from '../../utils/styles/colors';
 
 const Button = ({ label, onPress }) => {
@@ -60,8 +61,8 @@ const TextInput = forwardRef(({ icon, error, touched, ...otherProps }, ref) => {
 
 const SignIn = (props) => {
 
+    const {setTokenIsValid} = useContext(LogContext);
     const password = useRef(null);
-    const{setTokenIsValid} = props
     const { handleChange, handleSubmit, handleBlur, values, errors, touched } = useFormik({
         initialValues: {
             login: '',
