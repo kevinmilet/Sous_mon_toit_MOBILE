@@ -40,32 +40,34 @@ const AppointmentDetails = ({ route }) => {
             });
     }, [aptmtId])
 
-    // const showDelAlert = () => {
-    //     Alert.alert(
-    //         labels.confirmation,
-    //         labels.delConf,
-    //         [
-    //             {
-    //                 text: "Non",
-    //                 onPress: () => console.log("Suppresion annulée"),
-    //                 style: "cancel"
-    //             },
-    //             {
-    //                 text: "Oui",
-    //                 onPress: () => deleteAptmt(aptmtId),
-    //             }
-    //         ]
-    //     );
-    // }
+    const showDelAlert = () => {
+        Alert.alert(
+            labels.confirmation,
+            labels.delConf,
+            [
+                {
+                    text: "Non",
+                    onPress: () => console.log("Suppresion annulée"),
+                    style: "cancel"
+                },
+                {
+                    text: "Oui",
+                    onPress: () => delAptmt(aptmtId),
+                }
+            ]
+        );
+    }
 
-    // deleteAptmt(aptmtId)
-    //     .then(
-    //         response => {
-    //             console.log(response.data + ' ' + response.statusCode)
-    //         }
-    //     ).catch (error => {
-    //     console.log(error.message)
-    // });
+    const delAptmt = (aptmtId) => {
+        deleteAptmt(aptmtId)
+            .then(
+                response => {
+                    console.log(response.data + ' ' + response.statusCode)
+                }
+            ).catch (error => {
+            console.log(error.message)
+        });
+    };
 
     return(
             <>
@@ -102,7 +104,6 @@ const AppointmentDetails = ({ route }) => {
                                 <MaterialCommunityIcons name="calendar-edit" color={colors.secondaryBtn} size={24} />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => showDelAlert()}>
-                            {/*<touchableopacity onpress={() => showdelalert()}>*/}
                                 <MaterialCommunityIcons name="trash-can-outline" color={colors.secondaryBtn} size={24} />
                             </TouchableOpacity>
                         </View>

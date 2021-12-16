@@ -1,27 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Image, StyleSheet, FlatList, ScrollView } from 'react-native';
+import { TouchableOpacity, Text, View, Image, StyleSheet, FlatList, ScrollView } from 'react-native';
 import { getOneEstate, getEstateCover, getEstatePictures } from '../../API/ApiEstates';
 import { COVER_ESTATE_BASE_URL } from '@env';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Topbar from "../Topbar/Topbar";
 import colors from '../../utils/styles/colors';
-// import { Modal } from 'react-native';
-// import ImageViewer from 'react-native-image-zoom-viewer';
-
-// const images = [{
-//     // Simplest usage.
-//     url: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460',
-
-//     // width: number
-//     // height: number
-//     // Optional, if you know the image size, you can set the optimization performance
-
-//     // You can pass props to <Image />.
-//     props: {
-//         // headers: ...
-//     }
-// }]
-
+import { Modal } from 'react-native';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 const EstateDetail = ({ route }) => {
 
@@ -30,6 +15,8 @@ const EstateDetail = ({ route }) => {
     const [pictureCover, setPictureCover] = useState({})
     const [picturesList, setPicturesList] = useState([{}])
     // const [loading, setLoading] = useState(true);
+    const [visibleModal, setVisibleModal] = useState(false);
+    const [imageIndex , setImageIndex] = useState(0);
 
     useEffect(() => {
         // setTimeout(() => setLoading(false), 2000)
@@ -66,6 +53,12 @@ const EstateDetail = ({ route }) => {
             })
     }, [estateId])
 
+    // Création du tableau d'images pour le viewer d'image
+    const images = [];
+    picturesList.map((picture) => {
+        images.push({url:COVER_ESTATE_BASE_URL + picture.alt});
+    });
+
     return (
 
         // !loading &&
@@ -75,31 +68,47 @@ const EstateDetail = ({ route }) => {
             <ScrollView style={styles.containerDetail}>
 
                 <Text style={{ textAlign: "center", color: "white" }}>Référence du biens : {oneEstateData.reference}</Text>
-                <View style={{ alignItems: 'center' }}>
+                {/* <View style={{ alignItems: 'center' }}>
                     <Image
                         source={{ uri: COVER_ESTATE_BASE_URL + pictureCover.name }}
                         style={{ height: 150, width: '80%', resizeMode: 'cover', borderRadius: 15 }}
                     />
-                </View>
-                <View style={{ height: 100, width: "100%", alignItems: 'center' }}>
+                </View> */}
+                <View style={{ height: 150, width: "100%", alignItems: 'center' }}>
                     <FlatList
                         data={picturesList}
                         horizontal={true}
                         keyExtractor={(item,index) => index}
-                        renderItem={({ item }) => {
+                        renderItem={({ item,index }) => {
                             return(
                                 <View style={{}}>
-                                    <Image 
-                                        source={{ uri: COVER_ESTATE_BASE_URL + item.alt }}
-                                        style={{ height: 100, width: 100, resizeMode:'cover' }}
-                                    />
+                                    <TouchableOpacity
+                                        onPress={()=>{setVisibleModal(true); setImageIndex(index)}}
+                                    >
+                                        <Image 
+                                            source={{ uri: COVER_ESTATE_BASE_URL + item.alt }}
+                                            style={{ height: 150, width: 150, resizeMode:'cover' }}
+                                        />
+                                    </TouchableOpacity>
                                 </View>
                             )
                         }}
                     />
-                    {/* <Modal visible={false} transparent={true}>
-                        <ImageViewer imageUrls={images}/>
-                    </Modal> */}
+                <Modal visible={visibleModal} transparent={true}>
+                    <ImageViewer 
+                        imageUrls={images} 
+                        index={imageIndex} 
+                        enableSwipeDown={true}
+                        onCancel={()=>setVisibleModal(false)}
+                        renderFooter={()=>{
+                            return(
+                                <TouchableOpacity  style={{flexDirection:"row", alignItems:"flex-end", padding:20}} onPress={() => setVisibleModal(false)}>
+                                    <Text style={{textAlign:"right", width:"100%"}}><FontAwesome5 name="times-circle" color="white" size={45}/></Text>
+                                </TouchableOpacity>
+                            )
+                        }}
+                    />
+                </Modal>
                 </View>
 
                 <Text style={{ fontSize: 20, textAlign: "right", color: "black", marginRight: 10 }}>Prix: {oneEstateData.price}€</Text>
