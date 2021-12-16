@@ -18,16 +18,22 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
 import colors from "../../utils/styles/colors";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {getAptmtsTypes} from "../../API/ApiApointements";
+import {createAptmt, getAptmtsTypes} from "../../API/ApiApointements";
 import { Searchbar } from 'react-native-paper';
 import {searchCustomers} from "../../API/ApiCustomers";
 import {searchEstates} from "../../API/ApiEstates";
+import {getCurrentUser} from "../../API/ApiStaff";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useFormik} from "formik";
+import * as Yup from "yup";
 
 const AddAppointment = () => {
 
+    const [currentUser, setCurrentUser] = useState(null);
+
     const [date, setDate] = useState(moment());
     const [time, setTime] = useState(moment());
-    const [note, setNote] = useState();
+    const [dateTime, setDateTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
 
     const [isDatePickerShow, setIsDatePickerShow] = useState(false);
     const [isTimePickerShow, setIsTimePickerShow] = useState(false);
@@ -47,6 +53,34 @@ const AddAppointment = () => {
     });
     const [modalCVisible, setModalCVisible] = useState(false);
     const [modalEVisible, setModalEVisible] = useState(false);
+
+    const { handleChange, handleSubmit, handleBlur, values } = useFormik({
+        initialValues: {
+            scheduled_at: '',
+            notes: '',
+            id_estate: null,
+            id_staff: null,
+            id_customer: null,
+            id_appointment_type: null
+        },
+        // validationSchema: Yup.object({
+        //     scheduled_at: Yup.string()
+        //         .trim()
+        //         .matches(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]/)
+        //         .required(),
+        //     notes: Yup.string(),
+        //     id_estate: Yup.number(),
+        //     id_staff: Yup.number().required(),
+        //     id_customer: Yup.number(),
+        //     id_appointment_type: Yup.number().required('Champs requis')
+        // }),
+        onSubmit: async (values) => {
+            // await new Promise(r => {
+            //     createAptmt(values)
+            // });
+            console.log(values)
+        }
+    });
 
     const showDatePicker = () => {
         setIsDatePickerShow(true);
@@ -111,6 +145,23 @@ const AddAppointment = () => {
     }
 
     useEffect(() => {
+        if (!currentUser) {
+            AsyncStorage.getItem('@auth_userId', (error, result) => {
+                try {
+                    getCurrentUser(result).then(
+                        response => {
+                            setCurrentUser(response.data);
+                        }).catch(error => {
+                        console.log(error.message)
+                    })
+                } catch {
+                    console.log(error.message)
+                }
+            });
+        }
+    }, [currentUser])
+
+    useEffect(() => {
         getAptmtsTypes().then(
             response => {
                 setAptmtsTypes(response.data);
@@ -131,6 +182,18 @@ const AddAppointment = () => {
                 <View>
                     <Text style={styles.title}>Ajouter un rendez-vous</Text>
                 </View>
+                {currentUser ? (
+                    <TextInput
+                        editable={false}
+                        style={{display: 'none'}}
+                        onChangeText={handleChange('id_staff')}
+                        onBlur={handleBlur('id_staff')}
+                        value={values.id_staff}>
+                            {currentUser.id}
+                    </TextInput>)
+                    :
+                    null
+                }
 
                 <View style={styles.datetime_container}>
                     <View>
@@ -180,7 +243,7 @@ const AddAppointment = () => {
 
                 <View>
                     <Searchbar style={styles.dropdownInput}
-                                placeholder="Chercher un client"
+                               placeholder="Chercher un client"
                                onChangeText={(text) => {
                                    if (searchTimer) {
                                        clearTimeout(searchTimer);
@@ -229,7 +292,14 @@ const AddAppointment = () => {
                     </Modal>
 
                     <View>
-                        <TextInput editable={false}>{customer.firstname} {customer.lastname}</TextInput>
+                        <Text>{customer.firstname} {customer.lastname}</Text>
+                        <TextInput editable={false}
+                                   style={{display: 'none'}}
+                                   onChangeText={handleChange('id_customer')}
+                                   onBlur={handleBlur('id_customer')}
+                                   value={values.id_customer}>
+                            {customer.id}
+                        </TextInput>
                     </View>
 
                 </View>
@@ -285,18 +355,29 @@ const AddAppointment = () => {
                     </Modal>
 
                     <View>
-                        <TextInput editable={false}>{estate.title}</TextInput>
+                        <Text>{estate.reference} - {estate.title} - {estate.city}</Text>
+                        <TextInput editable={false}
+                                   style={{display: 'none'}}
+                                   onChangeText={handleChange('id_estate')}
+                                   onBlur={handleBlur('id_estate')}
+                                   value={values.id_estate}>
+                            {estate.id}
+                        </TextInput>
                     </View>
 
                 </View>
 
                 <View>
                     <SelectDropdown
+                        name="id_appointment_type"
                         data={aptmtsTypes}
                         defaultButtonText={"Type"}
+                        value={values.id_appointment_type}
                         onSelect={(selectedItem, index) => {
-                            console.log(selectedItem, index)
+                            return selectedItem.id
                         }}
+                        onChange={handleChange('id_appointment_type')}
+                        onBlur={handleBlur('id_appointment_type')}
                         buttonTextAfterSelection={(selectedItem, index) => {
                             // text represented after item is selected
                             // if data array is an array of objects then return selectedItem.property to render after item is selected
@@ -312,7 +393,7 @@ const AddAppointment = () => {
                         dropdownStyle={styles.dropdown}
                         buttonTextStyle={styles.selectBtnText}
                         renderDropdownIcon={() => {
-                            return <MaterialCommunityIcons name="chevron-down" size={18} color={colors.secondaryBtn} />;
+                            return <MaterialCommunityIcons name="chevron-down" size={18} color={colors.secondaryBtn} />
                         }}
                     />
                 </View>
@@ -323,12 +404,14 @@ const AddAppointment = () => {
                         multiline={true}
                         numberOfLines={5}
                         placeholder="Ajouter une note au rendez-vous"
-                        value={note}
+                        onChangeText={handleChange('notes')}
+                        onBlur={handleBlur('notes')}
+                        value={values.notes}
                     />
                 </View>
 
                 <View>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                         <Text style={styles.btnText}>Valider</Text>
                     </TouchableOpacity>
                 </View>
