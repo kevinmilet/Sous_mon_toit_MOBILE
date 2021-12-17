@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
     Platform,
     StyleSheet,
@@ -30,6 +30,7 @@ import MaterialCommunityIcon from "react-native-paper/src/components/MaterialCom
 import {useNavigation} from "@react-navigation/native";
 
 const AddAppointment = () => {
+    const {setTokenIsValid} = useContext(LogContext);
     const navigation = useNavigation();
 
     const [currentUser, setCurrentUser] = useState(null);
@@ -56,6 +57,8 @@ const AddAppointment = () => {
     });
     const [modalCVisible, setModalCVisible] = useState(false);
     const [modalEVisible, setModalEVisible] = useState(false);
+
+
 
     const showDatePicker = () => {
         setIsDatePickerShow(true);

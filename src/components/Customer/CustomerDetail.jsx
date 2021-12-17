@@ -100,28 +100,28 @@ const CustomerDetail = ({ route }) => {
       <ScrollView style={styles.main_container2}>            
         <Text style={styles.baseText}>
                 Prénom :
-                <Text style={styles.innerText}> {customerData.firstname}</Text>
+                <Text style={styles.innerText}> {customerData?.firstname}</Text>
               </Text>
               <Text style={styles.baseText}>
-                Mail :<Text style={styles.innerText}> {customerData.mail}</Text>
+                Mail :<Text style={styles.innerText}> {customerData?.mail}</Text>
               </Text>
               <Text style={styles.baseText}>
                 Date de naissance :
-                <Text style={styles.innerText}> {customerData.birthdate}</Text>
+                <Text style={styles.innerText}> {customerData?.birthdate}</Text>
               </Text>
               <Text style={styles.baseText}>
                 Adresse :
-                <Text style={styles.innerText}> {customerData.address}</Text>
+                <Text style={styles.innerText}> {customerData?.address}</Text>
               </Text>
               <Text style={styles.baseText}>
                 Numéro client :
-                <Text style={styles.innerText}> {customerData.n_customer}</Text>
+                <Text style={styles.innerText}> {customerData?.n_customer}</Text>
               </Text>
               <Text style={styles.baseText}>
                 Type client :
                 <Text style={styles.innerText}>
                   {" "}
-                  {customerData.customer_type}
+                  {customerData?.customer_type}
                 </Text>
               </Text>
 
