@@ -1,5 +1,4 @@
-import React, {useEffect, useState , useContext} from 'react';
-import React, {useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState , useContext, useCallback} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CalendarItem from './CalendarItem';
 import {getTodayStaffAptmts} from '../../API/ApiApointements';
@@ -7,7 +6,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Topbar from '../Topbar/Topbar';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import colors from '../../utils/styles/colors'
-import {useNavigation} from "@react-navigation/native";
 import LogContext from '../../API/Context/LogContext';
 import {useFocusEffect, useIsFocused, useNavigation} from "@react-navigation/native";
 
@@ -60,16 +58,15 @@ const Calendar = () => {
         <>
             <View style={{flex: 1}}>
                 <Topbar />
-                <View style={styles.button_container}>
-                    <TouchableOpacity onPress={() => navigation.navigate('addAppointment', null)}>
-                        <MaterialCommunityIcons name="calendar-plus" color={colors.primaryBtn} size={36} />
-                        {/*<Text>Ajouter un rendez-vous</Text>*/}
-                    </TouchableOpacity>
-                </View>
                 <FlatList
                     data={appointments}
                     renderItem={({ item }) => <CalendarItem appointments={item} />}
-                    keyExtractor={(item) => item.id} />
+                    keyExtractor={index => index} />
+            </View>
+            <View style={styles.button_container}>
+                <TouchableOpacity onPress={() => navigation.navigate('addAppointment', null)}>
+                    <MaterialCommunityIcons name="calendar-plus" color={colors.primaryBtn} size={36} />
+                </TouchableOpacity>
             </View>
         </>
         :

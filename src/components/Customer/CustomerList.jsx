@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState, useContext } from "react";
+import { FlatList, StyleSheet, View, TextInput } from 'react-native';
 import { getAllCustomers } from "../../API/ApiCustomers";
 import Card from '../../components/Customer/Card';
 import Loader from "../../Tools/Loader/Loader";

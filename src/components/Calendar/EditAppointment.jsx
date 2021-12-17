@@ -18,7 +18,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
 import colors from "../../utils/styles/colors";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { createAptmt, getAptmtsTypes } from "../../API/ApiApointements";
+import { updateAptmt, getAptmtsTypes, showAptmt } from "../../API/ApiApointements";
 import { Searchbar } from 'react-native-paper';
 import { searchCustomers } from "../../API/ApiCustomers";
 import { searchEstates } from "../../API/ApiEstates";
@@ -86,7 +86,7 @@ const EditAppointment = ({route}) => {
     // console.log(route)
 
     const { AppointmentId } = route.params;
-    const idAppt = 1
+    const [aptmtData, setAptmtData] = useState ();
 
     const [date, setDate] = useState(moment());
     const [time, setTime] = useState(moment());
@@ -113,10 +113,35 @@ const EditAppointment = ({route}) => {
     const [modalCVisible, setModalCVisible] = useState(false);
     const [modalEVisible, setModalEVisible] = useState(false);
 
+    useEffect(() => {
+        showAptmt(AppointmentId)
+            .then(
+                response => {
+                    if(response.response){
+                        if(response.response.status === 401)
+                        setTokenIsValid(false)
+                    }
+                    console.log(response.data , "response data")
+                    setAptmtData(response.data)
+                }
+            ).catch (error => {
+                console.log(error.message)
+            });
+    }, [AppointmentId])
+    console.log(aptmtData , "appointment data ! ")
+
     const { handleChange, handleSubmit, handleBlur, values, errors, touched } = useFormik({
         initialValues: {
-            scheduled_at: '',
-            notes: '',
+            // test
+            // scheduled_at: aptmtData?.scheduled_at,
+            // notes: aptmtData?.notes,
+            // id_estate: null,
+            // id_staff: aptmtData?.id_staff,
+            // id_customer: aptmtData?.id_customer,
+            // id_appointment_type: null
+
+            scheduled_at: "",
+            notes: "",
             id_estate: null,
             id_staff: null,
             id_customer: null,
@@ -134,25 +159,24 @@ const EditAppointment = ({route}) => {
             // id_appointment_type: Yup.number().required('Champs requis')
         }),
         onSubmit: async (values) => {
-            console.log(date);
-            console.log(time);
+            const myDateTime = date.format('YYYY-MM-DD') + " " + time.format('HH:mm:ss')
             const mesValues = {
                 id_appointment_type:typeAppt,
                 id_customer:customer.id,
                 id_estate:estate.id,
                 id_staff:currentUser.id,
                 notes:values.notes,
-                scheduled_at:values.scheduled_at
+                scheduled_at:myDateTime
             }
-            console.log(mesValues);
-            // await new Promise(r => {
-            //     EditAppointment(mesValues)
-            // })
+            console.log(mesValues ,AppointmentId);
+            await new Promise(r => {
+                EditAppointment(mesValues, AppointmentId)
+            })
         }
     });
-    const EditAppointment = (mesValues) => updateAptmt(mesValues, idAppt).then(
+    const EditAppointment = (mesValues , AppointmentId) => updateAptmt(mesValues, AppointmentId).then(
         response => {
-            console.log(response);
+            console.log(response, "response");
         }
     ).catch(error => {
         console.log("catch !",error.message);
@@ -167,14 +191,18 @@ const EditAppointment = ({route}) => {
     }
 
     const onDateChange = (e, selectedDate) => {
-        setDate(moment(selectedDate));
+        console.log(selectedDate || date, "=> selectedDate ....................")
+        console.log(date , " date after set")
+        setDate(moment(selectedDate || date ));
         if (Platform.OS === 'android') {
             setIsDatePickerShow(false);
         }
     }
 
     const onTimeChange = (e, selectedTime) => {
-        setTime(moment(selectedTime));
+        console.log(selectedTime || time , "=> selectedTime ....................")
+        console.log(time , " time after set")
+        setTime(moment(selectedTime || time));
         if (Platform.OS === 'android') {
             setIsTimePickerShow(false);
         }
@@ -293,7 +321,6 @@ const EditAppointment = ({route}) => {
                             />
                         )}
                     </View>
-
                     <View>
                         <TouchableOpacity
                             activeOpacity={0}
@@ -356,7 +383,7 @@ const EditAppointment = ({route}) => {
                                             </TouchableOpacity>
                                         </View>
                                     )}
-                                    keyExtractor={(item) => "" + item.id}
+                                    keyExtractor={(index) => index}
                                 />
                             </View>
                             <Pressable
@@ -419,7 +446,7 @@ const EditAppointment = ({route}) => {
                                             </TouchableOpacity>
                                         </View>
                                     )}
-                                    keyExtractor={(item) => "" + item.id}
+                                    keyExtractor={(index) => index}
                                 />
                             </View>
                             <Pressable
