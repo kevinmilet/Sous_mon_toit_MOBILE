@@ -12,7 +12,7 @@ const CalendarItem = (appointments) => {
     const navigation = useNavigation();
     
     return(
-        <TouchableOpacity onPress={() => navigation.navigate('appointmentDetails', { aptmtId: (aptmt.id).toString() })}>
+        <TouchableOpacity onPress={() => navigation.navigate('appointmentDetails', { aptmtId: aptmt.id })}>
             <View style={styles.content_container}>
                 <View style={styles.header_container}>
                     <Text style={styles.date_text}>{date}</Text>
