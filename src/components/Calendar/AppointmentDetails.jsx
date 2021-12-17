@@ -7,6 +7,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import colors from '../../utils/styles/colors'
 import labels from "../../utils/labels";
+import {useNavigation} from "@react-navigation/native";
 
 const AppointmentDetails = ({ route }) => {
 
@@ -60,14 +61,44 @@ const AppointmentDetails = ({ route }) => {
 
     const delAptmt = (aptmtId) => {
         deleteAptmt(aptmtId)
-            .then(
-                response => {
-                    console.log(response.data + ' ' + response.statusCode)
+            .then(response => {
+                    console.log(response.status)
+                    if (response.status === 200) {
+                        confirmAlert()
+                    } else {
+                        errorAlert()
+                    }
                 }
             ).catch (error => {
-            console.log(error.message)
+                console.log(error.message)
         });
     };
+
+    const confirmAlert = () => {
+        Alert.alert(
+            '',
+            'Rendez-vous supprimé',
+            [
+                {
+                    text: "Ok",
+                    onPress: () => useNavigation().navigate('home', null)
+                }
+            ]
+        );
+    }
+
+    const errorAlert = () => {
+        Alert.alert(
+            'Erreur',
+            'Le rendez-vous n\'a pas été supprimé',
+            [
+                {
+                    text: "Ok",
+                    onPress: () => useNavigation().navigate('home', null)
+                }
+            ]
+        );
+    }
 
     return(
             <>

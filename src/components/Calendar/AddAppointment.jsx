@@ -24,8 +24,9 @@ import {searchCustomers} from "../../API/ApiCustomers";
 import {searchEstates} from "../../API/ApiEstates";
 import {getCurrentUser} from "../../API/ApiStaff";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useFormik} from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
+import MaterialCommunityIcon from "react-native-paper/src/components/MaterialCommunityIcon";
 
 const AddAppointment = () => {
 
@@ -54,33 +55,7 @@ const AddAppointment = () => {
     const [modalCVisible, setModalCVisible] = useState(false);
     const [modalEVisible, setModalEVisible] = useState(false);
 
-    const { handleChange, handleSubmit, handleBlur, values } = useFormik({
-        initialValues: {
-            scheduled_at: '',
-            notes: '',
-            id_estate: null,
-            id_staff: null,
-            id_customer: null,
-            id_appointment_type: null
-        },
-        // validationSchema: Yup.object({
-        //     scheduled_at: Yup.string()
-        //         .trim()
-        //         .matches(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]/)
-        //         .required(),
-        //     notes: Yup.string(),
-        //     id_estate: Yup.number(),
-        //     id_staff: Yup.number().required(),
-        //     id_customer: Yup.number(),
-        //     id_appointment_type: Yup.number().required('Champs requis')
-        // }),
-        onSubmit: async (values) => {
-            // await new Promise(r => {
-            //     createAptmt(values)
-            // });
-            console.log(values)
-        }
-    });
+
 
     const showDatePicker = () => {
         setIsDatePickerShow(true);
@@ -182,239 +157,281 @@ const AddAppointment = () => {
                 <View>
                     <Text style={styles.title}>Ajouter un rendez-vous</Text>
                 </View>
-                {currentUser ? (
-                    <TextInput
-                        editable={false}
-                        style={{display: 'none'}}
-                        onChangeText={handleChange('id_staff')}
-                        onBlur={handleBlur('id_staff')}
-                        value={values.id_staff}>
-                            {currentUser.id}
-                    </TextInput>)
-                    :
-                    null
-                }
 
-                <View style={styles.datetime_container}>
+                <Formik
+                    initialValues={{
+                        scheduled_at: null,
+                        notes: '',
+                        id_estate: null,
+                        id_customer: null,
+                        id_appointment_type: null,
+                        customer_search: null
+                    }}
+                    // validationSchema={Yup.object({
+                    //     scheduled_at: Yup.string()
+                    //         .trim()
+                    //         .matches(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]/)
+                    //         .required(),
+                    //     notes: Yup.string(),
+                    //     id_estate: Yup.number(),
+                    //     id_customer: Yup.number(),
+                    //     id_appointment_type: Yup.number().required('Champs requis')
+                    // })}
+                    onSubmit={
+                        async (values) => {
+                            let data = {
+                                ...values, id_staff: currentUser.id
+                            }
+                            // await new Promise(r => {
+                            //     createAptmt(values)
+                            // });
+                            console.log(data)
+                    }}>
+
+                    {({ setFieldValue, handleChange, handleBlur, handleSubmit, values }) => (
                     <View>
-                        <TouchableOpacity
-                            activeOpacity={0}
-                            onPress={showDatePicker}
-                            style={styles.dateInput}>
+                        <View style={styles.datetime_container}>
                             <View>
-                                <Text>{date.format('LL')}</Text>
+                                <TouchableOpacity
+                                    activeOpacity={0}
+                                    onPress={showDatePicker}
+                                    style={styles.dateInput}>
+                                    <View>
+                                        <Text>{date.format('LL')}</Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                                {isDatePickerShow && (
+                                    <DateTimePicker
+                                        value={new Date(date.format('YYYY-MM-DD'))}
+                                        mode="date"
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                        is24hour={true}
+                                        onChange={onDateChange}
+                                        style={styles.datePicker}
+                                    />
+                                )}
                             </View>
-                        </TouchableOpacity>
 
-                        {isDatePickerShow && (
-                            <DateTimePicker
-                                value={new Date(date.format('YYYY-MM-DD'))}
-                                mode="date"
-                                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                is24hour={true}
-                                onChange={onDateChange}
-                                style={styles.datePicker}
-                            />
-                        )}
-                    </View>
-
-                    <View>
-                        <TouchableOpacity
-                            activeOpacity={0}
-                            onPress={showTimePicker}
-                            style={styles.timeInput}>
                             <View>
-                                <Text>{time.format('LT')}</Text>
+                                <TouchableOpacity
+                                    activeOpacity={0}
+                                    onPress={showTimePicker}
+                                    style={styles.timeInput}>
+                                    <View>
+                                        <Text>{time.format('LT')}</Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                                {isTimePickerShow && (
+                                    <DateTimePicker
+                                        value={new Date(time.format('HH:mm'))}
+                                        mode="time"
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                        is24hour={true}
+                                        onChange={onTimeChange}
+                                        style={styles.datePicker}
+                                    />
+                                )}
                             </View>
-                        </TouchableOpacity>
-
-                        {isTimePickerShow && (
-                            <DateTimePicker
-                                value={new Date(time)}
-                                mode="time"
-                                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                is24hour={true}
-                                onChange={onTimeChange}
-                                style={styles.datePicker}
-                            />
-                        )}
-                    </View>
-                </View>
-
-                <View>
-                    <Searchbar style={styles.dropdownInput}
-                               placeholder="Chercher un client"
-                               onChangeText={(text) => {
-                                   if (searchTimer) {
-                                       clearTimeout(searchTimer);
-                                   }
-                                   setCustomerInput(text);
-                                   setSearchTimer(
-                                       setTimeout(() => {
-                                           if (text.length >= 3) {
-                                               getCustomersResults(text);
-                                           }
-                                       }, 200),
-                                   );
-                               }}
-                               value={customerInput} />
-
-                    <Modal animationType="slide"
-                            transparent={true}
-                            visible={modalCVisible}
-                            onRequestClose={() => {
-                               setCustomerData(null);
-                               setSearchTimer(null);
-                               setModalCVisible(false);
-                            }}
-                            >
-                        <View style={styles.centeredModal}>
-                            <View style={styles.modalView}>
-                                <FlatList
-                                          data={customerData}
-                                          renderItem={({ item }) => (
-                                              <View>
-                                                  <TouchableOpacity onPress={() => selectCustomer(item)}>
-                                                        <Text style={styles.modalText}>{item.firstname} {item.lastname}</Text>
-                                                  </TouchableOpacity>
-                                              </View>
-                                          )}
-                                          keyExtractor={(item) => "" + item.id}
-                                />
-                            </View>
-                            <Pressable
-                                style={[styles.modalButton, styles.buttonClose]}
-                                onPress={() => setModalCVisible(false)}
-                            >
-                                <Text style={styles.btnText}>Fermer</Text>
-                            </Pressable>
                         </View>
-                    </Modal>
 
-                    <View>
-                        <Text>{customer.firstname} {customer.lastname}</Text>
-                        <TextInput editable={false}
-                                   style={{display: 'none'}}
-                                   onChangeText={handleChange('id_customer')}
-                                   onBlur={handleBlur('id_customer')}
-                                   value={values.id_customer}>
-                            {customer.id}
-                        </TextInput>
-                    </View>
-
-                </View>
-
-                <View>
-                    <Searchbar style={styles.dropdownInput}
-                               placeholder="Chercher un bien"
-                               onChangeText={(text) => {
-                                   if (searchTimer) {
-                                       clearTimeout(searchTimer);
-                                   }
-                                   setEstateInput(text);
-                                   setSearchTimer(
-                                       setTimeout(() => {
-                                           if (text.length >= 3) {
-                                               getEstatesResults(text);
+                        <View>
+                            <Searchbar style={styles.dropdownInput}
+                                       placeholder="Chercher un client"
+                                       onChangeText={(text) => {
+                                           if (searchTimer) {
+                                               clearTimeout(searchTimer);
                                            }
-                                       }, 200),
-                                   );
-                               }}
-                               value={estateInput} />
+                                           setCustomerInput(text);
+                                           setSearchTimer(
+                                               setTimeout(() => {
+                                                   if (text.length >= 3) {
+                                                       getCustomersResults(text);
+                                                   }
+                                               }, 200),
+                                           );
+                                       }}
+                                       name="customer_search"
+                                       value={values.customer_search}
+                                       clearIcon={() => {
+                                           return(
+                                           <TouchableOpacity onPress={() => {setFieldValue('customer_search', null)
+                                           setFieldValue('id_customer', null)
+                                           }}>
+                                                <MaterialCommunityIcon name="window-close" size={30} color={colors.primary}/>
+                                           </TouchableOpacity>)
+                                       }} />
 
-                    <Modal animationType="slide"
-                           transparent={true}
-                           visible={modalEVisible}
-                           onRequestClose={() => {
-                               setEstateData(null);
-                               setSearchTimer(null);
-                               setModalEVisible(false);
-                           }}
-                    >
-                        <View style={styles.centeredModal}>
-                            <View style={styles.modalView}>
-                                <FlatList
-                                    data={estateData}
-                                    renderItem={({ item }) => (
-                                        <View>
-                                            <TouchableOpacity onPress={() => selectEstates(item)}>
-                                                <Text style={styles.modalText}>{item.city } / {item.title}</Text>
-                                            </TouchableOpacity>
+                            {(customerData !== null) && (
+                                <Modal animationType="slide"
+                                        transparent={true}
+                                        visible={modalCVisible}
+                                        onRequestClose={() => {
+                                           setCustomerData(null);
+                                           setSearchTimer(null);
+                                           setModalCVisible(false);
+                                        }}
+                                        >
+                                    <View style={styles.centeredModal}>
+                                        <View style={styles.modalView}>
+                                            <FlatList
+                                                      data={customerData}
+                                                      renderItem={({ item }) => (
+                                                          <View>
+                                                              <TouchableOpacity onPress={() => {selectCustomer(item);
+                                                                setFieldValue('id_customer', item.id.toString());
+                                                                setFieldValue('customer_search', item.firstname + ' ' + item.lastname)
+                                                              }}>
+                                                                    <Text style={styles.modalText}>{item.firstname} {item.lastname}</Text>
+                                                              </TouchableOpacity>
+                                                          </View>
+                                                      )}
+                                                      keyExtractor={(item) => "" + item.id}
+                                            />
                                         </View>
-                                    )}
-                                    keyExtractor={(item) => "" + item.id}
-                                />
+                                        <Pressable
+                                            style={[styles.modalButton, styles.buttonClose]}
+                                            onPress={() => setModalCVisible(false)}
+                                        >
+                                            <Text style={styles.btnText}>Fermer</Text>
+                                        </Pressable>
+                                    </View>
+                                </Modal>
+                            )}
+
+                            <View>
+                                {(customer.id != null) && (
+                                    <Text style={styles.resultText}>{customer.firstname} {customer.lastname}</Text>
+                                )}
+                                <TextInput editable={false}
+                                           name="id_customer"
+                                           style={{display: 'none'}}
+                                           value={values.id_customer}>
+
+                                </TextInput>
                             </View>
-                            <Pressable
-                                style={[styles.modalButton, styles.buttonClose]}
-                                onPress={() => setModalEVisible(false)}
-                            >
-                                <Text style={styles.btnText}>Fermer</Text>
-                            </Pressable>
+
                         </View>
-                    </Modal>
 
-                    <View>
-                        <Text>{estate.reference} - {estate.title} - {estate.city}</Text>
-                        <TextInput editable={false}
-                                   style={{display: 'none'}}
-                                   onChangeText={handleChange('id_estate')}
-                                   onBlur={handleBlur('id_estate')}
-                                   value={values.id_estate}>
-                            {estate.id}
-                        </TextInput>
+                        <View>
+                            <Searchbar style={styles.dropdownInput}
+                                       placeholder="Chercher un bien"
+                                       onChangeText={(text) => {
+                                           if (searchTimer) {
+                                               clearTimeout(searchTimer);
+                                           }
+                                           setEstateInput(text);
+                                           setSearchTimer(
+                                               setTimeout(() => {
+                                                   if (text.length >= 3) {
+                                                       getEstatesResults(text);
+                                                   }
+                                               }, 200),
+                                           );
+                                       }}
+                                       value={estateInput} />
+
+                            {(estateData !== null) && (
+                                <Modal animationType="slide"
+                                       transparent={true}
+                                       visible={modalEVisible}
+                                       onRequestClose={() => {
+                                           setEstateData(null);
+                                           setSearchTimer(null);
+                                           setModalEVisible(false);
+                                       }}
+                                >
+                                    <View style={styles.centeredModal}>
+                                        <View style={styles.modalView}>
+                                            <FlatList
+                                                data={estateData}
+                                                renderItem={({ item }) => (
+                                                    <View>
+                                                        <TouchableOpacity onPress={() => selectEstates(item)}>
+                                                            <Text style={styles.modalText}>{item.city } / {item.title}</Text>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                )}
+                                                keyExtractor={(item) => "" + item.id}
+                                            />
+                                        </View>
+                                        <Pressable
+                                            style={[styles.modalButton, styles.buttonClose]}
+                                            onPress={() => setModalEVisible(false)}
+                                        >
+                                            <Text style={styles.btnText}>Fermer</Text>
+                                        </Pressable>
+                                    </View>
+                                </Modal>
+                            )}
+
+                            <View>
+                                {(estate.id != null) && (
+                                    <Text style={styles.resultText}>{estate.reference} - {estate.title} - {estate.city}</Text>
+                                )}
+                                <TextInput editable={false}
+                                           style={{display: 'none'}}
+                                           onChangeText={handleChange('id_estate')}
+                                           onBlur={handleBlur('id_estate')}
+                                           value={values.id_estate}>
+                                    {estate.id}
+                                </TextInput>
+                            </View>
+
+                        </View>
+
+                        <View>
+                            <SelectDropdown
+                                name="id_appointment_type"
+                                data={aptmtsTypes}
+                                defaultButtonText={"Type"}
+                                value={values.id_appointment_type}
+                                onSelect={(selectedItem, index) => {
+                                    return selectedItem.id
+                                }}
+                                onChange={handleChange('id_appointment_type')}
+                                onBlur={handleBlur('id_appointment_type')}
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    // text represented after item is selected
+                                    // if data array is an array of objects then return selectedItem.property to render after item is selected
+                                    return selectedItem.appointment_type
+                                }}
+                                rowTextForSelection={(item, index) => {
+                                    // text represented for each item in dropdown
+                                    // if data array is an array of objects then return item.property to represent item in dropdown
+                                    return item.appointment_type
+                                }}
+                                buttonStyle={styles.dropdownInput}
+                                dropdownIconPosition={'right'}
+                                dropdownStyle={styles.dropdown}
+                                buttonTextStyle={styles.selectBtnText}
+                                renderDropdownIcon={() => {
+                                    return <MaterialCommunityIcons name="chevron-down" size={18} color={colors.secondaryBtn} />
+                                }}
+                            />
+                        </View>
+
+                        <View>
+                            <TextInput
+                                style={styles.textareaInput}
+                                multiline={true}
+                                numberOfLines={5}
+                                placeholder="Ajouter une note au rendez-vous"
+                                onChangeText={handleChange('notes')}
+                                onBlur={handleBlur('notes')}
+                                value={values.notes}
+                            />
+                        </View>
+
+                        <View>
+                            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                                <Text style={styles.btnText}>Valider</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-
-                </View>
-
-                <View>
-                    <SelectDropdown
-                        name="id_appointment_type"
-                        data={aptmtsTypes}
-                        defaultButtonText={"Type"}
-                        value={values.id_appointment_type}
-                        onSelect={(selectedItem, index) => {
-                            return selectedItem.id
-                        }}
-                        onChange={handleChange('id_appointment_type')}
-                        onBlur={handleBlur('id_appointment_type')}
-                        buttonTextAfterSelection={(selectedItem, index) => {
-                            // text represented after item is selected
-                            // if data array is an array of objects then return selectedItem.property to render after item is selected
-                            return selectedItem.appointment_type
-                        }}
-                        rowTextForSelection={(item, index) => {
-                            // text represented for each item in dropdown
-                            // if data array is an array of objects then return item.property to represent item in dropdown
-                            return item.appointment_type
-                        }}
-                        buttonStyle={styles.dropdownInput}
-                        dropdownIconPosition={'right'}
-                        dropdownStyle={styles.dropdown}
-                        buttonTextStyle={styles.selectBtnText}
-                        renderDropdownIcon={() => {
-                            return <MaterialCommunityIcons name="chevron-down" size={18} color={colors.secondaryBtn} />
-                        }}
-                    />
-                </View>
-
-                <View>
-                    <TextInput
-                        style={styles.textareaInput}
-                        multiline={true}
-                        numberOfLines={5}
-                        placeholder="Ajouter une note au rendez-vous"
-                        onChangeText={handleChange('notes')}
-                        onBlur={handleBlur('notes')}
-                        value={values.notes}
-                    />
-                </View>
-
-                <View>
-                    <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                        <Text style={styles.btnText}>Valider</Text>
-                    </TouchableOpacity>
-                </View>
+                        )}
+                </Formik>
             </ScrollView>
         </>
     );
@@ -598,6 +615,19 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         textAlign: "left",
         fontSize: 18,
+    },
+    resultText: {
+        marginVertical: 2,
+        paddingStart: 15,
+        paddingVertical: 5,
+        marginHorizontal: 15,
+        fontSize: 18,
+        color: colors.primary,
+        borderStyle: 'solid',
+        borderRadius: 25,
+        borderWidth: 1,
+        borderColor: colors.primaryBtn
+
     }
 })
 
