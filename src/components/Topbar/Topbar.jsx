@@ -5,6 +5,7 @@ import 'moment/locale/fr';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { getCurrentUser } from '../../API/ApiStaff';
+import colors from '../../utils/styles/colors'
 
 const Topbar = () => {
 
@@ -15,23 +16,23 @@ const Topbar = () => {
 
     useEffect(() => {
         if (!currentUser) {
-            AsyncStorage.getItem('@auth:userId', (error, result) => {
+            AsyncStorage.getItem('@auth_userId', (error, result) => {
                 try {
                     getCurrentUser(result).then(
                         response => {
                             setCurrentUser(response.data);
                         }).catch(error => {
-                            console.log(error)
+                            console.log(error.message)
                         })
                 } catch {
-                    console.log(error)
+                    console.log(error.message)
                 } 
             });
         }
     }, [currentUser])
 
     return (
-        currentUser ? 
+        currentUser ? (
         <View style={styles.topbar_container}>
             <View style={styles.content_container}>
                 <View style={styles.profile_container}>
@@ -44,7 +45,7 @@ const Topbar = () => {
                     <Text style={styles.date}>{date}</Text>
                 </View>
             </View>
-        </View>
+        </View>)
         :
         null
     )
@@ -52,9 +53,11 @@ const Topbar = () => {
 
 const styles = StyleSheet.create({
     topbar_container: {
-        backgroundColor: '#E85A70',
+        backgroundColor: colors.secondary,
         minHeight: 180,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        borderBottomStartRadius: 10,
+        borderBottomEndRadius: 10
     },
     content_container: {
         flex: 1,
@@ -69,14 +72,14 @@ const styles = StyleSheet.create({
         
     },
     profile_img: {
-        width: 65,
-        height: 65,
+        width: 80,
+        height: 80,
         borderRadius: 50,
         margin: 12,
-        backgroundColor: 'gray'
+        backgroundColor: colors.backgroundSecondary
     },
     date: {
-        color: '#FFF',
+        color: colors.backgroundPrimary,
         textTransform: 'capitalize',
         fontSize: 24,
         fontWeight: 'bold',

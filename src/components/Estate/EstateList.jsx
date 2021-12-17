@@ -1,8 +1,9 @@
-import { API_URL } from '@env';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { getAllEstates } from '../../API/ApiEstates';
 import EstateCard from './EstateCard';
+import Topbar from '../Topbar/Topbar';
+import colors from '../../utils/styles/colors';
         
 const EstateList = () => {
 
@@ -17,17 +18,16 @@ const EstateList = () => {
                 console.log(error.message)
             }
         )
-    
-    }, [API_URL])
+    }, [])
 
     return (
 
         <View style={styles.main_container}>
+            <Topbar />
             <FlatList
                 data={estates}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <EstateCard estate={item} />}
-            />
+                renderItem={({ item }) => <EstateCard estate={item} />} />
         </View>
     );
 }
@@ -35,8 +35,7 @@ const EstateList = () => {
 const styles = StyleSheet.create({
 
     main_container: {
-
-        marginTop: 40,
+        backgroundColor: colors.primary,
         flex: 1
     },
 

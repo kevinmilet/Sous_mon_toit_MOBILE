@@ -1,34 +1,36 @@
-import { API_URL } from '@env';
-import axios from 'axios';
+import { instanceAxios } from "./Interceptor"
 
 // Liste de tous les clients
-export async function getAllCustomers() {
-    const url = `${API_URL}/customer/s`;
-    return await axios.get(url);
+export const getAllCustomers = () =>{
+    return instanceAxios.get(`/customer/s`)
+    .then(response => response)
 }
 
 // Récuperer un client
-export async function getOneCustomer(id) {
-    const url = `${API_URL}/customer/s/${id}`;
-    // const url = `${API_URL}/customer/s/2`;
-    return await axios.get(url);
+export const getOneCustomer = (id) =>{
+    return instanceAxios.get(`/customer/s/${id}`)
+    .then(response => response)
 }
 
 // Récupérer les types de clients (acheteur, vendeur....)
-export async function getCustomersTypes() {
-    const url = `${API_URL}/customer_type`;
-    return await axios.get(url);
+export const getCustomersTypes = () =>{
+    return instanceAxios.get(`/customer_type`)
+    .then(response => response)
 }
 
 // Récuperer les biens recherchés par le client
-export async function getCustomerSearch(id) {
-    // const url = `${API_URL}/customer_search/${id}`;
-    const url = `${API_URL}/customer_search/s/${id}`;
-    return await axios.get(url);
+export const getCustomerSearch = (id) =>{
+    return instanceAxios.get(`/customer_search/s/${id}`)
+    .then(response => response)
 }
 
-export async function getCustomerDescribe(id) {
-    // const url = `${API_URL}/customer_search/${id}`;
-    const url = `${API_URL}/describe_customer_type/joinCustomer/${id}`;
-    return await axios.get(url);
+export const getCustomerDescribe = (id) =>{
+    return instanceAxios.get(`/describe_customer_type/joinCustomer/${id}`)
+    .then(response => response)
+}
+
+// Chercher des clients
+export const searchCustomers = (value) => {
+    return instanceAxios.get(`/customer/s/search/${value}`)
+        .then(response => response);
 }

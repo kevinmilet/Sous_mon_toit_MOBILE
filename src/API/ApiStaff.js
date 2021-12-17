@@ -1,14 +1,19 @@
-import { API_URL } from '@env';
-import axios from 'axios';
+import { instanceAxios } from "./Interceptor"
 
 // Methode de connexion
-export async function login(values) {
-    const url = `${API_URL}/login/staff`;
-    return await axios.post(url, values);
+export const login = (values) => {
+    return instanceAxios.post(`/login/staff`, values)
+        .then(response => response.data)
 }
 
 // Récuperer l'user courant (connecté)
-export async function getCurrentUser(id) {
-    const url = `${API_URL}/staff/${id}`;
-    return await axios.get(url);
+export const getCurrentUser = (id) => {
+    return instanceAxios.get(`/staff/${id}`)
+        .then(response => response)
+}
+
+// Déconnexion user
+export const logout = () => {
+    return instanceAxios.post('/logout')
+        .then(response => response)
 }
