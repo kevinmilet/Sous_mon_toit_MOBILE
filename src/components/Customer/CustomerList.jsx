@@ -18,6 +18,7 @@ const CustomerList = () => {
     const [modalCVisible, setModalCVisible] = useState(false);
     const [modalEVisible, setModalEVisible] = useState(false);
     const [customerData2, setCustomerData2] = useState([]);
+    const [customer, setCustomer] = useState('');
 
     useEffect(() => {
         getAllCustomers().then((res) => {
@@ -73,6 +74,9 @@ const CustomerList = () => {
                                    );
                                }}
                                value={customerInput} />
+                    <View>
+                        <TextInput editable={false}>{customer.firstname} {customer.lastname}</TextInput>
+                    </View>
         <FlatList
             data={customerData1}
             keyExtractor={(item) => item.id.toString()}
