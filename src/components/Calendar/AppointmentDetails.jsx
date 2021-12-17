@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import Topbar from '../Topbar/Topbar';
@@ -7,11 +7,15 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import colors from '../../utils/styles/colors'
 import labels from "../../utils/labels";
+import {useNavigation} from "@react-navigation/native";
+import LogContext from '../../API/Context/LogContext';
 
 const AppointmentDetails = ({ route }) => {
 
     const {aptmtId} = route.params;
     const dateFormat = 'D/MM/YYYY à HH:mm';
+    const {setTokenIsValid} = useContext(LogContext);
+    const navigation = useNavigation();
 
     const [aptmtData, setAptmtData] = useState ({
         scheduled_at: '',
@@ -32,6 +36,10 @@ const AppointmentDetails = ({ route }) => {
         showAptmt(aptmtId)
             .then(
                 response => {
+                    if(response.response){
+                        if(response.response.status === 401)
+                        setTokenIsValid(false)
+                    }
                     console.log(response.data)
                     setAptmtData(response.data)
                 }
@@ -60,14 +68,44 @@ const AppointmentDetails = ({ route }) => {
 
     const delAptmt = (aptmtId) => {
         deleteAptmt(aptmtId)
-            .then(
-                response => {
-                    console.log(response.data + ' ' + response.statusCode)
+            .then(response => {
+                    console.log(response.status)
+                    if (response.status === 200) {
+                        confirmAlert()
+                    } else {
+                        errorAlert()
+                    }
                 }
             ).catch (error => {
-            console.log(error.message)
+                console.log(error.message)
         });
     };
+
+    const confirmAlert = () => {
+        Alert.alert(
+            '',
+            'Rendez-vous supprimé',
+            [
+                {
+                    text: "Ok",
+                    onPress: () => useNavigation().navigate('home', null)
+                }
+            ]
+        );
+    }
+
+    const errorAlert = () => {
+        Alert.alert(
+            'Erreur',
+            'Le rendez-vous n\'a pas été supprimé',
+            [
+                {
+                    text: "Ok",
+                    onPress: () => useNavigation().navigate('home', null)
+                }
+            ]
+        );
+    }
 
     return(
             <>
@@ -100,7 +138,7 @@ const AppointmentDetails = ({ route }) => {
                             </View>
                         </View>
                         <View style={styles.button_container}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => navigation.navigate('editAppointment', { AppointmentId: aptmtData.id })}>
                                 <MaterialCommunityIcons name="calendar-edit" color={colors.secondaryBtn} size={24} />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => showDelAlert()}>

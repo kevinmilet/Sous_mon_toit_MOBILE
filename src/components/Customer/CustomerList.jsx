@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext} from "react";
 import { FlatList, StyleSheet, View, TextInput, Modal, Pressable, Text, TouchableOpacity, Button} from 'react-native';
 import { getAllCustomers } from "../../API/ApiCustomers";
 import Card from '../../components/Customer/Card';
@@ -8,6 +8,7 @@ import colors from '../../utils/styles/colors';
 import { Searchbar } from 'react-native-paper';
 import {searchCustomers} from "../../API/ApiCustomers";
 import { useNavigation } from '@react-navigation/native';
+import LogContext from '../../API/Context/LogContext';
 
 
 const CustomerList = () => {
@@ -27,9 +28,39 @@ const CustomerList = () => {
         setCustomerData2(null);
         setCustomerInput(null);
     }
+    const {setTokenIsValid} = useContext(LogContext);
+    const onTimeChange = (e, selectedTime) => {
+        setTime(moment(selectedTime));
+        if (Platform.OS === 'android') {
+            setIsTimePickerShow(false);
+        }
+    };
+    const  getCustomersResults = (text) => {
+        if(!text){
+            alert('cc')
+            getAllCustomers();
+        }
+       searchCustomers(text).then(
+           response => {
+               setCustomerData2(response.data);
+           }
+       ).finally(() => {
+           setModalCVisible(true)
+           }
+       ).catch(error => {
+           console.log(error.message);
+       })
+   };
 
+   const  onPress1 = () => {
+    setCustomer(null);
+}
     useEffect(() => {
         getAllCustomers().then((res) => {
+                if(res.response){
+                    if(res.response.status === 401)
+                    setTokenIsValid(false)
+                }
                 setCustomerData1(res.data);
             })
             .catch((error) => {
@@ -38,32 +69,10 @@ const CustomerList = () => {
             .finally(() => {
                 setLoading(false);
             });
-             const onTimeChange = (e, selectedTime) => {
-                setTime(moment(selectedTime));
-                if (Platform.OS === 'android') {
-                    setIsTimePickerShow(false);
-                }
-            };
+          
         
-             getCustomersResults = (text) => {
-                 if(!text){
-                     alert('cc')
-                     getAllCustomers();
-                 }
-                searchCustomers(text).then(
-                    response => {
-                        setCustomerData2(response.data);
-                    }
-                ).finally(() => {
-                    setModalCVisible(true)
-                    }
-                ).catch(error => {
-                    console.log(error.message);
-                })
-            }; 
-            onPress1 = () => {
-                setCustomer(null);
-            }
+             
+           
           
     }, []);
 
@@ -167,6 +176,15 @@ const styles =  StyleSheet.create({
         flex: 1,
         backgroundColor: colors.primary
     },
+    baseText: {
+        fontWeight: "bold",
+        color: colors.backgroundSecondary
+      },
+      innerText: {
+        fontStyle: "italic",
+        fontWeight: "normal",
+        color: colors.primary
+      },
     card: {
      
         margin: 10,
@@ -310,14 +328,14 @@ const styles =  StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22
+        // marginTop: 22
     },
     modalView: {
-        width: '80%',
+        width: '50%',
         margin: 20,
         backgroundColor: "white",
         borderRadius: 10,
-        padding: 35,
+        padding: 20,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -339,9 +357,9 @@ const styles =  StyleSheet.create({
         width: 150,
     },
     modalText: {
-        marginBottom: 20,
-        textAlign: "left",
-        fontSize: 18,
+        // marginBottom: 20,
+        // textAlign: "left",
+        // fontSize: 18,
     }
 })
 

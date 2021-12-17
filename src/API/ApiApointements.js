@@ -25,7 +25,7 @@ export const createAptmt = (values) =>{
 }
 
 // Editer un rdv
-export const updateAptmt = (values) =>{
+export const updateAptmt = (values, id) =>{
     return instanceAxios.put(`/schedule/update/${id}`,values)
     .then(response => response)
 }

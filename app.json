@@ -4,7 +4,7 @@
     "slug": "sous_mon_toit-MOBILE",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/splash.png",
+    "icon": "./assets/sousmontoit_logo_square.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,9 +17,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.laManu.sous_mon_toit-MOBILE",
+      "buildNumber": "1.0.0"
     },
     "android": {
+      "package": "com.sousmontoit.sous_mon_toitMOBILE",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
