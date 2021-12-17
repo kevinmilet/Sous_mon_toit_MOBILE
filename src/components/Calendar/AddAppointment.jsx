@@ -28,6 +28,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import MaterialCommunityIcon from "react-native-paper/src/components/MaterialCommunityIcon";
 import {useNavigation} from "@react-navigation/native";
+import LogContext from "../../API/Context/LogContext";
 
 const AddAppointment = () => {
     const {setTokenIsValid} = useContext(LogContext);

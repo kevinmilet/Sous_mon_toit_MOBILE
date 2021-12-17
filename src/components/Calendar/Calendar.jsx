@@ -7,14 +7,13 @@ import Topbar from '../Topbar/Topbar';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import colors from '../../utils/styles/colors'
 import LogContext from '../../API/Context/LogContext';
-import {useFocusEffect, useIsFocused, useNavigation} from "@react-navigation/native";
+import {useFocusEffect, useNavigation} from "@react-navigation/native";
 
 const Calendar = () => {
 
     const [appointments, setAppointments] = useState([]);
     const navigation = useNavigation();
     const {setTokenIsValid} = useContext(LogContext);
-    const isFocused = useIsFocused();
 
     useEffect(() => {
         getAppointments()
@@ -48,10 +47,6 @@ const Calendar = () => {
             });
         }
     }
-
-    // const renderItem = ({ item }) => (
-    //     <CalendarItem title={item.sheduled_at} />
-    // );
 
     return(
         appointments.length !== 0 ?

@@ -31,8 +31,6 @@ const AppointmentDetails = ({ route }) => {
         id_customer: null
     });
 
-    const navigation = useNavigation();
-
     useEffect(() => {
         showAptmt(aptmtId)
             .then(
