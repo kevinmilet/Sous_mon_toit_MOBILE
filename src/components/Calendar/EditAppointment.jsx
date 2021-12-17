@@ -123,21 +123,21 @@ const EditAppointment = ({route}) => {
                     }
                     console.log(response.data , "response data")
                     setAptmtData(response.data)
-                    console.log(aptmtData , "appointment data ! ")
                 }
             ).catch (error => {
                 console.log(error.message)
             });
     }, [AppointmentId])
+    console.log(aptmtData , "appointment data ! ")
 
     const { handleChange, handleSubmit, handleBlur, values, errors, touched } = useFormik({
         initialValues: {
             // test
-            // scheduled_at: aptmtData.scheduled_at,
-            // notes: aptmtData.notes,
+            // scheduled_at: aptmtData?.scheduled_at,
+            // notes: aptmtData?.notes,
             // id_estate: null,
-            // id_staff: aptmtData.id_staff,
-            // id_customer: aptmtData.id_customer,
+            // id_staff: aptmtData?.id_staff,
+            // id_customer: aptmtData?.id_customer,
             // id_appointment_type: null
 
             scheduled_at: "",
