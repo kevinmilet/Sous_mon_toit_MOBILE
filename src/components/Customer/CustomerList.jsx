@@ -7,6 +7,7 @@ import Topbar from './../Topbar/Topbar';
 import colors from '../../utils/styles/colors';
 import { Searchbar } from 'react-native-paper';
 import {searchCustomers} from "../../API/ApiCustomers";
+import LogContext from '../../API/Context/LogContext';
 
 
 const CustomerList = () => {
@@ -19,9 +20,14 @@ const CustomerList = () => {
     const [modalEVisible, setModalEVisible] = useState(false);
     const [customerData2, setCustomerData2] = useState([]);
     const [customer, setCustomer] = useState('');
+    const {setTokenIsValid} = useContext(LogContext);
 
     useEffect(() => {
         getAllCustomers().then((res) => {
+                if(res.response){
+                    if(res.response.status === 401)
+                    setTokenIsValid(false)
+                }
                 setCustomerData1(res.data);
             })
             .catch((error) => {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState , useContext} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CalendarItem from './CalendarItem';
 import {getTodayStaffAptmts} from '../../API/ApiApointements';
@@ -7,11 +7,13 @@ import Topbar from '../Topbar/Topbar';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import colors from '../../utils/styles/colors'
 import {useNavigation} from "@react-navigation/native";
+import LogContext from '../../API/Context/LogContext';
 
 const Calendar = () => {
 
     const [appointments, setAppointments] = useState([]);
     const navigation = useNavigation();
+    const {setTokenIsValid} = useContext(LogContext);
 
     useEffect(() => {
         if (appointments.length === 0) {
@@ -19,6 +21,10 @@ const Calendar = () => {
                 try {
                     getTodayStaffAptmts(result).then(
                         response => {
+                            if(response.response){
+                                if(response.response.status === 401)
+                                setTokenIsValid(false)
+                            }
                             if (response.status === 200) {
                                 setAppointments(response.data);
                             } else {

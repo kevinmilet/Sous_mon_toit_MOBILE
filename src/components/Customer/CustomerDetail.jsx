@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState , useContext} from "react";
 import { StyleSheet, Text, View, ScrollView , FlatList, SectionList, SafeAreaView} from "react-native";
 import { getCustomerDescribe, getCustomerSearch } from "../../API/ApiCustomers";
 import Topbar from "../Topbar/Topbar";
@@ -11,6 +11,7 @@ import CustomerAptmt from "../Customer/CustomerAptmt";
 import colors from '../../utils/styles/colors';
 import NotSearch from './NotSearch';
 import CustomerSearch from "./CustomerSearch";
+import LogContext from '../../API/Context/LogContext';
 
 const CustomerDetail = ({ route }) => {
   const { id } = route.params;
@@ -22,10 +23,15 @@ const CustomerDetail = ({ route }) => {
   const [customerTypeData, setCustomerTypeData] = useState({});
   const [loading, setLoading] = useState(true);
   const [customerAptmts, setCustomerAptmts] = useState([]);
+  const {setTokenIsValid} = useContext(LogContext);
 
   useEffect(() => {
     getCustomerSearch(id)
       .then((res) => {
+        if(res.response){
+            if(res.response.status === 401)
+            setTokenIsValid(false)
+        }
         if(Object.entries(res.data).length != 0){
           setCustomerSearch(res.data);
         }
