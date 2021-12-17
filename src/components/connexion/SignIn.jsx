@@ -105,7 +105,8 @@ const SignIn = (props) => {
                     backgroundColor: colors.primary,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderRadius: 10
+                    borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10
                 }}
             >
                 <Image style={{borderRadius: 10}} source={require('../../../assets/android-icon-192x192.png')} />
