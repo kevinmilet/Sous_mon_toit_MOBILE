@@ -9,7 +9,7 @@ import {
     ScrollView,
     FlatList,
     Modal,
-    Pressable
+    Pressable, Alert
 } from "react-native";
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -27,14 +27,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import MaterialCommunityIcon from "react-native-paper/src/components/MaterialCommunityIcon";
+import {useNavigation} from "@react-navigation/native";
 
 const AddAppointment = () => {
+    const navigation = useNavigation();
 
     const [currentUser, setCurrentUser] = useState(null);
 
     const [date, setDate] = useState(moment());
     const [time, setTime] = useState(moment());
-    const [dateTime, setDateTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
+    const [dateTime, setDateTime] = useState(moment().format('YYYY-MM-DD HH:mm:00'));
 
     const [isDatePickerShow, setIsDatePickerShow] = useState(false);
     const [isTimePickerShow, setIsTimePickerShow] = useState(false);
@@ -55,8 +57,6 @@ const AddAppointment = () => {
     const [modalCVisible, setModalCVisible] = useState(false);
     const [modalEVisible, setModalEVisible] = useState(false);
 
-
-
     const showDatePicker = () => {
         setIsDatePickerShow(true);
     }
@@ -67,6 +67,7 @@ const AddAppointment = () => {
 
     const onDateChange = (e, selectedDate) => {
         setDate(moment(selectedDate));
+        time ? setDateTime(date.format('YYYY-MM-DD') + ' ' + time.format('HH:mm:00')) : null
         if (Platform.OS === 'android') {
             setIsDatePickerShow(false);
         }
@@ -74,6 +75,7 @@ const AddAppointment = () => {
 
     const onTimeChange = (e, selectedTime) => {
         setTime(moment(selectedTime));
+        date ? setDateTime(date.format('YYYY-MM-DD') + ' ' + time.format('HH:mm:00')) : null
         if (Platform.OS === 'android') {
             setIsTimePickerShow(false);
         }
@@ -119,6 +121,32 @@ const AddAppointment = () => {
         setEstateInput(null);
     }
 
+    const confirmAlert = () => {
+        Alert.alert(
+            '',
+            'Rendez-vous ajouté',
+            [
+                {
+                    text: "Ok",
+                    onPress: () => navigation.goBack()
+                }
+            ]
+        );
+    }
+
+    const errorAlert = () => {
+        Alert.alert(
+            'Erreur',
+            'Le rendez-vous n\'a pas été ajouté',
+            [
+                {
+                    text: "Ok",
+                    onPress: () => navigation.goBack()
+                }
+            ]
+        );
+    }
+
     useEffect(() => {
         if (!currentUser) {
             AsyncStorage.getItem('@auth_userId', (error, result) => {
@@ -160,35 +188,47 @@ const AddAppointment = () => {
 
                 <Formik
                     initialValues={{
-                        scheduled_at: null,
                         notes: '',
+                        scheduled_at: '',
                         id_estate: null,
                         id_customer: null,
                         id_appointment_type: null,
-                        customer_search: null
+                        customer_search: null,
+                        estate_search: null
                     }}
-                    // validationSchema={Yup.object({
-                    //     scheduled_at: Yup.string()
-                    //         .trim()
-                    //         .matches(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]/)
-                    //         .required(),
-                    //     notes: Yup.string(),
-                    //     id_estate: Yup.number(),
-                    //     id_customer: Yup.number(),
-                    //     id_appointment_type: Yup.number().required('Champs requis')
-                    // })}
+                    validationSchema={Yup.object({
+                        notes: Yup.string(),
+                        // id_estate: Yup.number().integer(),
+                        // id_customer: Yup.number(),
+                        // id_appointment_type: Yup.number(),
+                    })}
                     onSubmit={
                         async (values) => {
                             let data = {
-                                ...values, id_staff: currentUser.id
+                                ...values, id_staff: currentUser.id,
+                                ...values, scheduled_at: dateTime
                             }
-                            // await new Promise(r => {
-                            //     createAptmt(values)
-                            // });
                             console.log(data)
+                            await new Promise(r => {
+                                createAptmt(data).then(
+                                    response => {
+                                        if (response.status === 200) {
+                                            confirmAlert()
+                                        } else {
+                                            errorAlert()
+                                        }
+                                    }
+                                ).catch(error => {
+                                    console.log(error.message)
+                                })
+                            });
                     }}>
 
-                    {({ setFieldValue, handleChange, handleBlur, handleSubmit, values }) => (
+                    {({ setFieldValue,
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        values }) => (
                     <View>
                         <View style={styles.datetime_container}>
                             <View>
@@ -225,7 +265,7 @@ const AddAppointment = () => {
 
                                 {isTimePickerShow && (
                                     <DateTimePicker
-                                        value={new Date(time.format('HH:mm'))}
+                                        value={new Date(time)}
                                         mode="time"
                                         display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                         is24hour={true}
@@ -259,11 +299,11 @@ const AddAppointment = () => {
                                            <TouchableOpacity onPress={() => {setFieldValue('customer_search', null)
                                            setFieldValue('id_customer', null)
                                            }}>
-                                                <MaterialCommunityIcon name="window-close" size={30} color={colors.primary}/>
+                                                <MaterialCommunityIcon name="window-close" size={26} color={colors.primary}/>
                                            </TouchableOpacity>)
                                        }} />
 
-                            {(customerData !== null) && (
+                            {(customerData !== null && customerData.length > 0) && (
                                 <Modal animationType="slide"
                                         transparent={true}
                                         visible={modalCVisible}
@@ -280,7 +320,7 @@ const AddAppointment = () => {
                                                       renderItem={({ item }) => (
                                                           <View>
                                                               <TouchableOpacity onPress={() => {selectCustomer(item);
-                                                                setFieldValue('id_customer', item.id.toString());
+                                                                setFieldValue('id_customer', item.id);
                                                                 setFieldValue('customer_search', item.firstname + ' ' + item.lastname)
                                                               }}>
                                                                     <Text style={styles.modalText}>{item.firstname} {item.lastname}</Text>
@@ -299,19 +339,6 @@ const AddAppointment = () => {
                                     </View>
                                 </Modal>
                             )}
-
-                            <View>
-                                {(customer.id != null) && (
-                                    <Text style={styles.resultText}>{customer.firstname} {customer.lastname}</Text>
-                                )}
-                                <TextInput editable={false}
-                                           name="id_customer"
-                                           style={{display: 'none'}}
-                                           value={values.id_customer}>
-
-                                </TextInput>
-                            </View>
-
                         </View>
 
                         <View>
@@ -330,9 +357,18 @@ const AddAppointment = () => {
                                                }, 200),
                                            );
                                        }}
-                                       value={estateInput} />
+                                       name="estate_search"
+                                       value={values.estate_search}
+                                       clearIcon={() => {
+                                           return(
+                                               <TouchableOpacity onPress={() => {setFieldValue('estate_search', null)
+                                                   setFieldValue('id_estate', null)
+                                               }}>
+                                                   <MaterialCommunityIcon name="window-close" size={26} color={colors.primary}/>
+                                               </TouchableOpacity>)
+                                       }} />
 
-                            {(estateData !== null) && (
+                            {(estateData !== null && estateData.length > 0) && (
                                 <Modal animationType="slide"
                                        transparent={true}
                                        visible={modalEVisible}
@@ -348,7 +384,10 @@ const AddAppointment = () => {
                                                 data={estateData}
                                                 renderItem={({ item }) => (
                                                     <View>
-                                                        <TouchableOpacity onPress={() => selectEstates(item)}>
+                                                        <TouchableOpacity onPress={() => {selectEstates(item);
+                                                            setFieldValue('id_estate', item.id);
+                                                            setFieldValue('estate_search', item.reference + ' ' + item.title)
+                                                        }}>
                                                             <Text style={styles.modalText}>{item.city } / {item.title}</Text>
                                                         </TouchableOpacity>
                                                     </View>
@@ -365,20 +404,6 @@ const AddAppointment = () => {
                                     </View>
                                 </Modal>
                             )}
-
-                            <View>
-                                {(estate.id != null) && (
-                                    <Text style={styles.resultText}>{estate.reference} - {estate.title} - {estate.city}</Text>
-                                )}
-                                <TextInput editable={false}
-                                           style={{display: 'none'}}
-                                           onChangeText={handleChange('id_estate')}
-                                           onBlur={handleBlur('id_estate')}
-                                           value={values.id_estate}>
-                                    {estate.id}
-                                </TextInput>
-                            </View>
-
                         </View>
 
                         <View>
@@ -388,7 +413,7 @@ const AddAppointment = () => {
                                 defaultButtonText={"Type"}
                                 value={values.id_appointment_type}
                                 onSelect={(selectedItem, index) => {
-                                    return selectedItem.id
+                                    setFieldValue('id_appointment_type', selectedItem.id);
                                 }}
                                 onChange={handleChange('id_appointment_type')}
                                 onBlur={handleBlur('id_appointment_type')}

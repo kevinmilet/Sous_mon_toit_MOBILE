@@ -2,7 +2,6 @@ import { MaterialCommunityIcons, EvilIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useContext } from "react";
-import Contract from "../screens/Contract";
 import Customer from "../screens/Customer";
 import Estate from "../screens/Estate";
 import Home from '../screens/Home';
@@ -10,6 +9,7 @@ import colors from '../utils/styles/colors';
 import LogContext from '../API/Context/LogContext';
 import SignIn from '../components/connexion/SignIn';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ParametersView from "../screens/ParametersView";
 
 
 const Tab = createBottomTabNavigator();
@@ -56,17 +56,27 @@ const NavigationMain = () => {
 
                     </Tab.Screen>
                     
-                    <Tab.Screen name="contract" options={{
+                    {/*<Tab.Screen name="contract" options={{*/}
+                    {/*    headerShown: false,*/}
+                    {/*    tabBarLabel: 'Contrats',*/}
+                    {/*    tabBarIcon: ({ color, size }) => (*/}
+                    {/*        <MaterialCommunityIcons name="file-document-outline" size={24} color={colors.secondary} />*/}
+                    {/*    ),*/}
+                    {/*}} >*/}
+                    
+                    {/*    {()=><Contract/>}                    */}
+                    {/*    */}
+                    {/*</Tab.Screen>*/}
+
+                    <Tab.Screen name="parameters" options={{
                         headerShown: false,
-                        tabBarLabel: 'Contrats',
+                        tabBarLabel: 'Paramètres',
                         tabBarIcon: ({ color, size }) => (
-                            <MaterialCommunityIcons name="file-document-outline" size={24} color={colors.secondary} />
+                            <MaterialCommunityIcons name="cog-outline" size={24} color={colors.secondary} />
                         ),
                     }} >
-                    
-                        {()=><Contract/>}                    
-                        
-                    </Tab.Screen> 
+                        {()=><ParametersView/>}
+                    </Tab.Screen>
                 </Tab.Navigator>
             )
             :

@@ -11,3 +11,9 @@ export const getCurrentUser = (id) => {
     return instanceAxios.get(`/staff/${id}`)
         .then(response => response)
 }
+
+// Déconnexion user
+export const logout = () => {
+    return instanceAxios.post('/logout')
+        .then(response => response)
+}

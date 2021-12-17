@@ -30,7 +30,8 @@ const AppointmentDetails = ({ route }) => {
         id_staff: null,
         id_customer: null
     });
-    const [loading, setLoading] = useState(true);
+
+    const navigation = useNavigation();
 
     useEffect(() => {
         showAptmt(aptmtId)
@@ -88,7 +89,7 @@ const AppointmentDetails = ({ route }) => {
             [
                 {
                     text: "Ok",
-                    onPress: () => useNavigation().navigate('home', null)
+                    onPress: () => navigation.goBack()
                 }
             ]
         );
@@ -101,7 +102,7 @@ const AppointmentDetails = ({ route }) => {
             [
                 {
                     text: "Ok",
-                    onPress: () => useNavigation().navigate('home', null)
+                    onPress: () => navigation.goBack()
                 }
             ]
         );
@@ -119,14 +120,14 @@ const AppointmentDetails = ({ route }) => {
                         </View>
                         <View>
                             <Text style={styles.date}>{moment(aptmtData.scheduled_at).format(dateFormat)}</Text>
-                            <Text style={styles.type}>{aptmtData.appointment_type}</Text>
+                            <Text style={styles.type}>{aptmtData.appointment_type ?? ''}</Text>
                             <View>
                                 <Text style={styles.title}>Nom du client / Contact</Text>
-                                <Text style={styles.text}>{aptmtData.customerFirstname} {aptmtData.customerLastname}</Text>
+                                <Text style={styles.text}>{aptmtData.customerFirstname ?? 'Non renseigné'} {aptmtData.customerLastname ?? ''}</Text>
                             </View>
                             <View>
                                 <Text style={styles.title}>Adresse du bien</Text>
-                                <Text>{aptmtData.address} {aptmtData.zipcode} {aptmtData.city}</Text>
+                                <Text>{aptmtData.address ?? 'Non renseigné'} {aptmtData.zipcode ?? ''} {aptmtData.city ?? ''}</Text>
                             </View>
                             <View>
                                 <Text style={styles.title}>Notes</Text>

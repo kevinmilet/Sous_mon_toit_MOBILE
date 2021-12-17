@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { default as React, useEffect, useState } from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
 import LogContext from './src/API/Context/LogContext';
-import SignIn from './src/components/connexion/SignIn';
 import NavigationMain from './src/navigation/NavigationMain';
 import colors from './src/utils/styles/colors';
 
