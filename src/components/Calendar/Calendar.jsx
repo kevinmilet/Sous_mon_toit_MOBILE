@@ -52,7 +52,7 @@ const Calendar = () => {
                 <FlatList
                     data={appointments}
                     renderItem={({ item }) => <CalendarItem appointments={item} />}
-                    keyExtractor={item => item.id} />
+                    keyExtractor={index => index} />
             </View>
             <View style={styles.button_container}>
                 <TouchableOpacity onPress={() => navigation.navigate('addAppointment', null)}>

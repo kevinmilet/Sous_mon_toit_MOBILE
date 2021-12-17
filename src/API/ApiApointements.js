@@ -26,7 +26,7 @@ export const createAptmt = (values) =>{
 
 // Editer un rdv
 export const updateAptmt = (values, id) =>{
-    return instanceAxios.put(`/schedule/update/${id}`,values)
+    return instanceAxios.put(`/schedule/update/${id}?id_appointment_type=${values.id_appointment_type}&id_customer=${values.id_customer}&id_estate=${values.id_estate}&id_staff=${values.id_staff}&notes=${values.notes}&scheduled_at=${values.scheduled_at}`)
     .then(response => response)
 }
 
