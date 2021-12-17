@@ -206,7 +206,7 @@ const AddAppointment = () => {
                         async (values) => {
                             let data = {
                                 ...values, id_staff: currentUser.id,
-                                ...values, scheduled_at: dateTime
+                                scheduled_at: dateTime
                             }
                             console.log(data)
                             await new Promise(r => {
