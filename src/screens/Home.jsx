@@ -3,6 +3,7 @@ import AppointmentDetails from '../components/Calendar/AppointmentDetails';
 import Calendar from '../components/Calendar/Calendar';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AddAppointment from "../components/Calendar/AddAppointment";
+import EditAppointment from "../components/Calendar/EditAppointment"
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,11 @@ const Home = () => {
                 headerShown: false,
                 }}>
                 {() => <AddAppointment/>}
+            </Stack.Screen>
+            <Stack.Screen name="editAppointment" options={{
+                headerShown: false,
+            }}>
+                {(props) => <EditAppointment {...props}/>}
             </Stack.Screen>
         </Stack.Navigator>
     )
