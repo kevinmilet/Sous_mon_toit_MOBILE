@@ -1,38 +1,32 @@
 import { useNavigation } from '@react-navigation/native';
-import React , {useEffect, useState} from 'react';
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View , Image} from 'react-native';
-import { getEstateCover} from '../../API/ApiEstates';
 import { COVER_ESTATE_BASE_URL } from '@env';
 import colors from '../../utils/styles/colors';
 
 const EstateCard = (props) => {
 
     const { estate } = props;
-    const [pictureCover, setPictureCover] = useState({})
     const navigation = useNavigation();
+    const formatPrice = (price) => {
 
-    useEffect(() => {
-        //Image de couverture du bien
-        getEstateCover(estate.id)
-            .then(res => {
-                setPictureCover(res.data[0])
-            }).catch(error => {
-                console.log(error.message)
-            })
-    }, [estate])
+        let priceFormated = Math.round(price);
+        priceFormated = new Intl.NumberFormat().format( priceFormated )
+        return priceFormated;
+    };
 
     return (
 
-        <TouchableOpacity style={styles.main_container} onPress={() => navigation.navigate('estateDetail', { estateId: estate.id })} >
+        <TouchableOpacity style={styles.main_container} onPress={() => navigation.navigate('estateDetail', { estateId: estate.id_estate })} >
             <View style={styles.content_container}>
                 <View style={styles.content_image}>
-                    <Image source={{ uri: COVER_ESTATE_BASE_URL + pictureCover.name }} style={{height:100, width:100}}/>
+                    <Image source={{ uri: COVER_ESTATE_BASE_URL + estate.name }} style={{height:100, width:100 , borderRadius: 10}}/>
                 </View>
                 <View style={styles.content_text}>
-                    <Text style={{fontSize:15 , color: colors.primaryBtn, marginBottom:10}}>{estate.title}</Text>
-                    <Text style={{color:"white"}}>Reference : <Text style={{color:"black"}}>{estate.reference}</Text></Text>
-                    <Text style={{color:"white"}}>Ville : <Text style={{color:"black"}}>{estate.city}</Text></Text>
-                    <Text style={{fontSize:15, textAlign:"right"}}><Text style={{fontWeight: 'bold', color:"black"}}>{estate.price}€</Text></Text>
+                    <Text style={{fontSize:15 ,fontWeight: 'bold', color: colors.primaryBtn, marginBottom:10}}>{estate.title}</Text>
+                    <Text style={{color:"black",fontWeight: 'bold'}}>Reference : <Text style={{color:"white"}}>{estate.reference}</Text></Text>
+                    <Text style={{color:"black",fontWeight: 'bold'}}>Ville : <Text style={{color:"white"}}>{estate.city}</Text></Text>
+                    <Text style={{fontSize:20, textAlign:"right"}}><Text style={{fontWeight: 'bold', color:"white"}}>{formatPrice(estate.price)}€</Text></Text>
                 </View>
             </View>
         </TouchableOpacity>

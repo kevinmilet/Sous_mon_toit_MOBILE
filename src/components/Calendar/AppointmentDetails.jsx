@@ -39,7 +39,6 @@ const AppointmentDetails = ({ route }) => {
                         if(response.response.status === 401)
                         setTokenIsValid(false)
                     }
-                    console.log(response.data)
                     setAptmtData(response.data)
                 }
             ).catch (error => {
@@ -137,7 +136,7 @@ const AppointmentDetails = ({ route }) => {
                             </View>
                         </View>
                         <View style={styles.button_container}>
-                            <TouchableOpacity onPress={() => navigation.navigate('editAppointment', { AppointmentId: aptmtData.id })}>
+                            <TouchableOpacity onPress={() => navigation.navigate('editAppointment', { Appointment: aptmtData })}>
                                 <MaterialCommunityIcons name="calendar-edit" color={colors.secondaryBtn} size={24} />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => showDelAlert()}>

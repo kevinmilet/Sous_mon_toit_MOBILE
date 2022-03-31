@@ -1,15 +1,15 @@
-import React, { useEffect, useState, forwardRef } from 'react';
+import React, {forwardRef, useEffect, useState} from 'react';
 import {
-    Platform,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    ScrollView,
     FlatList,
     Modal,
+    Platform,
     Pressable,
-    TextInput as RNTextInput
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput as RNTextInput,
+    TouchableOpacity,
+    View
 } from "react-native";
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -17,40 +17,15 @@ import Topbar from "../Topbar/Topbar";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
 import colors from "../../utils/styles/colors";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { updateAptmt, getAptmtsTypes, showAptmt } from "../../API/ApiApointements";
-import { Searchbar } from 'react-native-paper';
-import { searchCustomers } from "../../API/ApiCustomers";
-import { searchEstates } from "../../API/ApiEstates";
-import { getCurrentUser } from "../../API/ApiStaff";
+import {Entypo as Icon, MaterialCommunityIcons} from '@expo/vector-icons';
+import {getAptmtsTypes, updateAptmt} from "../../API/ApiApointements";
+import {Searchbar} from 'react-native-paper';
+import {searchEstates} from "../../API/ApiEstates";
+import {getCurrentUser, getStaffList} from "../../API/ApiStaff";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFormik } from "formik";
+import {useFormik} from "formik";
 import * as Yup from "yup";
-import { Entypo as Icon } from '@expo/vector-icons';
 
-
-const Button = ({ label, onPress }) => {
-    return (
-        <TouchableOpacity
-            style={{
-                borderRadius: 25,
-                height: 50,
-                width: 245,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: colors.primaryBtn
-            }}
-            activeOpacity={0.7}
-            onPress={onPress}
-        >
-            <Text
-                style={{ fontSize: 18, color: 'white', textTransform: 'uppercase' }}
-            >
-                {label}
-            </Text>
-        </TouchableOpacity>
-    );
-}
 const TextInput = forwardRef(({ icon, error, touched, ...otherProps }, ref) => {
     const validationColor = !touched ? colors.secondaryBtn : error ? colors.primaryBtn : colors.secondaryBtn;
     return (
@@ -81,106 +56,101 @@ const TextInput = forwardRef(({ icon, error, touched, ...otherProps }, ref) => {
 });
 
 const EditAppointment = ({route}) => {
-
+    const { Appointment } = route.params;
     const [currentUser, setCurrentUser] = useState(null);
-    // console.log(route)
-
-    const { AppointmentId } = route.params;
-    const [aptmtData, setAptmtData] = useState ();
-
-    const [date, setDate] = useState(moment());
+    const [date, setDate] = useState();
     const [time, setTime] = useState(moment());
-    const [dateTime, setDateTime] = useState(moment().format('YYYY-MM-DD HH:mm:ss'));
-
     const [isDatePickerShow, setIsDatePickerShow] = useState(false);
     const [isTimePickerShow, setIsTimePickerShow] = useState(false);
-
-    const [customerInput, setCustomerInput] = useState('');
-    const [customerData, setCustomerData] = useState([]);
-    const [customer, setCustomer] = useState('');
-
     const [estate, setEstate] = useState('');
     const [estateInput, setEstateInput] = useState('');
     const [estateData, setEstateData] = useState([]);
-
     const [searchTimer, setSearchTimer] = useState(null);
     const [aptmtsTypes, setAptmtsTypes] = useState({
         appointment_type: '',
         id: null
     });
-    const [typeAppt , setTypeAppt] = useState('')
-
-    const [modalCVisible, setModalCVisible] = useState(false);
+    const [typeAppt , setTypeAppt] = useState('');
+    const [staffList, setStaffList] = useState();
+    const [staff, setStaff] = useState();
     const [modalEVisible, setModalEVisible] = useState(false);
 
+    let dateMin = moment().format('YYYY-MM-DD');
+    let dateValue = moment(Appointment.scheduled_at);
+
     useEffect(() => {
-        showAptmt(AppointmentId)
-            .then(
+        getStaffList().then(
+            response => {
+                setStaffList(response.data)
+            }
+        ).catch(error => {
+            console.log(error.message)
+        }).finally(() => {
+            getAptmtsTypes().then(
                 response => {
-                    if(response.response){
-                        if(response.response.status === 401)
-                        setTokenIsValid(false)
-                    }
-                    console.log(response.data , "response data")
-                    setAptmtData(response.data)
+                    setAptmtsTypes(response.data);
                 }
-            ).catch (error => {
+            ).catch(error => {
                 console.log(error.message)
+            }).finally(() => {
+                if (!currentUser) {
+                    AsyncStorage.getItem('@auth_userId', (error, result) => {
+                        try {
+                            getCurrentUser(result).then(
+                                response => {
+                                    setCurrentUser(response.data);
+                                }).catch(error => {
+                                console.log(error.message)
+                            })
+                        } catch {
+                            console.log(error.message)
+                        }
+                    });
+                }
             });
-    }, [AppointmentId])
-    console.log(aptmtData , "appointment data ! ")
+        })
+    }, []);
 
     const { handleChange, handleSubmit, handleBlur, values, errors, touched } = useFormik({
         initialValues: {
-            // test
-            // scheduled_at: aptmtData?.scheduled_at,
-            // notes: aptmtData?.notes,
-            // id_estate: null,
-            // id_staff: aptmtData?.id_staff,
-            // id_customer: aptmtData?.id_customer,
-            // id_appointment_type: null
+            notes: Appointment.notes ?? '',
+            id_estate: Appointment.id_estate ?? '',
+            id_customer: Appointment.id_customer ?? '',
+            id_appointment_type: Appointment.apptmt_type_id ?? '',
+            id_staff: Appointment.id_staff ?? '',
+            date: dateValue,
 
-            scheduled_at: "",
-            notes: "",
-            id_estate: null,
-            id_staff: null,
-            id_customer: null,
-            id_appointment_type: null
         },
         validationSchema: Yup.object({
-            // scheduled_at: Yup.string()
-            //     .trim()
-            //     .matches(/[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]/)
-            //     .required("champ requis"),
-            // notes: Yup.string(),
-            // id_estate: Yup.number(),
-            // id_staff: Yup.number().required("champ requis"),
-            // id_customer: Yup.number(),
-            // id_appointment_type: Yup.number().required('Champs requis')
+            notes: Yup.string(),
+            id_estate: Yup.number(),
+            id_customer: Yup.string().required('Veuillez sélectionner un client/contact'),
+            id_appointment_type: Yup.string().required('Veuillez sélectionner un type de rendez-vous'),
+            id_staff: Yup.string().required('Veuillez sélectionner un agent'),
+            // scheduled_at: Yup.string().required('Veuillez choisir un horaire et une date')
         }),
         onSubmit: async (values) => {
-            const myDateTime = date.format('YYYY-MM-DD') + " " + time.format('HH:mm:ss')
-            const mesValues = {
-                id_appointment_type:typeAppt,
-                id_customer:customer.id,
-                id_estate:estate.id,
-                id_staff:currentUser.id,
-                notes:values.notes,
-                scheduled_at:myDateTime
+            console.log('VALUES', values);
+            const scheduled_at = moment(date).format('YYYY-MM-DD') + ' ' + moment(time).format('HH:mm:ss');
+            const datas = {
+                ...values, scheduled_at: scheduled_at, id_appointment_type: (typeAppt ?? Appointment.apptmt_type_id)
             }
-            console.log(mesValues ,AppointmentId);
             await new Promise(r => {
-                EditAppointment(mesValues, AppointmentId)
+                EditAppointment(datas, Appointment.id)
             })
         }
     });
-    const EditAppointment = (mesValues , AppointmentId) => updateAptmt(mesValues, AppointmentId).then(
-        response => {
-            console.log(response, "response");
-        }
-    ).catch(error => {
-        console.log("catch !",error.message);
-    })
+
+    const EditAppointment = (datas, AppointmentId) => {
+        console.log(datas);
+        // updateAptmt(datas, AppointmentId).then(
+        //     response => {
+        //         console.log(response, "response");
+        //     }
+        // ).catch(error => {
+        //     console.log(error.message);
+        // })
+    }
 
     const showDatePicker = () => {
         setIsDatePickerShow(true);
@@ -191,34 +161,19 @@ const EditAppointment = ({route}) => {
     }
 
     const onDateChange = (e, selectedDate) => {
-        console.log(selectedDate || date, "=> selectedDate ....................")
-        console.log(date , " date after set")
-        setDate(moment(selectedDate || date ));
+        console.log('EVENT', e)
+        console.log('DATE', selectedDate);
+        setDate(selectedDate || dateValue);
         if (Platform.OS === 'android') {
             setIsDatePickerShow(false);
         }
     }
 
     const onTimeChange = (e, selectedTime) => {
-        console.log(selectedTime || time , "=> selectedTime ....................")
-        console.log(time , " time after set")
-        setTime(moment(selectedTime || time));
+        setTime(selectedTime || dateValue);
         if (Platform.OS === 'android') {
             setIsTimePickerShow(false);
         }
-    }
-
-    const getCustomersResults = (text) => {
-        searchCustomers(text).then(
-            response => {
-                setCustomerData(response.data);
-            }
-        ).finally(() => {
-            setModalCVisible(true)
-        }
-        ).catch(error => {
-            console.log(error.message);
-        })
     }
 
     const getEstatesResults = (text) => {
@@ -234,13 +189,6 @@ const EditAppointment = ({route}) => {
         })
     }
 
-    const selectCustomer = (customerIT) => {
-        setCustomer(customerIT);
-        setModalCVisible(false)
-        setCustomerData(null);
-        setCustomerInput(null);
-    }
-
     const selectEstates = (estateIT) => {
         setEstate(estateIT);
         setModalEVisible(false)
@@ -248,32 +196,7 @@ const EditAppointment = ({route}) => {
         setEstateInput(null);
     }
 
-    useEffect(() => {
-        if (!currentUser) {
-            AsyncStorage.getItem('@auth_userId', (error, result) => {
-                try {
-                    getCurrentUser(result).then(
-                        response => {
-                            setCurrentUser(response.data);
-                        }).catch(error => {
-                            console.log(error.message)
-                        })
-                } catch {
-                    console.log(error.message)
-                }
-            });
-        }
-    }, [currentUser])
-
-    useEffect(() => {
-        getAptmtsTypes().then(
-            response => {
-                setAptmtsTypes(response.data);
-            }
-        ).catch(error => {
-            console.log(error.message)
-        });
-    }, []);
+// console.log(Appointment);
 
     return (
         <>
@@ -284,17 +207,39 @@ const EditAppointment = ({route}) => {
             <ScrollView style={styles.main_container}>
 
                 <View>
-                    <Text style={styles.title}>Modifier un rendez-vous</Text>
+                    <Text style={styles.title}>Modifier le rendez-vous de :</Text>
+                </View>
+                <View>
+                    <Text style={styles.customerText}>
+                        {Appointment?.customerFirstname} {Appointment?.customerLastname}
+                    </Text>
                 </View>
                 {currentUser ? (
-                    <TextInput
-                        editable={false}
-                        // style={{ display: 'none' }}
-                        onChangeText={handleChange('id_staff')}
+                    <SelectDropdown
+                        name="id_staff"
+                        data={staffList}
+                        defaultButtonText={'Agent'}
+                        value={values.id_staff}
+                        onSelect={(selectedItem, index) => {
+                            setStaff(selectedItem.id)
+                            return selectedItem.id
+                        }}
+                        onChange={handleChange('id_staff')}
                         onBlur={handleBlur('id_staff')}
-                        value={values.id_staff}>
-                        {currentUser.id}
-                    </TextInput>)
+                        buttonTextAfterSelection={(selectedItem, index) => {
+                            return selectedItem.firstname + ' ' + selectedItem.lastname
+                        }}
+                        rowTextForSelection={(item, index) => {
+                            return item.firstname + ' ' + item.lastname
+                        }}
+                        buttonStyle={styles.dropdownInput}
+                        dropdownIconPosition={'right'}
+                        dropdownStyle={styles.dropdown}
+                        buttonTextStyle={styles.selectBtnText}
+                        renderDropdownIcon={() => {
+                            return <MaterialCommunityIcons name="chevron-down" size={18} color={colors.secondaryBtn} />
+                        }}
+                    />)
                     :
                     null
                 }
@@ -306,13 +251,13 @@ const EditAppointment = ({route}) => {
                             onPress={showDatePicker}
                             style={styles.dateInput}>
                             <View>
-                                <Text>{date.format('LL')}</Text>
+                                <Text>{values.date.format('LL')}</Text>
                             </View>
                         </TouchableOpacity>
 
                         {isDatePickerShow && (
                             <DateTimePicker
-                                value={new Date(date.format('YYYY-MM-DD'))}
+                                value={new Date(values.date)}
                                 mode="date"
                                 display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                 is24hour={true}
@@ -328,13 +273,13 @@ const EditAppointment = ({route}) => {
                             style={styles.timeInput}
                         >
                             <View>
-                                <Text>{time.format('LT')}</Text>
+                                <Text>{values.date.format('LT')}</Text>
                             </View>
                         </TouchableOpacity>
 
                         {isTimePickerShow && (
                             <DateTimePicker
-                                value={new Date(time)}
+                                value={new Date(values.date)}
                                 mode="time"
                                 display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                 is24hour={true}
@@ -344,70 +289,16 @@ const EditAppointment = ({route}) => {
                         )}
                     </View>
                 </View>
-
                 <View>
-                    <Searchbar style={styles.dropdownInput}
-                        placeholder="Chercher un client"
-                        onChangeText={(text) => {
-                            if (searchTimer) {
-                                clearTimeout(searchTimer);
-                            }
-                            setCustomerInput(text);
-                            setSearchTimer(
-                                setTimeout(() => {
-                                    if (text.length >= 3) {
-                                        getCustomersResults(text);
-                                    }
-                                }, 200),
-                            );
-                        }}
-                        value={customerInput} />
-
-                    <Modal animationType="slide"
-                        transparent={true}
-                        visible={modalCVisible}
-                        onRequestClose={() => {
-                            setCustomerData(null);
-                            setSearchTimer(null);
-                            setModalCVisible(false);
-                        }}
-                    >
-                        <View style={styles.centeredModal}>
-                            <View style={styles.modalView}>
-                                <FlatList
-                                    data={customerData}
-                                    renderItem={({ item }) => (
-                                        <View>
-                                            <TouchableOpacity onPress={() => selectCustomer(item)}>
-                                                <Text style={styles.modalText}>{item.firstname} {item.lastname}</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    )}
-                                    keyExtractor={(index) => index}
-                                />
-                            </View>
-                            <Pressable
-                                style={[styles.modalButton, styles.buttonClose]}
-                                onPress={() => setModalCVisible(false)}
-                            >
-                                <Text style={styles.btnText}>Fermer</Text>
-                            </Pressable>
-                        </View>
-                    </Modal>
-
-                    <View>
-                        <Text>{customer.firstname} {customer.lastname}</Text>
-                        <TextInput editable={false}
-                            // style={{ display: 'none' }}
-                            onChangeText={handleChange('id_customer')}
-                            onBlur={handleBlur('id_customer')}
-                            value={values.id_customer}>
-                            {customer.id}
-                        </TextInput>
-                    </View>
-
+                    <Text>{Appointment?.reference} - {Appointment?.title} - {Appointment?.city}</Text>
+                    {/*<TextInput editable={false}*/}
+                    {/*    // style={{ display: 'none' }}*/}
+                    {/*    onChangeText={handleChange('id_estate')}*/}
+                    {/*    onBlur={handleBlur('id_estate')}*/}
+                    {/*    value={values.id_estate}>*/}
+                    {/*    {estate.id}*/}
+                    {/*</TextInput>*/}
                 </View>
-
                 <View>
                     <Searchbar style={styles.dropdownInput}
                         placeholder="Chercher un bien"
@@ -457,18 +348,6 @@ const EditAppointment = ({route}) => {
                             </Pressable>
                         </View>
                     </Modal>
-
-                    <View>
-                        <Text>{estate.reference} - {estate.title} - {estate.city}</Text>
-                        <TextInput editable={false}
-                            // style={{ display: 'none' }}
-                            onChangeText={handleChange('id_estate')}
-                            onBlur={handleBlur('id_estate')}
-                            value={values.id_estate}>
-                            {estate.id}
-                        </TextInput>
-                    </View>
-
                 </View>
 
                 <View>
@@ -505,21 +384,20 @@ const EditAppointment = ({route}) => {
 
                 <View>
                     <TextInput
-                        // style={styles.textareaInput}
+                        name="notes"
                         multiline={true}
                         numberOfLines={5}
                         placeholder="Ajouter une note au rendez-vous"
                         onChangeText={handleChange('notes')}
                         onBlur={handleBlur('notes')}
-                        value={values.notes}
+                        value={Appointment?.notes}
                     />
                 </View>
 
                 <View>
-                    {/* <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                    <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                         <Text style={styles.btnText}>Valider</Text>
-                    </TouchableOpacity> */}
-                    <Button label='Editer' onPress={handleSubmit} />
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </>
@@ -704,6 +582,12 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         textAlign: "left",
         fontSize: 18,
+    },
+    customerText: {
+        marginBottom: 10,
+        fontSize: 18,
+        fontWeight: "bold",
+        textAlign: "center"
     }
 })
 
