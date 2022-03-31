@@ -11,6 +11,10 @@ export const getOneCustomer = (id) =>{
     return instanceAxios.get(`/customer/s/${id}`)
     .then(response => response)
 }
+export const getAllCustomer = (id) =>{
+    return instanceAxios.get(`/customer/s/`)
+    .then(response => response)
+}
 
 // Récupérer les types de clients (acheteur, vendeur....)
 export const getCustomersTypes = () =>{
