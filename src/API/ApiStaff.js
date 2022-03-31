@@ -17,3 +17,9 @@ export const logout = () => {
     return instanceAxios.post('/logout')
         .then(response => response)
 }
+
+// Liste du staff
+export const getStaffList = () => {
+    return instanceAxios.get(`/staff`)
+        .then(response => response);
+}
