@@ -8,7 +8,6 @@ import { getCurrentUser } from '../../API/ApiStaff';
 import colors from '../../utils/styles/colors'
 
 const Topbar = () => {
-
     let day = moment().format('dddd');
     let date = moment().format('DD MMMM YYYY');
 

@@ -127,10 +127,8 @@ const CustomerDetail = ({ route }) => {
             :
             <Text style={styles.innerText}>
               {" Non renseigné"}
-
             </Text>
           }
-
         </Text>
 
         <View style={styles.titleContainer}>
@@ -179,22 +177,8 @@ const CustomerDetail = ({ route }) => {
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Rendez-vous</Text>
         </View>
-        {/* <Text style={styles.baseText}>
-                Rendez-vous :
-                </Text> */}
-        {/* <Text style={styles.innerText}>
-                  {" "}
-                  {formatHour}
-                {customerTypes ?   customerTypes : null } 
-              </Text> */}
 
-        {/* <FlatList
-                data={customerAptmts}
-                keyExtractor={(item, index) => item.id.toString()}
-                renderItem={({ item }) => <CustomerAptmt customer={item} />}
-              /> */}
-        {/* </Text>  */}
-        {customerAptmts.length == 0 ? (
+        {customerAptmts.length === 0 ? (
           <Text> Pas de RDV pour ce client</Text>
         )
           :
@@ -203,7 +187,7 @@ const CustomerDetail = ({ route }) => {
               horizontal={true}
 
               data={customerAptmts}
-              keyExtractor={(item, index) => index}
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => <CustomerAptmt customer={item} />}
               renderSectionHeader={({ section: { title } }) => (
                 <Text > rdv</Text>
@@ -211,9 +195,6 @@ const CustomerDetail = ({ route }) => {
             />
           )
         }
-
-
-
       </ScrollView>
     </View>
   );
@@ -222,7 +203,6 @@ const CustomerDetail = ({ route }) => {
 const styles = StyleSheet.create({
   main_container: {
     flex: 1,
-    // backgroundColor: "#4EA1D5",
   },
 
   styleTitleMain: {
@@ -256,8 +236,6 @@ const styles = StyleSheet.create({
   },
   content_container: {
     flex: 1,
-    // margin: 5,
-
     marginBottom: 30,
   },
   containerTitleMain: {

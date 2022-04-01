@@ -20,7 +20,6 @@ const CalendarItem = (appointments) => {
                 </View>
                 <View style={styles.description_container}>
                     <Text style={styles.description_text}>{aptmt.customerFirstname} {aptmt.customerLastname}</Text>
-                    {/*<Text style={styles.description_text}>{aptmt.address} {aptmt.zipcode} {aptmt.city}</Text>*/}
                 </View>
             </View>
         </TouchableOpacity>

@@ -1,4 +1,4 @@
-import React, {forwardRef, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Alert,
     FlatList,
@@ -18,7 +18,7 @@ import Topbar from "../Topbar/Topbar";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
 import colors from "../../utils/styles/colors";
-import {Entypo as Icon, MaterialCommunityIcons} from '@expo/vector-icons';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {getAptmtsTypes, updateAptmt} from "../../API/ApiApointements";
 import {Searchbar} from 'react-native-paper';
 import {searchEstates} from "../../API/ApiEstates";
@@ -83,7 +83,7 @@ const EditAppointment = ({route}) => {
         })
     }, []);
 
-    const { handleChange, handleSubmit, handleBlur, values, setFieldValue, errors, touched } = useFormik({
+    const { handleChange, handleSubmit, handleBlur, values, setFieldValue } = useFormik({
         initialValues: {
             notes: Appointment.notes ?? '',
             id_estate: Appointment.id_estate ?? '',

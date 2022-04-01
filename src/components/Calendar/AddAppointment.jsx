@@ -1,15 +1,16 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
+    Alert,
+    FlatList,
+    Modal,
     Platform,
+    Pressable,
+    ScrollView,
     StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
-    View,
-    ScrollView,
-    FlatList,
-    Modal,
-    Pressable, Alert
+    View
 } from "react-native";
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -17,21 +18,19 @@ import Topbar from "../Topbar/Topbar";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
 import colors from "../../utils/styles/colors";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {createAptmt, getAptmtsTypes} from "../../API/ApiApointements";
-import { Searchbar } from 'react-native-paper';
+import {Searchbar} from 'react-native-paper';
 import {searchCustomers} from "../../API/ApiCustomers";
 import {searchEstates} from "../../API/ApiEstates";
 import {getCurrentUser} from "../../API/ApiStaff";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Formik } from "formik";
+import {Formik} from "formik";
 import * as Yup from "yup";
 import MaterialCommunityIcon from "react-native-paper/src/components/MaterialCommunityIcon";
 import {useNavigation} from "@react-navigation/native";
-import LogContext from "../../API/Context/LogContext";
 
 const AddAppointment = () => {
-    const {setTokenIsValid} = useContext(LogContext);
     const navigation = useNavigation();
 
     const [currentUser, setCurrentUser] = useState(null);

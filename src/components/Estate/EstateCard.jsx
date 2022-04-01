@@ -11,7 +11,6 @@ const EstateCard = (props) => {
     const formatPrice = (price, separator) => {
 
         let roundPrice = Math.round(price);
-        // priceFormated = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format( priceFormated )
 
         roundPrice = '' + roundPrice;
         separator = separator || ' ';
