@@ -185,9 +185,8 @@ const CustomerDetail = ({ route }) => {
           (
             <FlatList
               horizontal={true}
-
               data={customerAptmts}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item, idx) => item.id + idx}
               renderItem={({ item }) => <CustomerAptmt customer={item} />}
               renderSectionHeader={({ section: { title } }) => (
                 <Text > rdv</Text>

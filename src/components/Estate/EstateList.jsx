@@ -32,7 +32,7 @@ const EstateList = () => {
             <Topbar />
             <FlatList
                 data={estates}
-                keyExtractor={(item) => item.id_estate.toString()}
+                keyExtractor={(item) => item.id_estate}
                 renderItem={({ item }) => <EstateCard estate={item} />} />
         </View>
     );

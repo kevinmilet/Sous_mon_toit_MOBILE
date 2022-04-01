@@ -329,7 +329,7 @@ const AddAppointment = () => {
                                                               </TouchableOpacity>
                                                           </View>
                                                       )}
-                                                      keyExtractor={(item) => "" + item.id}
+                                                      keyExtractor={(item) => item.id}
                                             />
                                         </View>
                                         <Pressable
@@ -394,7 +394,7 @@ const AddAppointment = () => {
                                                         </TouchableOpacity>
                                                     </View>
                                                 )}
-                                                keyExtractor={(item) => "" + item.id}
+                                                keyExtractor={(item) => item.id}
                                             />
                                         </View>
                                         <Pressable

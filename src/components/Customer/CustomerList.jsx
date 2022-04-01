@@ -104,6 +104,7 @@ const CustomerList = () => {
                             <View style={styles.modalView}>
                                 <FlatList
                                           data={customerData2}
+                                          keyExtractor={(item, idx) => item.id + idx}
                                           renderItem={({ item }) => (
                                               <View>
                                                   <TouchableOpacity onPress={() => selectCustomer(item)}>
@@ -111,7 +112,6 @@ const CustomerList = () => {
                                                   </TouchableOpacity>
                                               </View>
                                           )}
-                                          keyExtractor={(item) => "" + item.id}
                                 />
                             </View>
                             <Pressable
@@ -125,7 +125,7 @@ const CustomerList = () => {
                     {!customer  ?(
                         <FlatList
                         data={customerData1}
-                        keyExtractor={(item) => item.id.toString()}
+                        keyExtractor={(item, idx) => item.id + idx}
                         renderItem={({item}) => <Card customer={item}/>}
                         />
                     ):(

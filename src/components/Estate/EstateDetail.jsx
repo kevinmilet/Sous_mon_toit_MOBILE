@@ -82,7 +82,7 @@ const EstateDetail = ({ route }) => {
                     <FlatList
                         data={picturesList}
                         horizontal={true}
-                        keyExtractor={(item, index) => index}
+                        keyExtractor={(item) => item.id}
                         renderItem={({ item, index }) => {
                             return (
                                 <View style={{}}>
