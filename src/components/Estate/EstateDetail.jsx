@@ -44,10 +44,23 @@ const EstateDetail = ({ route }) => {
     }, [estateId])
 
     //Fonction de formatage du prix
-    const formatPrice = (price) => {
+    const formatPrice = (price, separator) => {
 
-        let priceFormated = Math.round(price);
-        priceFormated = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format( priceFormated )
+        let roundPrice = Math.round(price);
+        // priceFormated = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format( priceFormated )
+
+        roundPrice = '' + roundPrice;
+        separator = separator || ' ';
+        let priceFormated = '',
+            d = 0;
+        while (roundPrice.match(/^0[0-9]/)) {
+            roundPrice = roundPrice.substring(1);
+        }
+        for (let i = roundPrice.length - 1; i >= 0; i--) {
+            priceFormated = (d !== 0 && d % 3 === 0) ? roundPrice[i] + separator + priceFormated : roundPrice[i] + priceFormated;
+            d++;
+        }
+
         return priceFormated;
     };
 
@@ -112,7 +125,7 @@ const EstateDetail = ({ route }) => {
                 </View>
 
                 <View style={styles.containerPrice}>
-                    <Text style={styles.textPrice}>Prix: {formatPrice(oneEstateData.price)}€</Text>
+                    <Text style={styles.textPrice}>Prix: {formatPrice(oneEstateData.price)}&nbsp;€</Text>
                 </View>
 
                 <Text style={{ fontSize: 30, color: colors.primaryBtn, padding: 20 }}>{oneEstateData.title}</Text>

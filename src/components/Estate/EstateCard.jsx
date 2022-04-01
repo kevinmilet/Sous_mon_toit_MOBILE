@@ -8,10 +8,23 @@ const EstateCard = (props) => {
 
     const { estate } = props;
     const navigation = useNavigation();
-    const formatPrice = (price) => {
+    const formatPrice = (price, separator) => {
 
-        let priceFormated = Math.round(price);
-        priceFormated = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format( priceFormated )
+        let roundPrice = Math.round(price);
+        // priceFormated = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format( priceFormated )
+
+        roundPrice = '' + roundPrice;
+        separator = separator || ' ';
+        let priceFormated = '',
+            d = 0;
+        while (roundPrice.match(/^0[0-9]/)) {
+            roundPrice = roundPrice.substring(1);
+        }
+        for (let i = roundPrice.length - 1; i >= 0; i--) {
+            priceFormated = (d !== 0 && d % 3 === 0) ? roundPrice[i] + separator + priceFormated : roundPrice[i] + priceFormated;
+            d++;
+        }
+
         return priceFormated;
     };
 
@@ -26,7 +39,7 @@ const EstateCard = (props) => {
                     <Text style={{fontSize:15 ,fontWeight: 'bold', color: colors.primaryBtn, marginBottom:10}}>{estate.title}</Text>
                     <Text style={{color:"black",fontWeight: 'bold'}}>Reference : <Text style={{color:"white"}}>{estate.reference}</Text></Text>
                     <Text style={{color:"black",fontWeight: 'bold'}}>Ville : <Text style={{color:"white"}}>{estate.city}</Text></Text>
-                    <Text style={{fontSize:20, textAlign:"right"}}><Text style={{fontWeight: 'bold', color:"white"}}>{formatPrice(estate.price)}€</Text></Text>
+                    <Text style={{fontSize:20, textAlign:"right"}}><Text style={{fontWeight: 'bold', color:"white"}}>{formatPrice(estate.price)}&nbsp;€</Text></Text>
                 </View>
             </View>
         </TouchableOpacity>
