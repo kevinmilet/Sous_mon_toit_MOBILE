@@ -70,7 +70,7 @@ const EstateDetail = ({ route }) => {
     });
 
     if (loading) {
-        return <Loader/>;
+        return <Loader />;
     }
     return (
 
@@ -124,7 +124,7 @@ const EstateDetail = ({ route }) => {
                 </View>
 
                 <View style={styles.containerPrice}>
-                    <Text style={styles.textPrice}>Prix: {formatPrice(oneEstateData.price)}&nbsp;€</Text>
+                    <Text style={styles.textPrice}>Prix: {formatPrice(oneEstateData.price)}&nbsp;{oneEstateData.buy_or_rent === "Location" ? "€/mois" : "€"}</Text>
                 </View>
 
                 <Text style={{ fontSize: 30, color: colors.primaryBtn, padding: 20 }}>{oneEstateData.title}</Text>
@@ -159,12 +159,12 @@ const EstateDetail = ({ route }) => {
                 </View>
 
                 <View style={styles.containerDescription}>
-                    <Text style={{ fontWeight: "bold" , fontSize: 30 , color: colors.primaryBtn}}>Description</Text>
+                    <Text style={{ fontWeight: "bold", fontSize: 30, color: colors.primaryBtn }}>Description</Text>
                     <Text >{oneEstateData.description}</Text>
                 </View>
 
                 <View style={styles.containerPlus}>
-                    <Text style={{ fontSize: 30, color: "white", marginBottom:10 }}>Les plus</Text>
+                    <Text style={{ fontSize: 30, color: "white", marginBottom: 10 }}>Les plus</Text>
                     {oneEstateData.communal_heating ? <Text style={{ fontWeight: 'bold', color: "white" }}><FontAwesome5 name="check-circle" size={24} color={colors.primaryBtn} /> Chauffage collectif</Text> : null}
                     {oneEstateData.furnished ? <Text style={{ fontWeight: 'bold', color: "white" }}><FontAwesome5 name="check-circle" size={24} color={colors.primaryBtn} /> Meublé</Text> : null}
                     {oneEstateData.private_parking ? <Text style={{ fontWeight: 'bold', color: "white" }}><FontAwesome5 name="check-circle" size={24} color={colors.primaryBtn} /> Parking privé</Text> : null}
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
         color: "white",
         backgroundColor: colors.secondaryBtn,
         marginRight: 10,
-        marginTop:10,
+        marginTop: 10,
 
     },
     containerDetail: {
@@ -214,13 +214,13 @@ const styles = StyleSheet.create({
         borderRadius: 20,
 
     },
-    containerDescription:{
+    containerDescription: {
         backgroundColor: "white",
-        margin:10,
+        margin: 10,
         padding: 10,
         borderRadius: 10,
-        marginHorizontal: 10 ,
-        borderWidth:3,
+        marginHorizontal: 10,
+        borderWidth: 3,
         borderColor: colors.secondary,
     },
     containerPlus: {
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 20,
         margin: 10,
-        marginTop:0,
+        marginTop: 0,
     },
 })
 

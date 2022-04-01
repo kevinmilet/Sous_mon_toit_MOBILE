@@ -38,7 +38,7 @@ const EstateCard = (props) => {
                     <Text style={{fontSize:15 ,fontWeight: 'bold', color: colors.primaryBtn, marginBottom:10}}>{estate.title}</Text>
                     <Text style={{color:"black",fontWeight: 'bold'}}>Reference : <Text style={{color:"white"}}>{estate.reference}</Text></Text>
                     <Text style={{color:"black",fontWeight: 'bold'}}>Ville : <Text style={{color:"white"}}>{estate.city}</Text></Text>
-                    <Text style={{fontSize:20, textAlign:"right"}}><Text style={{fontWeight: 'bold', color:"white"}}>{formatPrice(estate.price)}&nbsp;€</Text></Text>
+                    <Text style={{fontSize:20, textAlign:"right"}}><Text style={{fontWeight: 'bold', color:"white"}}>{formatPrice(estate.price)}&nbsp;{estate.buy_or_rent === "Location" ? "€/mois" : "€"}</Text></Text>
                 </View>
             </View>
         </TouchableOpacity>
