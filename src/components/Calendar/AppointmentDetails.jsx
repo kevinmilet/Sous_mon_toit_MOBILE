@@ -42,7 +42,7 @@ const AppointmentDetails = ({ route }) => {
                     setAptmtData(response.data)
                 }
             ).catch (error => {
-                console.log(error.message)
+                console.error(error.message)
             });
     }, [aptmtId])
 
@@ -57,7 +57,7 @@ const AppointmentDetails = ({ route }) => {
                     setAptmtData(response.data)
                 }
             ).catch (error => {
-            console.log(error.message)
+            console.error(error.message)
         });
     }, [aptmtId]))
 
@@ -68,7 +68,7 @@ const AppointmentDetails = ({ route }) => {
             [
                 {
                     text: "Non",
-                    onPress: () => console.log("Suppresion annulée"),
+                    onPress: () => console.warn("Suppresion annulée"),
                     style: "cancel"
                 },
                 {
@@ -82,7 +82,6 @@ const AppointmentDetails = ({ route }) => {
     const delAptmt = (aptmtId) => {
         deleteAptmt(aptmtId)
             .then(response => {
-                    console.log(response.status)
                     if (response.status === 200) {
                         confirmAlert()
                     } else {
@@ -90,7 +89,7 @@ const AppointmentDetails = ({ route }) => {
                     }
                 }
             ).catch (error => {
-                console.log(error.message)
+                console.error(error.message)
         });
     };
 
@@ -174,7 +173,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: colors.backgroundPrimary,
         margin: 10,
-        padding: 5
+        padding: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
     },
     button_container: {
         flexDirection: "row",

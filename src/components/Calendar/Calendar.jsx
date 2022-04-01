@@ -36,13 +36,13 @@ const Calendar = () => {
                             if (response.status === 200) {
                                 setAppointments(response.data);
                             } else {
-                                console.log('Pas de rendez-vous aujourd\'hui ');
+                                console.warn('Pas de rendez-vous aujourd\'hui ');
                             }
                         }).catch(error => {
-                        console.log(error.message)
+                        console.error(error.message)
                     })
                 } catch {
-                    console.log(error.message)
+                    console.error(error.message)
                 }
             });
         }

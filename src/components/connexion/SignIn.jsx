@@ -93,12 +93,11 @@ const SignIn = (props) => {
             }
         }
     ).catch(error => {
-        console.log("catch !",error.message);
+        console.error(error.message);
     })
 
     return (
         <View  style={{flex: 1}}>
-            {/* Logo */}
             <View
                 style={{
                     flex: 2,

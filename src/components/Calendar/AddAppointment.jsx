@@ -94,7 +94,7 @@ const AddAppointment = () => {
             setModalCVisible(true)
             }
         ).catch(error => {
-            console.log(error.message);
+            console.error(error.message);
         })
     }
 
@@ -107,7 +107,7 @@ const AddAppointment = () => {
             setModalEVisible(true)
             }
         ).catch(error => {
-            console.log(error.message);
+            console.error(error.message);
         })
     }
 
@@ -159,10 +159,10 @@ const AddAppointment = () => {
                         response => {
                             setCurrentUser(response.data);
                         }).catch(error => {
-                        console.log(error.message)
+                        console.error(error.message)
                     })
                 } catch {
-                    console.log(error.message)
+                    console.error(error.message)
                 }
             });
         }
@@ -174,7 +174,7 @@ const AddAppointment = () => {
                 setAptmtsTypes(response.data);
             }
         ).catch (error => {
-            console.log(error.message)
+            console.error(error.message)
         });
     }, []);
 
@@ -212,7 +212,6 @@ const AddAppointment = () => {
                                 ...values, id_staff: currentUser.id,
                                 scheduled_at: dateTime
                             }
-                            console.log(data)
                             await new Promise(r => {
                                 createAptmt(data).then(
                                     response => {
@@ -223,7 +222,7 @@ const AddAppointment = () => {
                                         }
                                     }
                                 ).catch(error => {
-                                    console.log(error.message)
+                                    console.error(error.message)
                                 })
                             });
                     }}>

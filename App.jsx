@@ -15,14 +15,12 @@ export default function App() {
     try {
         const value = await AsyncStorage.getItem('@auth_token')
         if (value !== null) {
-            console.log('j\'ai un token !', value)
             return true;
         }else{
-            console.log('pas de token')
             return false;
         }
     } catch (e) {
-        console.log('Failed to fetch the data from storage')
+        console.error('Failed to fetch the data from storage', e.message)
     }
   }  
   useEffect(() => {

@@ -22,10 +22,10 @@ const Topbar = () => {
                         response => {
                             setCurrentUser(response.data);
                         }).catch(error => {
-                            console.log(error.message)
+                            console.error(error.message)
                         })
                 } catch {
-                    console.log(error.message)
+                    console.error(error.message)
                 } 
             });
         }

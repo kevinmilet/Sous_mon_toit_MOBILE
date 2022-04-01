@@ -24,19 +24,18 @@ const EstateDetail = ({ route }) => {
         getOneEstate(estateId)
             .then(res => {
                 if (res.data === "aucun resultat") {
-                    console.log('aucun bien')
+                    console.warn('aucun bien')
                 }
                 setOneEstateData(res.data)
             }).catch(error => {
-                console.log(error.message)
+                console.error(error.message)
             }).finally(() => {
                 // liste des images du bien
                 getEstatePictures(estateId)
                     .then(res => {
                         setPicturesList(res.data)
-                        console.log(res.data, "picture")
                     }).catch(error => {
-                        console.log(error.message)
+                        console.error(error.message)
                     }).finally(() => {
                         setLoading(false)
                     })
@@ -78,7 +77,7 @@ const EstateDetail = ({ route }) => {
         <View style={styles.container}>
             <Topbar />
             <ScrollView >
-                <Text style={{ textAlign: "center", color: "white" }}>Référence du biens : {oneEstateData.reference}</Text>
+                <Text style={{ textAlign: "center", color: colors.primary, marginVertical: 10 }}>Référence du bien : {oneEstateData.reference}</Text>
                 <View style={{ height: 150, width: "100%", alignItems: 'center' }}>
                     <FlatList
                         data={picturesList}

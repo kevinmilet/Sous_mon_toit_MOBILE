@@ -26,10 +26,9 @@ const CustomerSearch = ({ route}) => {
     getCustomerSearch(id)
       .then((res) => {
         setCustomerSearch(res.data);
-        console.log(res.data, "search");
       })
       .catch((error) => {
-        console.log(error.message);
+        console.error(error.message);
       })
       .finally(() => {
         setLoading(false);
@@ -38,10 +37,9 @@ const CustomerSearch = ({ route}) => {
     getCustomerDescribe(id)
       .then((res) => {
         setCustomerData(res.data[0][0]);
-        console.log(res.data, "describe5");
       })
       .catch((error) => {
-        console.log(error.message);
+        console.error(error.message);
       })
       .finally(() => {
         setLoading(false);
@@ -74,12 +72,10 @@ const CustomerSearch = ({ route}) => {
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error.message);
+        console.error(error.message);
       })
      
   }, [id, isFocused]);
-  console.log( customerAptmts, 'ff');
-  console.log(customerSearch, 'eeeeee');
   if (loading) {
     return <Loader />;
   }

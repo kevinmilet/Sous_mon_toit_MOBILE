@@ -32,8 +32,16 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 10,
         padding: 10,
-        backgroundColor: colors.secondaryBtn,
-        borderRadius: 20
+        backgroundColor: colors.backgroundPrimary,
+        borderRadius: 20,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
         },
     header_container: {
         flexDirection: 'column',
@@ -44,13 +52,13 @@ const styles = StyleSheet.create({
     date_text: {
         textAlign: 'left',
         fontSize: 18,
-        color: colors.backgroundPrimary,
+        color: colors.primaryBtn,
         fontWeight: 'bold'
     },
     type_text: {
         textAlign: 'left',
         fontSize: 16,
-        color: colors.backgroundPrimary,
+        color: colors.primary,
         fontWeight: 'bold'
     },
     description_text: {

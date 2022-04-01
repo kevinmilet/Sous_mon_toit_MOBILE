@@ -56,14 +56,14 @@ const EditAppointment = ({route}) => {
                 setStaffList(response.data)
             }
         ).catch(error => {
-            console.log(error.message)
+            console.error(error.message)
         }).finally(() => {
             getAptmtsTypes().then(
                 response => {
                     setAptmtsTypes(response.data);
                 }
             ).catch(error => {
-                console.log(error.message)
+                console.error(error.message)
             }).finally(() => {
                 if (!currentUser) {
                     AsyncStorage.getItem('@auth_userId', (error, result) => {
@@ -72,10 +72,10 @@ const EditAppointment = ({route}) => {
                                 response => {
                                     setCurrentUser(response.data);
                                 }).catch(error => {
-                                console.log(error.message)
+                                console.error(error.message)
                             })
                         } catch {
-                            console.log(error.message)
+                            console.error(error.message)
                         }
                     });
                 }
@@ -139,7 +139,7 @@ const EditAppointment = ({route}) => {
                 }
             }
         ).catch(error => {
-            console.log(error.message);
+            console.error(error.message);
         })
     }
 
@@ -174,7 +174,7 @@ const EditAppointment = ({route}) => {
             setModalEVisible(true)
         }
         ).catch(error => {
-            console.log(error.message);
+            console.error(error.message);
         })
     }
 
