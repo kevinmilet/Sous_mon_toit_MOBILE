@@ -101,8 +101,7 @@ const CustomerDetail = ({ route }) => {
       })
 
   }, [id, isFocused]);
-  console.log(id, "id")
-  console.log(customerData, "cust");
+ 
   if (loading) {
     return <Loader />;
   }
@@ -192,21 +191,7 @@ const CustomerDetail = ({ route }) => {
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Rendez-vous</Text>
         </View>
-        {/* <Text style={styles.baseText}>
-                Rendez-vous :
-                </Text> */}
-        {/* <Text style={styles.innerText}>
-                  {" "}
-                  {formatHour}
-                {customerTypes ?   customerTypes : null } 
-              </Text> */}
-
-        {/* <FlatList
-                data={customerAptmts}
-                keyExtractor={(item, index) => item.id.toString()}
-                renderItem={({ item }) => <CustomerAptmt customer={item} />}
-              /> */}
-        {/* </Text>  */}
+     
         {customerAptmts.length == 0 ? (
           <Text> Pas de RDV pour ce client</Text>
         )
