@@ -1,5 +1,6 @@
-import React, {forwardRef, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
+    Alert,
     FlatList,
     Modal,
     Platform,
@@ -7,7 +8,7 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    TextInput as RNTextInput,
+    TextInput,
     TouchableOpacity,
     View
 } from "react-native";
@@ -17,7 +18,7 @@ import Topbar from "../Topbar/Topbar";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SelectDropdown from 'react-native-select-dropdown';
 import colors from "../../utils/styles/colors";
-import {Entypo as Icon, MaterialCommunityIcons} from '@expo/vector-icons';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {getAptmtsTypes, updateAptmt} from "../../API/ApiApointements";
 import {Searchbar} from 'react-native-paper';
 import {searchEstates} from "../../API/ApiEstates";
@@ -25,41 +26,15 @@ import {getCurrentUser, getStaffList} from "../../API/ApiStaff";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-
-const TextInput = forwardRef(({ icon, error, touched, ...otherProps }, ref) => {
-    const validationColor = !touched ? colors.secondaryBtn : error ? colors.primaryBtn : colors.secondaryBtn;
-    return (
-        <View
-            style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                height: 48,
-                borderRadius: 25,
-                borderColor: validationColor,
-                borderWidth: StyleSheet.hairlineWidth,
-                padding: 8
-            }}
-        >
-            <View style={{ padding: 8 }}>
-                <Icon name={icon} color={validationColor} size={16} />
-            </View>
-            <View style={{ flex: 1 }}>
-                <RNTextInput
-                    underlineColorAndroid='transparent'
-                    placeholderTextColor='rgba(34, 62, 75, 0.7)'
-                    ref={ref}
-                    {...otherProps}
-                />
-            </View>
-        </View>
-    );
-});
+import {useNavigation} from "@react-navigation/native";
+import MaterialCommunityIcon from "react-native-paper/src/components/MaterialCommunityIcon";
 
 const EditAppointment = ({route}) => {
     const { Appointment } = route.params;
+    const navigation = useNavigation();
     const [currentUser, setCurrentUser] = useState(null);
-    const [date, setDate] = useState();
-    const [time, setTime] = useState(moment());
+    const [date, setDate] = useState(Appointment.scheduled_at);
+    const [time, setTime] = useState(Appointment.scheduled_at);
     const [isDatePickerShow, setIsDatePickerShow] = useState(false);
     const [isTimePickerShow, setIsTimePickerShow] = useState(false);
     const [estate, setEstate] = useState('');
@@ -75,23 +50,20 @@ const EditAppointment = ({route}) => {
     const [staff, setStaff] = useState();
     const [modalEVisible, setModalEVisible] = useState(false);
 
-    let dateMin = moment().format('YYYY-MM-DD');
-    let dateValue = moment(Appointment.scheduled_at);
-
     useEffect(() => {
         getStaffList().then(
             response => {
                 setStaffList(response.data)
             }
         ).catch(error => {
-            console.log(error.message)
+            console.error(error.message)
         }).finally(() => {
             getAptmtsTypes().then(
                 response => {
                     setAptmtsTypes(response.data);
                 }
             ).catch(error => {
-                console.log(error.message)
+                console.error(error.message)
             }).finally(() => {
                 if (!currentUser) {
                     AsyncStorage.getItem('@auth_userId', (error, result) => {
@@ -100,10 +72,10 @@ const EditAppointment = ({route}) => {
                                 response => {
                                     setCurrentUser(response.data);
                                 }).catch(error => {
-                                console.log(error.message)
+                                console.error(error.message)
                             })
                         } catch {
-                            console.log(error.message)
+                            console.error(error.message)
                         }
                     });
                 }
@@ -111,14 +83,15 @@ const EditAppointment = ({route}) => {
         })
     }, []);
 
-    const { handleChange, handleSubmit, handleBlur, values, errors, touched } = useFormik({
+    const { handleChange, handleSubmit, handleBlur, values, setFieldValue } = useFormik({
         initialValues: {
             notes: Appointment.notes ?? '',
             id_estate: Appointment.id_estate ?? '',
             id_customer: Appointment.id_customer ?? '',
             id_appointment_type: Appointment.apptmt_type_id ?? '',
             id_staff: Appointment.id_staff ?? '',
-            date: dateValue,
+            date: moment(Appointment.scheduled_at),
+            estate_search: null
 
         },
         validationSchema: Yup.object({
@@ -127,13 +100,28 @@ const EditAppointment = ({route}) => {
             id_customer: Yup.string().required('Veuillez sélectionner un client/contact'),
             id_appointment_type: Yup.string().required('Veuillez sélectionner un type de rendez-vous'),
             id_staff: Yup.string().required('Veuillez sélectionner un agent'),
-            // scheduled_at: Yup.string().required('Veuillez choisir un horaire et une date')
         }),
         onSubmit: async (values) => {
-            console.log('VALUES', values);
-            const scheduled_at = moment(date).format('YYYY-MM-DD') + ' ' + moment(time).format('HH:mm:ss');
+            let newDate;
+            let newTime;
+
+            if (date) {
+                newDate = moment(date).format('YYYY-MM-DD');
+            } else {
+                newDate = moment(values.date).format('YYYY-MM-DD');
+            }
+
+            if (time) {
+                newTime =  moment(time).format('HH:mm');
+            } else {
+                newTime = moment(values.date).format('HH:mm');
+            }
+
             const datas = {
-                ...values, scheduled_at: scheduled_at, id_appointment_type: (typeAppt ?? Appointment.apptmt_type_id)
+                ...values,
+                id_staff: staff ?? Appointment.id_staff,
+                scheduled_at: newDate + ' ' + newTime,
+                id_appointment_type: (typeAppt ?? Appointment.apptmt_type_id)
             }
             await new Promise(r => {
                 EditAppointment(datas, Appointment.id)
@@ -142,14 +130,17 @@ const EditAppointment = ({route}) => {
     });
 
     const EditAppointment = (datas, AppointmentId) => {
-        console.log(datas);
-        // updateAptmt(datas, AppointmentId).then(
-        //     response => {
-        //         console.log(response, "response");
-        //     }
-        // ).catch(error => {
-        //     console.log(error.message);
-        // })
+        updateAptmt(datas, AppointmentId).then(
+            response => {
+                if (response.status === 200) {
+                    confirmAlert()
+                } else {
+                    errorAlert()
+                }
+            }
+        ).catch(error => {
+            console.error(error.message);
+        })
     }
 
     const showDatePicker = () => {
@@ -161,16 +152,14 @@ const EditAppointment = ({route}) => {
     }
 
     const onDateChange = (e, selectedDate) => {
-        console.log('EVENT', e)
-        console.log('DATE', selectedDate);
-        setDate(selectedDate || dateValue);
+        setDate(selectedDate);
         if (Platform.OS === 'android') {
             setIsDatePickerShow(false);
         }
     }
 
     const onTimeChange = (e, selectedTime) => {
-        setTime(selectedTime || dateValue);
+        setTime(selectedTime);
         if (Platform.OS === 'android') {
             setIsTimePickerShow(false);
         }
@@ -185,7 +174,7 @@ const EditAppointment = ({route}) => {
             setModalEVisible(true)
         }
         ).catch(error => {
-            console.log(error.message);
+            console.error(error.message);
         })
     }
 
@@ -196,7 +185,31 @@ const EditAppointment = ({route}) => {
         setEstateInput(null);
     }
 
-// console.log(Appointment);
+    const confirmAlert = () => {
+        Alert.alert(
+            '',
+            'Rendez-vous modifié',
+            [
+                {
+                    text: "Ok",
+                    onPress: () => navigation.goBack()
+                }
+            ]
+        );
+    }
+
+    const errorAlert = () => {
+        Alert.alert(
+            'Erreur',
+            'Le rendez-vous n\'a pas été modifié',
+            [
+                {
+                    text: "Ok",
+                    onPress: () => navigation.goBack()
+                }
+            ]
+        );
+    }
 
     return (
         <>
@@ -214,11 +227,14 @@ const EditAppointment = ({route}) => {
                         {Appointment?.customerFirstname} {Appointment?.customerLastname}
                     </Text>
                 </View>
+                    <Text style={styles.labelText}>
+                        Agent
+                    </Text>
                 {currentUser ? (
                     <SelectDropdown
                         name="id_staff"
                         data={staffList}
-                        defaultButtonText={'Agent'}
+                        defaultButtonText={Appointment.staffFirstname + ' ' + Appointment.staffLastname}
                         value={values.id_staff}
                         onSelect={(selectedItem, index) => {
                             setStaff(selectedItem.id)
@@ -244,6 +260,9 @@ const EditAppointment = ({route}) => {
                     null
                 }
 
+                <Text style={styles.labelText}>
+                    Horaire
+                </Text>
                 <View style={styles.datetime_container}>
                     <View>
                         <TouchableOpacity
@@ -251,7 +270,7 @@ const EditAppointment = ({route}) => {
                             onPress={showDatePicker}
                             style={styles.dateInput}>
                             <View>
-                                <Text>{values.date.format('LL')}</Text>
+                                <Text>{moment(date).format('LL')}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -273,7 +292,7 @@ const EditAppointment = ({route}) => {
                             style={styles.timeInput}
                         >
                             <View>
-                                <Text>{values.date.format('LT')}</Text>
+                                <Text>{moment(time).format('LT')}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -289,15 +308,13 @@ const EditAppointment = ({route}) => {
                         )}
                     </View>
                 </View>
-                <View>
-                    <Text>{Appointment?.reference} - {Appointment?.title} - {Appointment?.city}</Text>
-                    {/*<TextInput editable={false}*/}
-                    {/*    // style={{ display: 'none' }}*/}
-                    {/*    onChangeText={handleChange('id_estate')}*/}
-                    {/*    onBlur={handleBlur('id_estate')}*/}
-                    {/*    value={values.id_estate}>*/}
-                    {/*    {estate.id}*/}
-                    {/*</TextInput>*/}
+                <Text style={styles.labelText}>
+                    Bien concerné
+                </Text>
+                <View style={styles.location}>
+                    <Text>Ref: {Appointment?.reference}</Text>
+                    <Text>Bien: {Appointment?.title}</Text>
+                    <Text>Lieu: {Appointment?.address} {Appointment?.zipcode} {Appointment?.city}</Text>
                 </View>
                 <View>
                     <Searchbar style={styles.dropdownInput}
@@ -315,7 +332,17 @@ const EditAppointment = ({route}) => {
                                 }, 200),
                             );
                         }}
-                        value={estateInput} />
+                       name="estate_search"
+                       value={values.estate_search}
+                               clearIcon={() => {
+                                   return(
+                                       <TouchableOpacity onPress={() => {setFieldValue('estate_search', null)
+                                           setFieldValue('id_estate', null)
+                                       }}>
+                                           <MaterialCommunityIcon name="window-close" size={26} color={colors.primary} />
+                                       </TouchableOpacity>)
+                               }}
+                    />
 
                     <Modal animationType="slide"
                         transparent={true}
@@ -332,12 +359,15 @@ const EditAppointment = ({route}) => {
                                     data={estateData}
                                     renderItem={({ item }) => (
                                         <View>
-                                            <TouchableOpacity onPress={() => selectEstates(item)}>
+                                            <TouchableOpacity onPress={() => {selectEstates(item);
+                                                setFieldValue('id_estate', item.id);
+                                                setFieldValue('estate_search', item.reference + ' ' + item.title)
+                                            }}>
                                                 <Text style={styles.modalText}>{item.city} / {item.title}</Text>
                                             </TouchableOpacity>
                                         </View>
                                     )}
-                                    keyExtractor={(index) => index}
+                                    keyExtractor={(item) =>item.id}
                                 />
                             </View>
                             <Pressable
@@ -350,11 +380,14 @@ const EditAppointment = ({route}) => {
                     </Modal>
                 </View>
 
+                <Text style={styles.labelText}>
+                    Type de rendez-vous
+                </Text>
                 <View>
                     <SelectDropdown
                         name="id_appointment_type"
                         data={aptmtsTypes}
-                        defaultButtonText={"Type"}
+                        defaultButtonText={Appointment.appointment_type}
                         value={values.id_appointment_type}
                         onSelect={(selectedItem, index) => {
                             setTypeAppt(selectedItem.id)
@@ -382,15 +415,19 @@ const EditAppointment = ({route}) => {
                     />
                 </View>
 
+                <Text style={styles.labelText}>
+                    Notes
+                </Text>
                 <View>
                     <TextInput
-                        name="notes"
+                        style={styles.textareaInput}
                         multiline={true}
                         numberOfLines={5}
                         placeholder="Ajouter une note au rendez-vous"
                         onChangeText={handleChange('notes')}
                         onBlur={handleBlur('notes')}
-                        value={Appointment?.notes}
+                        value={values.notes}
+                        defaultValue={Appointment?.notes}
                     />
                 </View>
 
@@ -413,7 +450,7 @@ const styles = StyleSheet.create({
     },
     title: {
         justifyContent: 'center',
-        marginBottom: 15,
+        marginBottom: 10,
         textAlign: 'center',
         fontSize: 24,
         fontWeight: 'bold',
@@ -467,24 +504,24 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5
     },
-    textareaInput: {
-        paddingVertical: 15,
-        paddingHorizontal: 10,
-        borderColor: colors.secondaryBtn,
-        borderRadius: 25,
-        borderWidth: 1,
-        width: '100%',
-        marginVertical: 5,
-        fontSize: 18,
-        backgroundColor: colors.backgroundPrimary,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
+        textareaInput: {
+            paddingVertical: 15,
+            paddingHorizontal: 10,
+            borderColor: colors.secondaryBtn,
+            borderRadius: 25,
+            borderWidth: 1,
+            width: '100%',
+            marginVertical: 5,
+            fontSize: 18,
+            backgroundColor: colors.backgroundPrimary,
+            shadowColor: "#000",
+            shadowOffset: {
+                width: 0,
+                height: 2
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5
     },
     // Seulement pour iOS
     datePicker: {
@@ -585,9 +622,33 @@ const styles = StyleSheet.create({
     },
     customerText: {
         marginBottom: 10,
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: "bold",
         textAlign: "center"
+    },
+    labelText: {
+        marginStart: 5,
+        fontSize: 16,
+        textAlign: "left"
+    },
+    location: {
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        borderColor: colors.secondaryBtn,
+        borderRadius: 25,
+        borderWidth: 1,
+        width: '100%',
+        marginVertical: 5,
+        fontSize: 18,
+        backgroundColor: colors.backgroundPrimary,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
     }
 })
 

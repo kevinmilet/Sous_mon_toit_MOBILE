@@ -27,12 +27,11 @@ instanceAxios.interceptors.response.use(
     (res) => {
         if (res.data.token) {
             AsyncStorage.setItem("@auth_token", res.data.token);
-            console.log('j\'ai set le token')
         }
         return res;
     },
     async (err) => {
-        console.log("interceptor error",err);
+        console.error("interceptor error", err);
         const originalConfig = err.config;
 
         if (err.response) {
@@ -40,16 +39,13 @@ instanceAxios.interceptors.response.use(
             if (err.response.status === 401 && !originalConfig._retry) {
                 AsyncStorage.removeItem("@auth_token");
                 AsyncStorage.removeItem("@auth_userId");
-                console.log('j\ai supprimé le token')
                 return err
             }
         }
 
         if (err.response.status === 403 && err.response.data) {
-            console.log("403");
             AsyncStorage.removeItem("@auth_token");
             AsyncStorage.removeItem("@auth_userId");
-            console.log('j\ai supprimé le token')
         }
 
         return err

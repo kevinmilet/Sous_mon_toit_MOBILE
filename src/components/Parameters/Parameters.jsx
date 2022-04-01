@@ -7,7 +7,6 @@ import {logout} from "../../API/ApiStaff";
 import Topbar from "../Topbar/Topbar";
 
 const Parameters = () => {
-
     const {setTokenIsValid} = useContext(LogContext);
 
     const signOut = () => {

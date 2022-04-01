@@ -1,6 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState, FlatList} from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import {Text} from 'react-native';
 
 const Appointment = ({customerTypes}) => {
   

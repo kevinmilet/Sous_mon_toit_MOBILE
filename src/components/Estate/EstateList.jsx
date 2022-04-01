@@ -17,7 +17,7 @@ const EstateList = () => {
             response => {
                 setEstates(response.data)
             }).catch(error => {
-                console.log(error.message)
+                console.error(error.message)
             }).finally(() => {
                 setLoading(false);
             })
