@@ -8,7 +8,6 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 import colors from '../../utils/styles/colors'
 import LogContext from '../../API/Context/LogContext';
 import {useFocusEffect, useNavigation} from "@react-navigation/native";
-import uuid from 'react-native-uuid';
 
 const Calendar = () => {
 
@@ -37,13 +36,13 @@ const Calendar = () => {
                             if (response.status === 200) {
                                 setAppointments(response.data);
                             } else {
-                                console.log('Pas de rendez-vous aujourd\'hui ');
+                                console.warn('Pas de rendez-vous aujourd\'hui ');
                             }
                         }).catch(error => {
-                        console.log(error.message)
+                        console.error(error.message)
                     })
                 } catch {
-                    console.log(error.message)
+                    console.error(error.message)
                 }
             });
         }
@@ -54,16 +53,17 @@ const Calendar = () => {
         <>
             <View style={{flex: 1}}>
                 <Topbar />
+                <View style={styles.button_container}>
+                    <TouchableOpacity onPress={() => navigation.navigate('addAppointment', null)}>
+                        <MaterialCommunityIcons name="calendar-plus" color={colors.primaryBtn} size={36} />
+                    </TouchableOpacity>
+                </View>
                 <FlatList
                     data={appointments}
                     renderItem={({ item }) => <CalendarItem appointments={item} />}
-                    keyExtractor={index => uuid.v4()} />
+                    keyExtractor={(item) =>item.id} />
             </View>
-            <View style={styles.button_container}>
-                <TouchableOpacity onPress={() => navigation.navigate('addAppointment', null)}>
-                    <MaterialCommunityIcons name="calendar-plus" color={colors.primaryBtn} size={36} />
-                </TouchableOpacity>
-            </View>
+
         </>
         :
         <>

@@ -1,7 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import colors from '../../utils/styles/colors';
+import {Text} from 'react-native';
 
 
 const NotSearch = () => {

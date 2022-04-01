@@ -8,7 +8,6 @@ import { getCurrentUser } from '../../API/ApiStaff';
 import colors from '../../utils/styles/colors'
 
 const Topbar = () => {
-
     let day = moment().format('dddd');
     let date = moment().format('DD MMMM YYYY');
 
@@ -22,13 +21,15 @@ const Topbar = () => {
                         response => {
                             setCurrentUser(response.data);
                         }).catch(error => {
-                            console.log(error.message)
+                            console.error(error.message)
                         })
                 } catch {
-                    console.log(error.message)
+                    console.error(error.message)
                 } 
             });
         }
+        return currentUser;
+
     }, [currentUser])
 
     return (

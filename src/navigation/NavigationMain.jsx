@@ -1,14 +1,14 @@
-import { MaterialCommunityIcons, EvilIcons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import React, { useContext } from "react";
+import {EvilIcons, MaterialCommunityIcons} from '@expo/vector-icons';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
+import React, {useContext} from "react";
 import Customer from "../screens/Customer";
 import Estate from "../screens/Estate";
 import Home from '../screens/Home';
 import colors from '../utils/styles/colors';
 import LogContext from '../API/Context/LogContext';
 import SignIn from '../components/connexion/SignIn';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ParametersView from "../screens/ParametersView";
 
 

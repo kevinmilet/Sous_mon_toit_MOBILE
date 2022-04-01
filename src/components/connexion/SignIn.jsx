@@ -1,10 +1,10 @@
-import { Entypo as Icon } from '@expo/vector-icons';
+import {Entypo as Icon} from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFormik } from "formik";
-import React, { forwardRef, useRef , useEffect, useState, useContext } from 'react';
-import { Image, StyleSheet, Text, TextInput as RNTextInput, TouchableOpacity, View } from 'react-native';
+import {useFormik} from "formik";
+import React, {forwardRef, useContext, useRef} from 'react';
+import {Image, StyleSheet, Text, TextInput as RNTextInput, TouchableOpacity, View} from 'react-native';
 import * as Yup from "yup";
-import { login } from '../../API/ApiStaff';
+import {login} from '../../API/ApiStaff';
 import LogContext from '../../API/Context/LogContext';
 import colors from '../../utils/styles/colors';
 
@@ -78,7 +78,6 @@ const SignIn = (props) => {
             await new Promise(r => {
                 signIn(values)
             })
-            // alert(`Login: ${values.login}, Password: ${values.password}`)
         }
     });
 
@@ -93,12 +92,11 @@ const SignIn = (props) => {
             }
         }
     ).catch(error => {
-        console.log("catch !",error.message);
+        console.error(error.message);
     })
 
     return (
         <View  style={{flex: 1}}>
-            {/* Logo */}
             <View
                 style={{
                     flex: 2,

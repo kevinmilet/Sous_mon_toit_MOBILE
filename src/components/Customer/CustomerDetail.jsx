@@ -1,16 +1,14 @@
-import React, { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View, ScrollView, FlatList, SectionList, SafeAreaView } from "react-native";
-import { getCustomerDescribe, getCustomerSearch, getOneCustomer } from "../../API/ApiCustomers";
+import React, {useContext, useEffect, useState} from "react";
+import {FlatList, ScrollView, StyleSheet, Text, View} from "react-native";
+import {getCustomerDescribe, getCustomerSearch, getOneCustomer} from "../../API/ApiCustomers";
 import Topbar from "../Topbar/Topbar";
-import { getAllCustomerAptmt } from "../../API/ApiApointements";
+import {getAllCustomerAptmt} from "../../API/ApiApointements";
 import Moment from "moment";
 import "moment/locale/fr";
 import Loader from "../../Tools/Loader/Loader";
-import { useIsFocused } from "@react-navigation/native";
+import {useIsFocused} from "@react-navigation/native";
 import CustomerAptmt from "../Customer/CustomerAptmt";
-import colors from '../../utils/styles/colors';
 import NotSearch from './NotSearch';
-import CustomerSearch from "./CustomerSearch";
 import LogContext from '../../API/Context/LogContext';
 
 const CustomerDetail = ({ route }) => {
@@ -20,7 +18,6 @@ const CustomerDetail = ({ route }) => {
   const [customerData, setCustomerData] = useState({});
   const [customerSearch, setCustomerSearch] = useState(null);
   const [customerTypes, setCustomerTypes] = useState(null);
-  const [customerTypeData, setCustomerTypeData] = useState({});
   const [loading, setLoading] = useState(true);
   const [customerAptmts, setCustomerAptmts] = useState([]);
   const { setTokenIsValid } = useContext(LogContext);
@@ -32,14 +29,12 @@ const CustomerDetail = ({ route }) => {
           if (res.response.status === 401)
             setTokenIsValid(false)
         }
-        if (Object.entries(res.data).length != 0) {
+        if (Object.entries(res.data).length !== 0) {
           setCustomerSearch(res.data);
         }
-
-        console.log(res.data.length, "search");
       })
       .catch((error) => {
-        console.log(error.message);
+        console.error(error.message);
       })
       .finally(() => {
         setLoading(false);
@@ -48,10 +43,9 @@ const CustomerDetail = ({ route }) => {
     getOneCustomer(id)
       .then((res) => {
         setCustomerData(res.data);
-        console.log(res.data, "describe5");
       })
       .catch((error) => {
-        // console.log(error.message);
+        console.error(error.message);
       })
       .finally(() => {
 
@@ -61,10 +55,9 @@ const CustomerDetail = ({ route }) => {
     getCustomerDescribe(id)
       .then((res) => {
         setCustomerTypes(res.data[0][0]);
-        console.log(res.data, "describe5");
       })
       .catch((error) => {
-        // console.log(error.message);
+        console.error(error.message);
       })
       .finally(() => {
 
@@ -76,33 +69,23 @@ const CustomerDetail = ({ route }) => {
         let allApptmt = [];
         res.data.map(item => {
 
-
-
           Moment.locale();
-          var dt = item.scheduled_at;
+          let dt = item.scheduled_at;
           const formatDate = Moment(dt).format("LLLL")
 
           allApptmt = [...allApptmt, formatDate];
-
-
         });
 
-
         setCustomerAptmts(allApptmt);
-
-
       }).finally(() => {
-        // let formatHour = null;
-
         setLoading(false);
       })
       .catch((error) => {
-        // console.log(error.message);
+        console.error(error.message);
       })
 
   }, [id, isFocused]);
-  console.log(id, "id")
-  console.log(customerData, "cust");
+
   if (loading) {
     return <Loader />;
   }
@@ -111,6 +94,10 @@ const CustomerDetail = ({ route }) => {
       <Topbar />
 
       <ScrollView style={styles.main_container2}>
+        <Text style={styles.baseText}>
+          Nom :
+          <Text style={styles.innerText}> {customerData?.lastname}</Text>
+        </Text>
         <Text style={styles.baseText}>
           Prénom :
           <Text style={styles.innerText}> {customerData?.firstname}</Text>
@@ -140,10 +127,8 @@ const CustomerDetail = ({ route }) => {
             :
             <Text style={styles.innerText}>
               {" Non renseigné"}
-
             </Text>
           }
-
         </Text>
 
         <View style={styles.titleContainer}>
@@ -192,22 +177,8 @@ const CustomerDetail = ({ route }) => {
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Rendez-vous</Text>
         </View>
-        {/* <Text style={styles.baseText}>
-                Rendez-vous :
-                </Text> */}
-        {/* <Text style={styles.innerText}>
-                  {" "}
-                  {formatHour}
-                {customerTypes ?   customerTypes : null } 
-              </Text> */}
 
-        {/* <FlatList
-                data={customerAptmts}
-                keyExtractor={(item, index) => item.id.toString()}
-                renderItem={({ item }) => <CustomerAptmt customer={item} />}
-              /> */}
-        {/* </Text>  */}
-        {customerAptmts.length == 0 ? (
+        {customerAptmts.length === 0 ? (
           <Text> Pas de RDV pour ce client</Text>
         )
           :
@@ -216,7 +187,7 @@ const CustomerDetail = ({ route }) => {
               horizontal={true}
 
               data={customerAptmts}
-              keyExtractor={(item, index) => index}
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => <CustomerAptmt customer={item} />}
               renderSectionHeader={({ section: { title } }) => (
                 <Text > rdv</Text>
@@ -224,9 +195,6 @@ const CustomerDetail = ({ route }) => {
             />
           )
         }
-
-
-
       </ScrollView>
     </View>
   );
@@ -235,7 +203,6 @@ const CustomerDetail = ({ route }) => {
 const styles = StyleSheet.create({
   main_container: {
     flex: 1,
-    // backgroundColor: "#4EA1D5",
   },
 
   styleTitleMain: {
@@ -269,8 +236,6 @@ const styles = StyleSheet.create({
   },
   content_container: {
     flex: 1,
-    // margin: 5,
-
     marginBottom: 30,
   },
   containerTitleMain: {

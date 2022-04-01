@@ -3,7 +3,6 @@ import {StyleSheet, Text, View } from 'react-native';
 import colors from '../../utils/styles/colors';
 
 const CustomeAptmt= (props) =>{
-console.log(props)
 const {customer} = props
 
   return (
