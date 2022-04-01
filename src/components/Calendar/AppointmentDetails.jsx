@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {useState, useEffect, useContext, useCallback} from "react";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import Topbar from '../Topbar/Topbar';
@@ -7,7 +7,7 @@ import moment from 'moment';
 import 'moment/locale/fr';
 import colors from '../../utils/styles/colors'
 import labels from "../../utils/labels";
-import {useNavigation} from "@react-navigation/native";
+import {useFocusEffect, useNavigation} from "@react-navigation/native";
 import LogContext from '../../API/Context/LogContext';
 
 const AppointmentDetails = ({ route }) => {
@@ -45,6 +45,21 @@ const AppointmentDetails = ({ route }) => {
                 console.log(error.message)
             });
     }, [aptmtId])
+
+    useFocusEffect(useCallback(() => {
+        showAptmt(aptmtId)
+            .then(
+                response => {
+                    if(response.response){
+                        if(response.response.status === 401)
+                            setTokenIsValid(false)
+                    }
+                    setAptmtData(response.data)
+                }
+            ).catch (error => {
+            console.log(error.message)
+        });
+    }, [aptmtId]))
 
     const showDelAlert = () => {
         Alert.alert(

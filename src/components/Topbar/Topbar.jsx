@@ -29,6 +29,8 @@ const Topbar = () => {
                 } 
             });
         }
+        return currentUser;
+
     }, [currentUser])
 
     return (

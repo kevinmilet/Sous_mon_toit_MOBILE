@@ -8,7 +8,6 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 import colors from '../../utils/styles/colors'
 import LogContext from '../../API/Context/LogContext';
 import {useFocusEffect, useNavigation} from "@react-navigation/native";
-import uuid from 'react-native-uuid';
 
 const Calendar = () => {
 
@@ -57,7 +56,7 @@ const Calendar = () => {
                 <FlatList
                     data={appointments}
                     renderItem={({ item }) => <CalendarItem appointments={item} />}
-                    keyExtractor={index => uuid.v4()} />
+                    keyExtractor={(item) =>item.id} />
             </View>
             <View style={styles.button_container}>
                 <TouchableOpacity onPress={() => navigation.navigate('addAppointment', null)}>
