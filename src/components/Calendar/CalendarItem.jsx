@@ -8,7 +8,7 @@ import colors from '../../utils/styles/colors';
 const CalendarItem = (appointments) => {
 
     const aptmt = appointments.appointments;
-    const date = moment(aptmt.scheduled_at).format('D/MM/YYYY à HH:mm');
+    const date = moment(aptmt.scheduled_at).format('DD/MM/YYYY à HH:mm');
     const navigation = useNavigation();
     
     return(
@@ -20,7 +20,7 @@ const CalendarItem = (appointments) => {
                 </View>
                 <View style={styles.description_container}>
                     <Text style={styles.description_text}>{aptmt.customerFirstname} {aptmt.customerLastname}</Text>
-                    <Text style={styles.description_text}>{aptmt.address} {aptmt.zipcode} {aptmt.city}</Text>
+                    {/*<Text style={styles.description_text}>{aptmt.address} {aptmt.zipcode} {aptmt.city}</Text>*/}
                 </View>
             </View>
         </TouchableOpacity>
@@ -36,27 +36,26 @@ const styles = StyleSheet.create({
         borderRadius: 20
         },
     header_container: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        flexDirection: 'column',
     },
     description_container: {
         marginTop: 5
     },
     date_text: {
         textAlign: 'left',
-        fontSize: 16,
+        fontSize: 18,
         color: colors.backgroundPrimary,
         fontWeight: 'bold'
     },
     type_text: {
-        textAlign: 'right',
+        textAlign: 'left',
         fontSize: 16,
         color: colors.backgroundPrimary,
         fontWeight: 'bold'
     },
     description_text: {
         color: colors.primary,
-        fontSize: 14,
+        fontSize: 16,
         marginVertical: 3
     }
 })

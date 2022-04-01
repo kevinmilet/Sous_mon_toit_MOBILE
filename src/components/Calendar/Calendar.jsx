@@ -53,16 +53,17 @@ const Calendar = () => {
         <>
             <View style={{flex: 1}}>
                 <Topbar />
+                <View style={styles.button_container}>
+                    <TouchableOpacity onPress={() => navigation.navigate('addAppointment', null)}>
+                        <MaterialCommunityIcons name="calendar-plus" color={colors.primaryBtn} size={36} />
+                    </TouchableOpacity>
+                </View>
                 <FlatList
                     data={appointments}
                     renderItem={({ item }) => <CalendarItem appointments={item} />}
                     keyExtractor={(item) =>item.id} />
             </View>
-            <View style={styles.button_container}>
-                <TouchableOpacity onPress={() => navigation.navigate('addAppointment', null)}>
-                    <MaterialCommunityIcons name="calendar-plus" color={colors.primaryBtn} size={36} />
-                </TouchableOpacity>
-            </View>
+
         </>
         :
         <>

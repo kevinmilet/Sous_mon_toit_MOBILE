@@ -13,7 +13,7 @@ import LogContext from '../../API/Context/LogContext';
 const AppointmentDetails = ({ route }) => {
 
     const {aptmtId} = route.params;
-    const dateFormat = 'D/MM/YYYY à HH:mm';
+    const dateFormat = 'DD/MM/YYYY à HH:mm';
     const {setTokenIsValid} = useContext(LogContext);
     const navigation = useNavigation();
 
@@ -138,7 +138,8 @@ const AppointmentDetails = ({ route }) => {
                                 <Text style={styles.text}>{aptmtData.customerFirstname ?? 'Non renseigné'} {aptmtData.customerLastname ?? ''}</Text>
                             </View>
                             <View>
-                                <Text style={styles.title}>Adresse du bien</Text>
+                                <Text style={styles.title}>Bien</Text>
+                                <Text>{aptmtData.reference ?? 'Non renseigné'} {aptmtData.title ?? ''}</Text>
                                 <Text>{aptmtData.address ?? 'Non renseigné'} {aptmtData.zipcode ?? ''} {aptmtData.city ?? ''}</Text>
                             </View>
                             <View>
